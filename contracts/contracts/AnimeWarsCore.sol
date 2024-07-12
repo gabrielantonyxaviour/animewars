@@ -63,7 +63,7 @@ contract AnimeWarsCore is EIP712WithModifier {
     event PlayerSignedup(string gameCode, address player);
     event GameIsGame(Game game);
 
-    function initGame(GameRequestInput memory _input, address signer) public {
+    function initGame(GameRequestInput memory _input) public {
         // check if game already exists
         require(bytes(games[_input.gameCode].gameCode).length==0, "Game already exists");
         GameRequest memory request;
@@ -95,7 +95,7 @@ contract AnimeWarsCore is EIP712WithModifier {
 
         Game memory _game=games[gameCode];
 
-        require(msg.sender==_game.players[_game.order[request.playersSignedUp]], "Not your turn");
+        require(signer==_game.players[_game.order[request.playersSignedUp]], "Not your turn");
 
         euint8 rnd=TFHE.randEuint8();
         rnd=TFHE.rem(rnd, 4);
@@ -138,53 +138,99 @@ contract AnimeWarsCore is EIP712WithModifier {
         }
 
         request.playersSignedUp+=1;
+        if(request.playersSignedUp==request.playerCount){
+            emit GameStarted(gameCode, _game.players, _game.lordIndex);
+        }
         gameRequests[gameCode]=request;
+
+        
         emit PlayerSignedup(gameCode, signer);
     }
 
-    function _getOrder(uint8 length) internal returns(uint8[] memory){
-        euint32 num=TFHE.randEuint32();
-        uint32 rnd=TFHE.decrypt(num);
-        uint8[] memory order=new uint8[](length);
-        for(uint8 i=0; i<length;i++) order[i]=i;
-        for (uint i = 0; i < order.length; i++) {
-            uint j = uint(keccak256(abi.encode(rnd, i))) % (order.length - i);
-            // Swap roles[i] with roles[i + j]
-            uint8 temp = order[i];
-            order[i] = order[i + j];
-            order[i + j] = temp;
+    function singupM2(string memory gameCode, address signer) public {
+         require(playerSignupStatus[gameCode][signer]==1, "Player already signed up or player not invited");
+        GameRequest memory request=gameRequests[gameCode];
+        playerSignupStatus[gameCode][signer]=2;
 
-             if (order[i] == 0) {
-                lordIndex = uint8(i);
-            } else if (order[j] == 0) {
-                lordIndex = uint8(j);
+        Game memory _game=games[gameCode];
+
+        require(signer==_game.players[_game.order[request.playersSignedUp]], "Not your turn");
+
+        euint8 rnd=TFHE.randEuint8();
+        rnd=TFHE.rem(rnd, 4);
+
+        while(true){
+            uint8 d_rnd=TFHE.decrypt(rnd);
+            if(d_rnd== 0){
+                if(request.lordCount==0){
+                    request.lordCount+=1;
+                    _game.lordIndex=request.playersSignedUp;
+                    break;
+                }else{
+                    rnd=TFHE.rem(TFHE.add(rnd, 1),4);
+                    continue;
+                }
+            }else if(d_rnd== 1){
+                if(request.alliesCount<2){
+                    request.alliesCount+=1;
+                    break;
+                }else{
+                    rnd=TFHE.rem(TFHE.add(rnd, 1),4);
+                    continue;
+                }
+            }else if(d_rnd== 2){
+                if(request.rebelsCount<2){
+                    request.rebelsCount+=1;
+                    break;
+                }else{
+                    rnd=TFHE.rem(TFHE.add(rnd, 1),4);
+                    continue;
+                }
+            }else if(d_rnd== 3){
+                if(request.traitorCount==0){
+                    request.traitorCount+=1;
+                    break;
+                }else{
+                    rnd=TFHE.rem(TFHE.add(rnd, 1),4);
+                    continue;
+                }
             }
         }
-        return order;
 
+        request.playersSignedUp+=1;
+        if(request.playersSignedUp==request.playerCount){
+            emit GameStarted(gameCode, _game.players, _game.lordIndex);
+        }
+        gameRequests[gameCode]=request;
+
+        
+        emit PlayerSignedup(gameCode, signer);
     }
 
 
-    uint8 public lordIndex;
-    event Done(uint8[5] roles, uint8 lordIndex);
-    function assignRoles() public {
-        euint32 num=TFHE.randEuint32();
-        uint32 rnd=TFHE.decrypt(num);
-        uint8[5] memory roles = [0, 1, 2, 2, 3];
-        
-        for (uint i = 0; i < roles.length; i++) {
-            uint j = uint(keccak256(abi.encode(rnd, i))) % (roles.length - i);
-            // Swap roles[i] with roles[i + j]
-            uint8 temp = roles[i];
-            roles[i] = roles[i + j];
-            roles[i + j] = temp;
+    function _getOrder(uint8 length) internal returns(uint8[] memory){
+         euint32 num = TFHE.randEuint32(); 
+    uint32 rnd = TFHE.decrypt(num); 
+    
+    uint8[] memory order = new uint8[](length);
+    for (uint8 i = 0; i < length; i++) {
+        order[i] = i;
+    }
+    
+    for (uint i = 0; i < order.length; i++) {
+        uint j = uint(keccak256(abi.encode(rnd, i))) % (order.length - i);
+        uint8 temp = order[i];
+        order[i] = order[i + j];
+        order[i + j] = temp;
+    }
+    
+    return order;
 
-             if (roles[i] == 0) {
-                lordIndex = uint8(i);
-            } else if (roles[j] == 0) {
-                lordIndex = uint8(j);
-            }
-        }
-        emit Done(roles, lordIndex);
+    }
+    event LETs(uint8 rand);
+    function whatswonrg() public {
+        euint8 rnd=TFHE.randEuint8();
+        rnd=TFHE.rem(rnd, 4);
+        emit LETs(TFHE.decrypt(TFHE.rem(TFHE.add(rnd, 1),4)));
     }
 }
