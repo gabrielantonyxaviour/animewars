@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  font-family: "Londrina Solid", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #ffffff, #999999);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom scrollbar styles */
+.scrollbar-custom {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #6b7280 #e5e7eb; /* thumb color, track color for Firefox */
+
+  /* For WebKit Browsers (Safari, Brave) */
+  scrollbar-color: #d8485f #6b7280; /* track color, thumb color for WebKit */
+  overflow-y: auto;
+}
+
+/* For WebKit Browsers (Safari, Brave) */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 1px; /* width of the scrollbar */
+  overflow-y: auto;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #e5e7eb; /* track color */
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #6b7280; /* thumb color */
+  border-radius: 10px; /* roundness of the thumb */
+  border: 2px solid #e5e7eb; /* creates padding around thumb */
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #4b5563; /* thumb color on hover */
+}
+
+.dynamic-shadow-dom {
+  /* --dynamic-text-size-button-primary: 32px; */
+  --dynamic-font-family-primary: "Roboto", sans-serif;
+  --dynamic-connect-button-background: linear-gradient(
+    to right,
+    #d8485f,
+    #b62dd3
+  );
+  --dynamic-connect-button-border: none;
+  --dynamic-connect-button-color: #ffffff;
+  --dynamic-connect-button-hover-background: #242967;
+  --dynamic-connect-button-color-hover: #fff;
+}
+
+@keyframes scrollLeftRight {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(
+      -50%
+    ); /* Adjust this value based on your content width */
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.scrolling-text {
+  display: inline-block; /* Ensures the element is only as wide as its content */
+  animation: scrollLeftRight 10s linear infinite; /* Adjust duration as needed */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
