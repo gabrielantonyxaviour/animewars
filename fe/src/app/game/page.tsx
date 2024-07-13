@@ -18,15 +18,16 @@ import supabase from "@/utils/supabase";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
 
 function Page() {
   const searchParams = useSearchParams();
-  const { primaryWallet, isAuthenticated, sdkHasLoaded } = useDynamicContext();
+  const { address, status } = useAccount();
   const roomCode = searchParams.get("code");
   const [gameState, setGameState] = useState<GameState | null>(null);
 
   useEffect(() => {
-    if (sdkHasLoaded && !isAuthenticated) window.location.href = "/";
+    if (status != "connected") window.location.href = "/";
 
     getGame(roomCode as string).then((game) => {
       console.log("GANEEES");
@@ -36,7 +37,7 @@ function Page() {
   }, []);
 
   useEffect(() => {
-    if (primaryWallet == null) return;
+    if (status != "connected") return;
     if (gameState != null && Object.keys(gameState).length == 0)
       getRoomPlayers(roomCode as string).then((roomPlayers) => {
         getPlayer(address.toLowerCase()).then((player) => {
@@ -87,7 +88,7 @@ function Page() {
           });
         });
       });
-  }, [primaryWallet, gameState]);
+  }, [status, gameState]);
 
   useEffect(() => {
     supabase
@@ -110,7 +111,7 @@ function Page() {
       )
       .subscribe();
   }, [supabase, roomCode, gameState, setGameState]);
-  if (primaryWallet == null) return <div></div>;
+  if (status != "connected") return <div></div>;
 
   return (
     <div className="h-screen flex flex-col items-center space-y-4 select-none xl:w-[33%] lg:w-[50%] md:w-[70%] sm:w-[85%] w-full mx-auto relative">
@@ -121,12 +122,8 @@ function Page() {
         objectFit="cover"
         alt="back"
       />
-      <GameNavbar roomCode={roomCode as string} primaryWallet={primaryWallet} />
-      <Game
-        gameState={gameState}
-        roomCode={roomCode as string}
-        primaryWallet={primaryWallet}
-      />
+      <GameNavbar roomCode={roomCode as string} />
+      <Game gameState={gameState} roomCode={roomCode as string} />
     </div>
   );
 }

@@ -11,7 +11,7 @@
   "dependencies": {
     "@supabase/ssr": "^0.4.0",
     "@supabase/supabase-js": "^2.44.2",
-    "@tanstack/react-query": "^5.32.0",
+    "@tanstack/react-query": "^5.51.1",
     "@worldcoin/idkit": "^1.2.0",
     "axios": "^1.7.2",
     "graphql": "^16.8.1",
@@ -19,8 +19,8 @@
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
-    "viem": "^2.9.28",
-    "wagmi": "^2.6.0"
+    "viem": "2.x",
+    "wagmi": "^2.10.10"
   },
   "devDependencies": {
     "@types/node": "^20",
