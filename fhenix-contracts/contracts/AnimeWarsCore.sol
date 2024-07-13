@@ -2,10 +2,8 @@
 
 pragma solidity ^0.8.19;
 
-import "fhevm/abstracts/EIP712WithModifier.sol";
-import "fhevm/lib/TFHE.sol";
-
-contract AnimeWarsCore is EIP712WithModifier {
+import { FHE, euint32, euint8 } from "@fhenixprotocol/contracts/FHE.sol";
+contract AnimeWarsCore  {
 
     struct PlayerInput{
         address playerAddress;
@@ -55,7 +53,7 @@ contract AnimeWarsCore is EIP712WithModifier {
     mapping(string=>mapping(address=>euint8[8])) public playerCards;
     // mapping(string=>mapping(address=>mapping(euint8=>bool))) public playerCardExists;
 
-    constructor() EIP712WithModifier("AnimeWars", "1") {}
+   constructor(){}
 
     event GameInitiated(string gameCode, address[4] players);
 
@@ -78,7 +76,6 @@ contract AnimeWarsCore is EIP712WithModifier {
         _game.winner=4;
         _game.spellsDisabledCooldown=0;
         _game.players=_input.players;
-        
         // create order of players
         _game.order=_getOrder();
 
@@ -93,45 +90,45 @@ contract AnimeWarsCore is EIP712WithModifier {
                 tranceCooldown: 0,
                 cardCount: 8
             });
-            euint8 rnd=TFHE.randEuint8();
-            rnd=TFHE.rem(rnd, 4);
+            euint8 rnd=_getFakeRandomU8();
+            rnd=FHE.rem(rnd, FHE.asEuint8(4));
 
             while(true){
-            if(TFHE.decrypt(TFHE.eq(rnd, 0))){
+            if(FHE.decrypt(FHE.eq(rnd, FHE.asEuint8(0)))){
                 if(request.lordCount==0){
                     request.lordCount+=1;
                     _game.lordIndex=i;
                     _player.health=5;
                     break;
                 }else{
-                    rnd=TFHE.rem(TFHE.add(rnd, 1),4);
+                    rnd=FHE.rem(FHE.add(rnd, FHE.asEuint8(1)),FHE.asEuint8(4));
                     continue;
                 }
-            }else if(TFHE.decrypt(TFHE.eq(rnd, 1))){
+            }else if(FHE.decrypt(FHE.eq(rnd, FHE.asEuint8(1)))){
                 if(request.alliesCount==0){
                     request.alliesCount+=1;
                     _player.health=4;
                     break;
                 }else{
-                    rnd=TFHE.rem(TFHE.add(rnd, 1),4);
+                    rnd=FHE.rem(FHE.add(rnd, FHE.asEuint8(1)),FHE.asEuint8(4));
                     continue;
                 }
-            }else if(TFHE.decrypt(TFHE.eq(rnd, 2))){
+            }else if(FHE.decrypt(FHE.eq(rnd, FHE.asEuint8(2)))){
                 if(request.rebelsCount==0){
                     _player.health=4;
                     request.rebelsCount+=1;
                     break;
                 }else{
-                    rnd=TFHE.rem(TFHE.add(rnd, 1),4);
+                    rnd=FHE.rem(FHE.add(rnd, FHE.asEuint8(1)),FHE.asEuint8(4));
                     continue;
                 }
-            }else if(TFHE.decrypt(TFHE.eq(rnd, 3))){
+            }else if(FHE.decrypt(FHE.eq(rnd, FHE.asEuint8(3)))){
                 if(request.traitorCount==0){
                     _player.health=4;
                     request.traitorCount+=1;
                     break;
                 }else{
-                    rnd=TFHE.rem(TFHE.add(rnd, 1),4);
+                    rnd=FHE.rem(FHE.add(rnd, FHE.asEuint8(1)),FHE.asEuint8(4));
                     continue;
                 }
             }
@@ -159,8 +156,8 @@ contract AnimeWarsCore is EIP712WithModifier {
         euint8[8] memory cards;
         for(uint8 i=0;i<2;i++)
         {
-            euint8 card = TFHE.randEuint8();
-            card=TFHE.rem(card, 108);
+            euint8 card = _getFakeRandomU8();
+            card=FHE.rem(card, FHE.asEuint8(108));
             cards[i]=card;
         }
 
@@ -172,14 +169,13 @@ contract AnimeWarsCore is EIP712WithModifier {
         }
 
         gameRequests[gameCode]=request;
-        
         emit PlayerSignedup(gameCode, signer);
     }
 
 
     function _getOrder() internal view returns(uint8[4] memory){
-         euint32 num = TFHE.randEuint32(); 
-        uint32 rnd = TFHE.decrypt(num); 
+        euint32 num = _getFakeRandomU32(); 
+        uint32 rnd = FHE.decrypt(num); 
     
         uint8[4] memory order=[0,1,2,3];
     
@@ -193,12 +189,12 @@ contract AnimeWarsCore is EIP712WithModifier {
         return order;
     }
 
-    function getCards(string memory gameCode, address signer, bytes32 _publicKey) public view returns(bytes[8] memory _data){
+    function getCards(string memory gameCode, address signer) public view returns(uint8[8] memory _data){
         euint8[8] memory _cards = playerCards[gameCode][signer];
-        bytes[8] memory _decryptedCards;
+        uint8[8] memory _decryptedCards;
         
         for(uint8 i=0;i<_cards.length; i++){
-            _decryptedCards[i]=TFHE.reencrypt(_cards[i], _publicKey);
+            _decryptedCards[i]=FHE.decrypt(_cards[i]);
         }
 
         return _decryptedCards;
@@ -206,6 +202,23 @@ contract AnimeWarsCore is EIP712WithModifier {
 
     function getOrder(string memory _gameCode) public view returns(uint8[4] memory){
         return games[_gameCode].order;
+    }
+
+    function _getFakeRandom() internal view returns (uint256) {
+        uint blockNumber = block.number;
+        uint256 blockHash = uint256(blockhash(blockNumber));
+
+        return blockHash;
+    }
+
+    function _getFakeRandomU32() internal view returns (euint32) {
+        uint32 blockHash = uint32(_getFakeRandom());
+        return FHE.asEuint32(blockHash);
+    }
+
+    function _getFakeRandomU8() internal view returns (euint8) {
+        uint8 blockHash = uint8(_getFakeRandom());
+        return FHE.asEuint8(blockHash);
     }
 
 }
