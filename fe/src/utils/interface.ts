@@ -48,7 +48,7 @@ interface Player {
   cards: number[];
   tranceCooldown: number;
   poisonCooldown: number;
-  isLord: boolean;
+  role: number;
   isAlive: boolean;
 }
 interface GamePlay {

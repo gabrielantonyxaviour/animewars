@@ -80,7 +80,14 @@ function Page() {
                     armour: 0,
                     tranceCooldown: 0,
                     poisonCooldown: 0,
-                    isLord: index == lordId,
+                    role:
+                      index == lordId
+                        ? 0
+                        : (index + 1) % 4 || (index - 1) % 4 == lordId
+                        ? 1
+                        : (index + 1) % 4 || (index - 1) % 4
+                        ? 2
+                        : 3,
                     isAlive: true,
                   };
                 }),

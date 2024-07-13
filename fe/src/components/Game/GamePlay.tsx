@@ -31,9 +31,7 @@ export default function GamePlay({
         ) : gameState.currentPlay.state == "declare_lord" ? (
           <DeclareLord
             acked={acked}
-            lord={
-              gameState.players.filter((player) => player.isLord == true)[0]
-            }
+            lord={gameState.players.filter((player) => player.role == 0)[0]}
             ack={() => {
               acknowledgeLord({
                 roomCode: roomCode,

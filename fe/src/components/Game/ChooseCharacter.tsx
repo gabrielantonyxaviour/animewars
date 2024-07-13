@@ -21,7 +21,7 @@ export default function ChooseCharacter({
       {gameState.players.filter(
         (player) =>
           player.address.toLowerCase() == (address ?? "").toLowerCase()
-      )[0].isLord ? (
+      )[0].role == 0 ? (
         <>
           <Image
             src={"/box.png"}
@@ -98,7 +98,19 @@ export default function ChooseCharacter({
             className="absolute"
           />
           <p className="relative text-black text-center font-semibold text-2xl">
-            You are a {"TRAITOR"}
+            You are &nbsp;
+            {gameState.players.filter(
+              (player) =>
+                player.address.toLowerCase() == (address ?? "").toLowerCase()
+            )[0].role == 1
+              ? "ALLY"
+              : gameState.players.filter(
+                  (player) =>
+                    player.address.toLowerCase() ==
+                    (address ?? "").toLowerCase()
+                )[0].role == 2
+              ? "REBEL"
+              : "TRAITOR"}
           </p>
           <p className="relative text-black text-center">
             Choose your character for the game
