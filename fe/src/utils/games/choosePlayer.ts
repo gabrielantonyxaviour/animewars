@@ -24,7 +24,7 @@ export default async function choosePlayer({
       by: playerIndex,
       to: null,
       move: 0,
-      turn: 0,
+      turn: 1,
       metadata: {
         count: 0,
       },
