@@ -13,9 +13,6 @@ export default function Page() {
   const { address, status } = useAccount();
 
   useEffect(() => {
-    if (status !== "connected") {
-      window.location.href = "/";
-    }
     getRoomPlayers(roomCode || "").then((res) => {
       if (res.success) {
         setPlayers(res.data);

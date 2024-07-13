@@ -97,13 +97,15 @@ const CreateGameModal: React.FC<CreateGameModalProps> = ({ closeModal }) => {
                 backgroundSize: "100% 100%",
               }}
             />
-            <Image
-              src="/misc/terms.png"
-              width={120}
-              height={60}
-              alt="back"
-              className="ml-16 mt-1"
-            />
+            <div className="ml-16 mt-1 flex justify-between">
+              <Image src="/misc/terms.png" width={120} height={30} alt="back" />
+              {error.length > 0 && (
+                <div className="h-[10px]">
+                  <p className="text-red-500 text-xs mr-12">{error}</p>
+                </div>
+              )}
+            </div>
+
             <div
               className=" ml-16 mt-1 relative w-[120px] h-[30px] cursor-pointer flex justify-center items-center"
               onClick={async () => {
@@ -137,6 +139,23 @@ const CreateGameModal: React.FC<CreateGameModalProps> = ({ closeModal }) => {
                 style={{
                   backgroundImage: 'url("/buttons/Rock.png")',
                   backgroundSize: "100% 100%",
+                }}
+                onClick={async () => {
+                  if (signature != true) {
+                    setError("Please sign the terms and conditions");
+                    return;
+                  }
+                  const roomCode = generateRandomCode();
+                  const createRoomData = await createRoom({
+                    roomCode: roomCode,
+                    address: (address as string).toLowerCase(),
+                    pfpCode: pfp_id,
+                    name: name,
+                  });
+                  console.log(createRoomData);
+                  if (createRoomData.success == false)
+                    setError(createRoomData.data);
+                  else window.location.href = `/room?code=${roomCode}`;
                 }}
               >
                 <p className="text-[#454223] text-xs ">CREATE ROOM</p>
