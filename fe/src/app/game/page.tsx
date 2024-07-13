@@ -32,14 +32,16 @@ function Page() {
     getGame(roomCode as string).then((game) => {
       console.log("GANEEES");
       console.log(game.data.state);
-      setGameState(game.data.state);
+      setGameState(JSON.parse(game.data.state));
     });
-  }, []);
+  }, [roomCode]);
 
   useEffect(() => {
     if (status != "connected") return;
     if (gameState != null && Object.keys(gameState).length == 0)
       getRoomPlayers(roomCode as string).then((roomPlayers) => {
+        console.log("ROOM PLAYERS");
+        console.log(roomPlayers.data);
         getPlayer((address ?? "").toLowerCase()).then((player) => {
           isRoomFull(roomCode as string).then((roomFull) => {
             console.log("ROOM FULL", roomFull);
@@ -88,7 +90,7 @@ function Page() {
           });
         });
       });
-  }, [status, gameState]);
+  }, [status, gameState, roomCode]);
 
   useEffect(() => {
     supabase
