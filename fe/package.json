@@ -9,7 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@dynamic-labs/ethereum": "^2.1.0-alpha.8",
+    "@dynamic-labs/ethereum": "^2.3.0",
+    "@dynamic-labs/ethereum-aa": "^2.3.0",
     "@dynamic-labs/sdk-react-core": "^2.1.0-alpha.8",
     "@dynamic-labs/wagmi-connector": "^2.1.0-alpha.8",
     "@supabase/ssr": "^0.4.0",
@@ -19,9 +20,9 @@
     "axios": "^1.7.2",
     "graphql": "^16.8.1",
     "graphql-request": "^7.0.1",
-   "react": "^18",
-    "react-dom": "^18",
     "next": "14.2.4",
+    "react": "^18",
+    "react-dom": "^18",
     "viem": "^2.9.28",
     "wagmi": "^2.6.0"
   },
