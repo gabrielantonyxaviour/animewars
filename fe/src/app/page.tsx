@@ -2,10 +2,23 @@
 import CreateGameModal from "@/components/Home/CreateGameModal";
 import JoinGameModal from "@/components/Home/JoinGameModal";
 import Loading from "@/components/Loading";
-import { DynamicWidget, useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { fhenixTestnet } from "@/utils/chains";
+import {
+  FHENIX_CORE_ABI,
+  FHENIX_CORE_ADDRESS,
+  FHENIX_EVM_ARBITRUM_ADDRESS,
+} from "@/utils/constants";
+import {
+  createWalletClientFromWallet,
+  DynamicWidget,
+  useDynamicContext,
+  Wallet,
+} from "@dynamic-labs/sdk-react-core";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
+import { createPublicClient, http } from "viem";
+import { arbitrumSepolia } from "viem/chains";
 
 function Page() {
   const { primaryWallet, isAuthenticated, sdkHasLoaded } = useDynamicContext();
@@ -32,7 +45,40 @@ function Page() {
       />
       <div className="relative flex flex-col text-center">
         <DynamicWidget />
-        {isAuthenticated && (
+
+        <button
+          onClick={async () => {
+            const walletClient = await createWalletClientFromWallet(
+              primaryWallet as Wallet
+            );
+
+            const publicClient = createPublicClient({
+              chain: fhenixTestnet,
+              transport: http(),
+            });
+
+            try {
+              const res = await publicClient.simulateContract({
+                account: primaryWallet?.address as `0x${string}`,
+                address: FHENIX_CORE_ADDRESS as `0x${string}`,
+                abi: FHENIX_CORE_ABI,
+                functionName: "setOrigin",
+                args: [
+                  arbitrumSepolia.id,
+                  "0x" + FHENIX_EVM_ARBITRUM_ADDRESS.slice(2).padStart(64, "0"),
+                ],
+              });
+              console.log(res);
+            } catch (e) {
+              console.log("TRANSACTION FAILED");
+              console.log(e);
+            }
+          }}
+          className="text-black font-bold text-2xl border border-2 border-black rounded-xl"
+        >
+          Fhenix, SetOrigin
+        </button>
+        {/* {isAuthenticated && (
           <>
             <button
               onClick={() => {
@@ -64,7 +110,7 @@ function Page() {
               Test Pyth
             </Link>
           </>
-        )}
+        )} */}
       </div>
 
       {enableJoinGameModal && (

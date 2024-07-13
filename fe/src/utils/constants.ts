@@ -5,6 +5,7 @@ export const MAX_PLAYERS_COUNT = 4;
 export const INITIAL_CARDS_DEALT = 7;
 export const TOTAL_CARDS = 108;
 export const TRANCE_COOLDOWN = 3;
+
 const redAttack: Omit<Card, "id"> = {
   cardId: 1,
   name: "Attack",
@@ -522,18 +523,13 @@ export const WORLDCOIN_TESTER_ABI = [
   },
 ];
 
-export const PYTH_TESTER_ADDRESS = "0x88854958eCE14EF7AC63AC684AAF19f7D9e84233";
-export const PYTH_TESTER_ABI = [
+export const FHENIX_CORE_ADDRESS = "0xdbff454c77307ccaa6c2762f9f515559f6d728d3";
+export const FHENIX_CORE_ABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_entropy",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_entropyProvider",
+        internalType: "contract IMailbox",
+        name: "_mailbox",
         type: "address",
       },
     ],
@@ -541,8 +537,30 @@ export const PYTH_TESTER_ABI = [
     type: "constructor",
   },
   {
-    inputs: [],
-    name: "InsufficientFee",
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "origin",
+        type: "uint32",
+      },
+      {
+        internalType: "bytes32",
+        name: "caller",
+        type: "bytes32",
+      },
+    ],
+    name: "InvalidOrigin",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "caller",
+        type: "address",
+      },
+    ],
+    name: "NotMailbox",
     type: "error",
   },
   {
@@ -550,12 +568,18 @@ export const PYTH_TESTER_ABI = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint64",
-        name: "sequenceNumber",
-        type: "uint64",
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "address[4]",
+        name: "players",
+        type: "address[4]",
       },
     ],
-    name: "RolesRequested",
+    name: "GameInitiated",
     type: "event",
   },
   {
@@ -563,39 +587,286 @@ export const PYTH_TESTER_ABI = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint64",
-        name: "sequenceNumber",
-        type: "uint64",
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
       },
       {
         indexed: false,
-        internalType: "uint8[5]",
-        name: "roles",
-        type: "uint8[5]",
+        internalType: "address[4]",
+        name: "players",
+        type: "address[4]",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "lordIndex",
+        type: "uint256",
       },
     ],
-    name: "RolesResult",
+    name: "GameStarted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "action",
+        type: "uint256",
+      },
+    ],
+    name: "InvalidAction",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "player",
+        type: "address",
+      },
+    ],
+    name: "PlayerSignedup",
     type: "event",
   },
   {
     inputs: [
       {
-        internalType: "uint64",
-        name: "sequence",
-        type: "uint64",
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    name: "gameRequests",
+    outputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "playersSignedUp",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "lordCount",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "alliesCount",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "rebelsCount",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "traitorCount",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    name: "games",
+    outputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "lordIndex",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "turn",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "winner",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "spellsDisabledCooldown",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
       },
       {
         internalType: "address",
-        name: "provider",
+        name: "signer",
         type: "address",
+      },
+    ],
+    name: "getCards",
+    outputs: [
+      {
+        internalType: "uint8[8]",
+        name: "_data",
+        type: "uint8[8]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_gameCode",
+        type: "string",
+      },
+    ],
+    name: "getOrder",
+    outputs: [
+      {
+        internalType: "uint8[4]",
+        name: "",
+        type: "uint8[4]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "_origin",
+        type: "uint32",
       },
       {
         internalType: "bytes32",
-        name: "randomNumber",
+        name: "_sender",
         type: "bytes32",
       },
+      {
+        internalType: "bytes",
+        name: "_message",
+        type: "bytes",
+      },
     ],
-    name: "_entropyCallback",
+    name: "handle",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "gameCode",
+            type: "string",
+          },
+          {
+            internalType: "address[4]",
+            name: "players",
+            type: "address[4]",
+          },
+        ],
+        internalType: "struct AnimeWarsCore.GameRequestInput",
+        name: "_input",
+        type: "tuple",
+      },
+    ],
+    name: "initGame",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "mailbox",
+    outputs: [
+      {
+        internalType: "contract IMailbox",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "signer",
+        type: "address",
+      },
+      {
+        internalType: "uint8",
+        name: "playerIndex",
+        type: "uint8",
+      },
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "by",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "to",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "cardId",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct AnimeWarsCore.Move[]",
+        name: "moves",
+        type: "tuple[]",
+      },
+    ],
+    name: "makeMoves",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -603,29 +874,45 @@ export const PYTH_TESTER_ABI = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "randomNumber",
-        type: "uint256",
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
       },
     ],
-    name: "generateRoles",
+    name: "originAddresses",
     outputs: [
       {
-        internalType: "uint8[5]",
+        internalType: "bytes32",
         name: "",
-        type: "uint8[5]",
+        type: "bytes32",
       },
     ],
-    stateMutability: "pure",
+    stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [],
-    name: "getRandomnessFee",
-    outputs: [
+    inputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
       {
         internalType: "uint256",
-        name: "fee",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "playerCards",
+    outputs: [
+      {
+        internalType: "euint8",
+        name: "",
         type: "uint256",
       },
     ],
@@ -635,18 +922,385 @@ export const PYTH_TESTER_ABI = [
   {
     inputs: [
       {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "playerSignupStatus",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "players",
+    outputs: [
+      {
+        internalType: "address",
+        name: "playerAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint8",
+        name: "health",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "armour",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "character",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "equippedArmour",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "equippedPet",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "tranceCooldown",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "cardCount",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "_origin",
+        type: "uint32",
+      },
+      {
         internalType: "bytes32",
-        name: "userRandomNumber",
+        name: "_caller",
         type: "bytes32",
       },
     ],
-    name: "requestRandomRoles",
+    name: "setOrigin",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "signer",
+        type: "address",
+      },
+      {
+        internalType: "uint8",
+        name: "index",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "character",
+        type: "uint8",
+      },
+    ],
+    name: "signUp",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+export const FHENIX_EVM_ARBITRUM_ADDRESS =
+  "0x0232d399ECbb77ff94f4E5FF5a847F79Bb529A34";
+export const FHENIX_EVM_ZIRCUIT_ADDRESS = "";
+
+export const FHENIX_EVM_ABI = [
+  {
+    inputs: [
+      {
+        internalType: "contract IMailbox",
+        name: "_mailbox",
+        type: "address",
+      },
+      {
+        internalType: "bytes32",
+        name: "core",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+      {
+        internalType: "bytes32",
+        name: "destinationAddress",
+        type: "bytes32",
+      },
+    ],
+    name: "DestinationNotSupported",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+      {
+        internalType: "uint256",
+        name: "requiredFee",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "sentFee",
+        type: "uint256",
+      },
+    ],
+    name: "InadequateCrosschainFee",
+    type: "error",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bytes32",
+        name: "messageId",
+        type: "bytes32",
+      },
+    ],
+    name: "MessageDispatched",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    name: "destinationAddresses",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "address[]",
+        name: "players",
+        type: "address[]",
+      },
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+    ],
+    name: "instantiateGame",
     outputs: [],
     stateMutability: "payable",
     type: "function",
   },
   {
+    inputs: [],
+    name: "mailbox",
+    outputs: [
+      {
+        internalType: "contract IMailbox",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "playerIndex",
+        type: "uint8",
+      },
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "by",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "to",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "cardId",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct AnimeWarsEVM.Move[]",
+        name: "moves",
+        type: "tuple[]",
+      },
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "makeMove",
+    outputs: [],
     stateMutability: "payable",
-    type: "receive",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "_destinationDomain",
+        type: "uint32",
+      },
+      {
+        internalType: "bytes32",
+        name: "_destinationAddress",
+        type: "bytes32",
+      },
+    ],
+    name: "setDestinationAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "index",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "character",
+        type: "uint8",
+      },
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "signUp",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+    ],
+    name: "testing",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
   },
 ];
+
+export const INCO_CORE_ADDRESS = "";
+export const INCO_CORE_ABI = [];
+
+export const INCO_EVM_ARBITRUM_ADDRESS = "";
+export const INCO_EVM_ZIRCUIT_ADDRESS = "";
+
+export const INCO_EVM_ABI = [];

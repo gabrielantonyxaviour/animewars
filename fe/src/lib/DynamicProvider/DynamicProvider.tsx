@@ -4,60 +4,11 @@ import { PropsWithChildren } from "react";
 
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+import { zircuitTestnet } from "viem/chains";
+import { fhenixTestnet } from "@/utils/chains";
 
 export const DynamicProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const evmNetworks = [
-    {
-      blockExplorerUrls: ["https://testnet.snowtrace.io/"],
-      chainId: 43113,
-      chainName: "Avalanche Fuji",
-      iconUrls: ["https://app.dynamic.xyz/assets/networks/avax.svg"],
-      name: "Avalanche Fuji",
-      nativeCurrency: {
-        decimals: 18,
-        name: "Avalanche",
-        symbol: "AVAX",
-      },
-      networkId: 43113,
-      rpcUrls: [`https://api.avax-test.network/ext/bc/C/rpc`],
-      vanityName: "Avax Fuji",
-    },
-    {
-      blockExplorerUrls: ["https://sepolia.etherscan.io/"],
-      chainId: 11155111,
-      chainName: "Sepolia",
-      iconUrls: ["https://app.dynamic.xyz/assets/networks/eth.svg"],
-      name: "Sepolia",
-      nativeCurrency: {
-        decimals: 18,
-        name: "Ether",
-        symbol: "ETH",
-      },
-      networkId: 11155111,
-      rpcUrls: [
-        "https://eth-sepolia.g.alchemy.com/v2/" +
-          process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
-      ],
-      vanityName: "Sepolia",
-    },
-    {
-      blockExplorerUrls: ["https://sepolia.basescan.org/"],
-      chainId: 84532,
-      chainName: "Base Sepolia",
-      iconUrls: ["https://app.dynamic.xyz/assets/networks/base.svg"],
-      name: "Base Sepolia",
-      nativeCurrency: {
-        decimals: 18,
-        name: "Ether",
-        symbol: "ETH",
-      },
-      networkId: 84532,
-      rpcUrls: [
-        "https://base-sepolia.g.alchemy.com/v2/" +
-          process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
-      ],
-      vanityName: "Base Sepolia",
-    },
     {
       blockExplorerUrls: ["https://sepolia.arbiscan.io/"],
       chainId: 421614,
@@ -76,21 +27,34 @@ export const DynamicProvider: React.FC<PropsWithChildren> = ({ children }) => {
       vanityName: "Arb Sepolia",
     },
     {
-      blockExplorerUrls: ["https://sepolia-optimism.etherscan.io/"],
-      chainId: 11155420,
-      chainName: "Optimism Sepolia",
-      iconUrls: ["https://app.dynamic.xyz/assets/networks/optimism.svg"],
-      name: "Optimism Sepolia",
+      blockExplorerUrls: [zircuitTestnet.blockExplorers.default.url],
+      chainId: zircuitTestnet.id,
+      chainName: "Zircuit Testnet",
+      iconUrls: [""],
+      name: "Zircuit Testnet",
       nativeCurrency: {
         decimals: 18,
         name: "Ether",
         symbol: "ETH",
       },
-      networkId: 11155420,
-      rpcUrls: [
-        `https://opt-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`,
-      ],
-      vanityName: "OP Sepolia",
+      networkId: zircuitTestnet.id,
+      rpcUrls: [zircuitTestnet.rpcUrls.default.http[0]],
+      vanityName: "Zircuit",
+    },
+    {
+      blockExplorerUrls: [fhenixTestnet.blockExplorers.default.url],
+      chainId: fhenixTestnet.id,
+      chainName: "Fhenix Testnet",
+      iconUrls: ["https://animewars.vercel.app/logos/fhenix.png"],
+      name: "Fhenix Testnet",
+      nativeCurrency: {
+        decimals: 18,
+        name: "Fhenix",
+        symbol: "tFHE",
+      },
+      networkId: fhenixTestnet.id,
+      rpcUrls: [fhenixTestnet.rpcUrls.default.http[0]],
+      vanityName: "Fhenix",
     },
   ];
   return (
