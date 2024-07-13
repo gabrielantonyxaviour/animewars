@@ -7,32 +7,31 @@ import equipPet from "@/utils/games/play/equipPet";
 import usePotion from "@/utils/games/play/usePotion";
 import useTrance from "@/utils/games/play/useTrance";
 import { GameState, Player } from "@/utils/interface";
-import { Wallet } from "@dynamic-labs/sdk-react-core";
 import Image from "next/image";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 export default function CardDeck({
-  primaryWallet,
   gameState,
   setShowAttackOptions,
   roomCode,
 }: {
-  primaryWallet: Wallet;
   gameState: GameState;
   setShowAttackOptions: React.Dispatch<
     React.SetStateAction<null | (boolean | null)[]>
   >;
   roomCode: string;
 }) {
+  const { address } = useAccount();
   const players = gameState.players;
   const playerId = gameState.players.findIndex(
-    (player) => player.address == address.toLowerCase()
+    (player) => player.address == (address ?? "").toLowerCase()
   );
   const isPlaying =
     gameState.players[(gameState.turn - 1) % 5].address ==
-    address.toLowerCase();
+    (address ?? "").toLowerCase();
   const cardIds = gameState.players.filter(
-    (player) => player.address.toLowerCase() == address.toLowerCase()
+    (player) => player.address.toLowerCase() == (address ?? "").toLowerCase()
   )[0].cards;
   const [cardSelected, setCardSelected] = useState<number | null>(null);
   return (

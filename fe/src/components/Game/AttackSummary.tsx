@@ -72,7 +72,7 @@ export default function AttackSummary({
       <button
         disabled={
           gameState.players[(gameState.turn - 1) % 5].address !=
-          address.toLowerCase()
+          (address ?? "").toLowerCase()
         }
         onClick={() => {
           setDiscard({ gameState, roomCode, address });
@@ -80,7 +80,7 @@ export default function AttackSummary({
         className="bg-red-500 p-2 rounded-lg relative"
       >
         {gameState.players[(gameState.turn - 1) % 5].address !=
-        address.toLowerCase()
+        (address ?? "").toLowerCase()
           ? "Waiting for Turn"
           : "End Turn"}
       </button>

@@ -26,7 +26,7 @@ export default function Potion({
       />
       <p className="text-xl relative text-black text-center">
         {gameState.players[(gameState.turn - 1) % 5].address ==
-        address.toLowerCase()
+        (address ?? "").toLowerCase()
           ? "You "
           : gameState.players[(gameState.turn - 1) % 5].name}
         used Potion <br /> to gain 1 HP
@@ -51,7 +51,7 @@ export default function Potion({
       <button
         disabled={
           gameState.players[(gameState.turn - 1) % 5].address !=
-          address.toLowerCase()
+          (address ?? "").toLowerCase()
         }
         onClick={() => {
           setDiscard({ gameState, roomCode, address });
@@ -59,7 +59,7 @@ export default function Potion({
         className="bg-red-500 p-2 rounded-lg relative"
       >
         {gameState.players[(gameState.turn - 1) % 5].address !=
-        address.toLowerCase()
+        (address ?? "").toLowerCase()
           ? "Waiting for Turn"
           : "End Turn"}
       </button>

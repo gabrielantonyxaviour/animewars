@@ -26,7 +26,7 @@ export default function Equipped({
       />
       <p className="text-xl relative text-black text-center">
         {gameState.players[(gameState.turn - 1) % 5].address ==
-        address.toLowerCase()
+        (address ?? "").toLowerCase()
           ? "You"
           : gameState.players[(gameState.turn - 1) % 5].name}
         &nbsp;equipped <br /> {cards[cardId].name}
@@ -51,7 +51,7 @@ export default function Equipped({
       <button
         disabled={
           gameState.players[(gameState.turn - 1) % 5].address !=
-          address.toLowerCase()
+          (address ?? "").toLowerCase()
         }
         onClick={() => {
           setDiscard({ gameState, roomCode, address });
@@ -59,7 +59,7 @@ export default function Equipped({
         className="bg-red-500 p-2 rounded-lg relative"
       >
         {gameState.players[(gameState.turn - 1) % 5].address !=
-        address.toLowerCase()
+        (address ?? "").toLowerCase()
           ? "Waiting for Turn"
           : "End Turn"}
       </button>

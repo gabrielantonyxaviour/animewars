@@ -40,7 +40,7 @@ function Page() {
     if (status != "connected") return;
     if (gameState != null && Object.keys(gameState).length == 0)
       getRoomPlayers(roomCode as string).then((roomPlayers) => {
-        getPlayer(address.toLowerCase()).then((player) => {
+        getPlayer((address ?? "").toLowerCase()).then((player) => {
           isRoomFull(roomCode as string).then((roomFull) => {
             console.log("ROOM FULL", roomFull);
             if (!roomFull) window.location.href = "/room?code=" + roomCode;

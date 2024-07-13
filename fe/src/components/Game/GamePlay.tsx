@@ -1,35 +1,31 @@
 import { GameState } from "@/utils/interface";
 import ChooseCharacter from "./ChooseCharacter";
-import { Wallet } from "@dynamic-labs/sdk-react-core";
 import DeclareLord from "./DeclareLord";
 import acknowledgeLord from "@/utils/games/acknowledgeLord";
 import { useEffect, useState } from "react";
 import WaitingForMove from "./WaitingForMove";
 import Equipped from "./Equipped";
-// import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
 import AttackSummary from "./AttackSummary";
 import WaitingForDiscard from "./WaitingForDiscard";
 import Potion from "./Potion";
 import Trance from "./Trance";
+import { useAccount } from "wagmi";
 
 export default function GamePlay({
   gameState,
   roomCode,
-  primaryWallet,
 }: {
   gameState: GameState;
   roomCode: string;
-  primaryWallet: Wallet;
 }) {
   const [acked, setAcked] = useState<boolean>(false);
-
+  const { address } = useAccount();
   return (
     <div className="flex-1 bg-white flex flex-col w-full">
       {gameState.currentPlay != null ? (
         gameState.currentPlay.state == "choose_character" ? (
           <ChooseCharacter
             gameState={gameState}
-            primaryWallet={primaryWallet}
             roomCode={roomCode as string}
           />
         ) : gameState.currentPlay.state == "declare_lord" ? (
@@ -51,34 +47,34 @@ export default function GamePlay({
           <WaitingForMove
             roomCode={roomCode}
             gameState={gameState}
-            address={address.toLowerCase()}
+            address={(address ?? "").toLowerCase()}
           />
         ) : gameState.currentPlay.state == "equip_armour" ||
           gameState.currentPlay.state == "equip_pet" ? (
           <Equipped
             roomCode={roomCode}
             gameState={gameState}
-            address={address}
+            address={address ?? ""}
             cardId={gameState.currentPlay.metadata.cardId}
           />
         ) : gameState.currentPlay.state == "attack" ? (
           <AttackSummary
             roomCode={roomCode}
             gameState={gameState}
-            address={address.toLowerCase()}
+            address={(address ?? "").toLowerCase()}
           />
         ) : gameState.currentPlay.state == "waiting_for_discard" ? (
           <WaitingForDiscard
             roomCode={roomCode}
             gameState={gameState}
-            address={address.toLowerCase()}
+            address={(address ?? "").toLowerCase()}
           />
         ) : gameState.currentPlay.state == "potion" ? (
           <Potion
             cardId={gameState.currentPlay.metadata.cardId}
             roomCode={roomCode}
             gameState={gameState}
-            address={address.toLowerCase()}
+            address={(address ?? "").toLowerCase()}
           />
         ) : (
           gameState.currentPlay.state == "trance" && (
@@ -86,7 +82,7 @@ export default function GamePlay({
               cardId={gameState.currentPlay.metadata.cardId}
               roomCode={roomCode}
               gameState={gameState}
-              address={address.toLowerCase()}
+              address={(address ?? "").toLowerCase()}
             />
           )
         )

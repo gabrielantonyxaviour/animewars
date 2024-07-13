@@ -1,13 +1,8 @@
 import supabase from "@/utils/supabase";
-import { Wallet } from "@dynamic-labs/sdk-react-core";
+import { useAccount } from "wagmi";
 
-export default function GameNavbar({
-  roomCode,
-  primaryWallet,
-}: {
-  roomCode: string;
-  primaryWallet: Wallet;
-}) {
+export default function GameNavbar({ roomCode }: { roomCode: string }) {
+  const { address, status } = useAccount();
   return (
     <div className="flex justify-between w-full mb-2 pt-2 relative">
       <p className="text-2xl font-bold my-auto">Anime Wars</p>
@@ -15,10 +10,11 @@ export default function GameNavbar({
       <button
         className="text-white p-2 rounded-lg bg-red-700"
         onClick={async () => {
+          if (status != "connected") return;
           const { data, error } = await supabase
             .from("players")
             .update({ current_game: null })
-            .eq("address", address.toLowerCase())
+            .eq("address", (address ?? "").toLowerCase())
             .select();
 
           if (error) {

@@ -1,18 +1,15 @@
 import { GameState } from "@/utils/interface";
 import PlayersRoster from "./PlayersRoster";
 import GamePlay from "./GamePlay";
-import { Wallet } from "@dynamic-labs/sdk-react-core";
 import CardDeck from "./CardDeck";
 import { useState } from "react";
 
 export default function Game({
   gameState,
   roomCode,
-  primaryWallet,
 }: {
   gameState: GameState | null;
   roomCode: string;
-  primaryWallet: Wallet;
 }) {
   const [showAttackOptions, setShowAttackOptions] = useState<
     null | (boolean | null)[]
@@ -27,15 +24,10 @@ export default function Game({
           showAttackOptions={showAttackOptions}
           setShowAttackOptions={setShowAttackOptions}
         />
-        <GamePlay
-          gameState={gameState}
-          roomCode={roomCode as string}
-          primaryWallet={primaryWallet}
-        />
+        <GamePlay gameState={gameState} roomCode={roomCode as string} />
         {gameState.currentPlay?.state != "choose_character" && (
           <CardDeck
             gameState={gameState}
-            primaryWallet={primaryWallet}
             setShowAttackOptions={setShowAttackOptions}
             roomCode={roomCode}
           />

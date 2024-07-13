@@ -24,7 +24,7 @@ export default function WaitingForDiscard({
       />
       <p className="text-3xl relative text-black">
         {gameState.players[(gameState.turn - 1) % 5].address ==
-        address.toLowerCase()
+        (address ?? "").toLowerCase()
           ? "Choose Your"
           : gameState.players[(gameState.turn - 1) % 5].name + "'s"}
         &nbsp;discard

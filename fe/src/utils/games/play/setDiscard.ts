@@ -17,7 +17,7 @@ export default async function setDiscard({
   tempState.currentPlay = {
     state: "waiting_for_discard",
     by: gameState.players.filter(
-      (p) => p.address.toLowerCase() == address.toLowerCase()
+      (p) => p.(address??"").toLowerCase() == (address??"").toLowerCase()
     )[0].id,
     to: null,
     move: tempState.currentPlay != null ? tempState.currentPlay.move + 1 : 0,

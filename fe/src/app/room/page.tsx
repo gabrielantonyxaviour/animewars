@@ -4,15 +4,16 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import supabase from "@/utils/supabase";
 import { MAX_PLAYERS_COUNT } from "@/utils/constants";
+import { useAccount } from "wagmi";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const roomCode = searchParams.get("code");
-  const { primaryWallet, isAuthenticated, sdkHasLoaded } = useDynamicContext();
   const [players, setPlayers] = React.useState<any[]>([]);
+  const { address, status } = useAccount();
 
   useEffect(() => {
-    if (sdkHasLoaded && !isAuthenticated) {
+    if (status !== "connected") {
       window.location.href = "/";
     }
     getRoomPlayers(roomCode || "").then((res) => {
@@ -110,7 +111,7 @@ export default function Page() {
           const { data, error } = await supabase
             .from("players")
             .update({ current_game: null })
-            .eq("address", primaryWallet?.address.toLowerCase())
+            .eq("address", (address ?? "").toLowerCase())
             .select(); // Ensure this line is only used if you're querying updated rows
 
           if (error) {

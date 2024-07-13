@@ -1,28 +1,26 @@
 import { characters } from "@/utils/constants";
 import choosePlayer from "@/utils/games/choosePlayer";
 import { GameState } from "@/utils/interface";
-import { Wallet } from "@dynamic-labs/sdk-react-core";
 import Image from "next/image";
+import { useAccount } from "wagmi";
 
 export default function ChooseCharacter({
   gameState,
-  primaryWallet,
   roomCode,
 }: {
   gameState: GameState;
-  primaryWallet: Wallet;
   roomCode: string;
 }) {
+  const { address, status } = useAccount();
   return gameState.players[
     gameState.players.findIndex(
-      (player) => player.address.toLowerCase() == address.toLowerCase()
+      (player) => player.address.toLowerCase() == (address ?? "").toLowerCase()
     )
   ].character == null ? (
     <div className="relative w-[70%] py-12 mb-4 flex flex-col space-y-4 justify-center items-center w-full">
       {gameState.players.filter(
         (player) =>
-          player.address.toLowerCase() ==
-          (primaryWallet as any).address.toLowerCase()
+          player.address.toLowerCase() == (address ?? "").toLowerCase()
       )[0].isLord ? (
         <>
           <Image
@@ -43,12 +41,12 @@ export default function ChooseCharacter({
               <button
                 key={index}
                 onClick={() => {
-                  if (primaryWallet == null) return;
+                  if (status != "connected") return;
 
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: address.toLowerCase(),
+                    address: (address ?? "").toLowerCase(),
                     characterId: index,
                   }).then(() => {
                     console.log("CHOOSED PLAYER");
@@ -68,12 +66,12 @@ export default function ChooseCharacter({
           </div>
           <button
             onClick={() => {
-              if (primaryWallet == null) return;
+              if (status != "connected") return;
 
               choosePlayer({
                 roomCode: roomCode as string,
                 state: gameState,
-                address: address.toLowerCase(),
+                address: (address ?? "").toLowerCase(),
                 characterId: 2,
               }).then(() => {
                 console.log("CHOOSED PLAYER");
@@ -110,12 +108,12 @@ export default function ChooseCharacter({
               <button
                 key={index}
                 onClick={() => {
-                  if (primaryWallet == null) return;
+                  if (status != "connected") return;
 
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: address.toLowerCase(),
+                    address: (address ?? "").toLowerCase(),
                     characterId: character.id - 1,
                   });
                 }}
@@ -136,12 +134,12 @@ export default function ChooseCharacter({
               <button
                 key={index}
                 onClick={() => {
-                  if (primaryWallet == null) return;
+                  if (status != "connected") return;
 
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: address.toLowerCase(),
+                    address: (address ?? "").toLowerCase(),
                     characterId: character.id - 1,
                   }).then((returndata: any) => {
                     console.log("CHOOSED PLAYER");
@@ -172,7 +170,7 @@ export default function ChooseCharacter({
             gameState.players[
               gameState.players.findIndex(
                 (player) =>
-                  player.address.toLowerCase() == address.toLowerCase()
+                  player.address.toLowerCase() == (address ?? "").toLowerCase()
               )
             ].character || 0
           ].name
@@ -188,7 +186,8 @@ export default function ChooseCharacter({
               gameState.players[
                 gameState.players.findIndex(
                   (player) =>
-                    player.address.toLowerCase() == address.toLowerCase()
+                    player.address.toLowerCase() ==
+                    (address ?? "").toLowerCase()
                 )
               ].character || 0
             ].card

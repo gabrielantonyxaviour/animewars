@@ -29,7 +29,7 @@ export default function WaitingForMove({
       />
       <p className="text-3xl relative text-black">
         {gameState.players[(gameState.turn - 1) % 5].address ==
-        address.toLowerCase()
+        (address ?? "").toLowerCase()
           ? "Your"
           : gameState.players[(gameState.turn - 1) % 5].name + "'s"}
         &nbsp;turn
@@ -45,7 +45,7 @@ export default function WaitingForMove({
       <button
         disabled={
           gameState.players[(gameState.turn - 1) % 5].address !=
-          address.toLowerCase()
+          (address ?? "").toLowerCase()
         }
         onClick={() => {
           setDiscard({ gameState, roomCode, address });
@@ -53,7 +53,7 @@ export default function WaitingForMove({
         className="bg-red-500 p-2 rounded-lg relative"
       >
         {gameState.players[(gameState.turn - 1) % 5].address !=
-        address.toLowerCase()
+        (address ?? "").toLowerCase()
           ? "Waiting for Turn"
           : "End Turn"}
       </button>

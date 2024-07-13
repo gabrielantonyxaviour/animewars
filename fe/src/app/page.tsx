@@ -2,7 +2,6 @@
 import ConnectButton from "@/components/ConnectButton";
 import CreateGameModal from "@/components/Home/CreateGameModal";
 import JoinGameModal from "@/components/Home/JoinGameModal";
-import Loading from "@/components/Loading";
 import { fhenixTestnet } from "@/utils/chains";
 import {
   FHENIX_CORE_ABI,
@@ -43,41 +42,44 @@ function Page() {
       <div className="relative flex flex-col text-center">
         <ConnectButton />
 
-        <button
-          onClick={async () => {
-            try {
-              const walletClient = createWalletClient({
-                chain: fhenixTestnet,
-                transport: custom(window.ethereum!),
-              });
-
-              const publicClient = createPublicClient({
-                chain: fhenixTestnet,
-                transport: http(fhenixTestnet.rpcUrls.default.http[0]),
-              });
-              const { request } = await publicClient.simulateContract({
-                account: address as `0x${string}`,
-                address: FHENIX_CORE_ADDRESS as `0x${string}`,
-                abi: FHENIX_CORE_ABI,
-                functionName: "setOrigin",
-                args: [
-                  arbitrumSepolia.id,
-                  "0x" + FHENIX_EVM_ARBITRUM_ADDRESS.slice(2).padStart(64, "0"),
-                ],
-              });
-
-              const tx = await walletClient.writeContract(request);
-              console.log(tx);
-            } catch (e) {
-              console.log("TRANSACTION FAILED");
-              console.log(e);
-            }
-          }}
-          className="text-black font-bold text-2xl border border-2 border-black rounded-xl"
-        >
-          Fhenix, SetOrigin
-        </button>
         {status == "connected" && (
+          <button
+            onClick={async () => {
+              try {
+                const walletClient = createWalletClient({
+                  chain: fhenixTestnet,
+                  transport: custom(window.ethereum!),
+                });
+
+                const publicClient = createPublicClient({
+                  chain: fhenixTestnet,
+                  transport: http(fhenixTestnet.rpcUrls.default.http[0]),
+                });
+                const { request } = await publicClient.simulateContract({
+                  account: address as `0x${string}`,
+                  address: FHENIX_CORE_ADDRESS as `0x${string}`,
+                  abi: FHENIX_CORE_ABI,
+                  functionName: "setOrigin",
+                  args: [
+                    arbitrumSepolia.id,
+                    "0x" +
+                      FHENIX_EVM_ARBITRUM_ADDRESS.slice(2).padStart(64, "0"),
+                  ],
+                });
+
+                const tx = await walletClient.writeContract(request);
+                console.log(tx);
+              } catch (e) {
+                console.log("TRANSACTION FAILED");
+                console.log(e);
+              }
+            }}
+            className="text-white font-bold text-2xl border border-2 border-white p-4 rounded-xl"
+          >
+            Fhenix, SetOrigin
+          </button>
+        )}
+        {false && status == "connected" && (
           <>
             <button
               onClick={() => {
