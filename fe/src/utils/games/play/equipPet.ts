@@ -1,6 +1,7 @@
 import { cards, characters } from "@/utils/constants";
 import { GameState, Player } from "@/utils/interface";
 import supabase from "@/utils/supabase";
+import { ConfigSource } from "@worldcoin/idkit/internal";
 
 export default async function equipPet(
   playerId: number,
@@ -17,7 +18,9 @@ export default async function equipPet(
     to: playerId,
     move: tempState.currentPlay != null ? tempState.currentPlay.move + 1 : 0,
     turn: tempState.currentPlay != null ? tempState.currentPlay.turn : 0,
-    metadata: null,
+    metadata: {
+      cardId: cardId,
+    },
   };
 
   tempState.players[playerId].equippedPet = cardId;

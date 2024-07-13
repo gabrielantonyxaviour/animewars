@@ -111,18 +111,10 @@ export default function CardDeck({
                   setShowAttackOptions(checkCanAttack(players, playerId));
                 } else if (cards[cardIndex - 1].kind == "armour") {
                   console.log("ARMOUR");
-                  if (players[playerId].equippedArmour != null) {
-                    // TODO: Tell already equipped armour
-                  } else {
-                    equipArmour(playerId, gameState, cardIndex - 1, roomCode);
-                  }
+                  equipArmour(playerId, gameState, cardIndex - 1, roomCode);
                 } else if (cards[cardIndex - 1].kind == "pet") {
                   console.log("PET");
-                  if (players[playerId].equippedPet != null) {
-                    // TODO: Tell already equipped pet
-                  } else {
-                    equipPet(playerId, gameState, cardIndex - 1, roomCode);
-                  }
+                  equipPet(playerId, gameState, cardIndex - 1, roomCode);
                 } else if (cards[cardIndex - 1].kind == "spell") {
                   // show spell
                 } else if (cards[cardIndex - 1].name == "Potion") {
