@@ -65,7 +65,10 @@ export default function CardDeck({
                   : "hover:scale-110 transform transition-transform duration-200"
               }  ${index == 0 && "ml-2"}`}
               style={
-                !(gameState.currentPlay?.state == "waiting_for_discard") &&
+                !(
+                  gameState.currentPlay?.state == "waiting_for_discard" &&
+                  (gameState.turn - 1) % 5 == playerId
+                ) &&
                 checkCardDisabled({
                   cardId: cardIndex,
                   player: players[playerId],
@@ -80,7 +83,10 @@ export default function CardDeck({
                   : {}
               }
               onClick={() => {
-                if (gameState.currentPlay?.state == "waiting_for_discard") {
+                if (
+                  gameState.currentPlay?.state == "waiting_for_discard" &&
+                  (gameState.turn - 1) % 5 == playerId
+                ) {
                   discard({
                     gameState,
                     playerIndex: playerId,
