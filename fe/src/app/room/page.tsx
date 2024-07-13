@@ -59,6 +59,9 @@ export default function Page() {
         }
       )
       .subscribe();
+    if (players.length == MAX_PLAYERS_COUNT) {
+      window.location.href = `/game?code=${roomCode}`;
+    }
   }, [supabase, players, setPlayers]);
   return (
     <div className="h-screen flex flex-col items-center justify-around select-none xl:w-[33%] lg:w-[50%] md:w-[70%] sm:w-[85%] w-full mx-auto relative">
@@ -104,13 +107,21 @@ export default function Page() {
                     zIndex: 10,
                   }}
                 />
-                <Image
-                  src="/misc/WoodBoard.png"
-                  width={400}
-                  height={100}
-                  alt="back"
-                  className="relative -left-3"
-                />
+                <div className="relative -left-3 w-[400px] my-2">
+                  <Image
+                    src="/misc/WoodBoard.png"
+                    width={400}
+                    height={100}
+                    alt="back"
+                    className="absolute "
+                  />
+                  <div className="relative text-start text-white ml-8 mt-4">
+                    <p>{player.name}</p>
+                    <p>
+                      {player.address.slice(0, 10)}...{player.address.slice(-8)}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
