@@ -3,7 +3,6 @@
 pragma solidity ^0.8.20;
 
 import "fhevm/abstracts/EIP712WithModifier.sol";
-
 import "fhevm/lib/TFHE.sol";
 
 contract AnimeWarsCore is EIP712WithModifier {
@@ -94,8 +93,6 @@ contract AnimeWarsCore is EIP712WithModifier {
 
         Game memory _game=games[gameCode];
 
-        require(signer==_game.players[_game.order[request.playersSignedUp]], "Not your turn");
-
         euint8 rnd=TFHE.randEuint8();
         rnd=TFHE.rem(rnd, 4);
 
@@ -110,7 +107,7 @@ contract AnimeWarsCore is EIP712WithModifier {
                     continue;
                 }
             }else if(TFHE.decrypt(TFHE.eq(rnd, 1))){
-                if(request.alliesCount<2){
+                if(request.alliesCount==0){
                     request.alliesCount+=1;
                     break;
                 }else{
@@ -118,7 +115,7 @@ contract AnimeWarsCore is EIP712WithModifier {
                     continue;
                 }
             }else if(TFHE.decrypt(TFHE.eq(rnd, 2))){
-                if(request.rebelsCount<2){
+                if(request.rebelsCount==0){
                     request.rebelsCount+=1;
                     break;
                 }else{

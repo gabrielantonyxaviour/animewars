@@ -47,7 +47,7 @@ function Page() {
             console.log("ROOM PLAYERS");
             console.log(roomPlayers.data);
             console.log(player.data.id);
-            if (player.data.id == roomPlayers.data[4].id) {
+            if (player.data.id == roomPlayers.data[2].id) {
               // Get order
               const lordId = Math.floor(Math.random() * MAX_PLAYERS_COUNT);
               const order = shuffleCards([0, 1, 2, 3, 4]);
