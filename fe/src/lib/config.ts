@@ -1,11 +1,11 @@
 import { fhenixTestnet } from "@/utils/chains";
-import { http, createConfig } from "@wagmi/core";
-import { arbitrumSepolia, zircuitTestnet } from "@wagmi/core/chains";
+import { http, createConfig } from "wagmi";
+import { arbitrumSepolia, zircuitTestnet } from "wagmi/chains";
+import { injected } from "wagmi/connectors";
 
 export const config = createConfig({
   chains: [arbitrumSepolia, zircuitTestnet, fhenixTestnet],
-  multiInjectedProviderDiscovery: false,
-  ssr: true,
+  connectors: [injected()],
   transports: {
     [arbitrumSepolia.id]: http(
       `https://arb-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
@@ -14,9 +14,3 @@ export const config = createConfig({
     [fhenixTestnet.id]: http(`https://api.helium.fhenix.zone`),
   },
 });
-
-declare module "wagmi" {
-  interface Register {
-    config: typeof config;
-  }
-}

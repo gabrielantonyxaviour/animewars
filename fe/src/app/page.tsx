@@ -1,4 +1,5 @@
 "use client";
+import ConnectButton from "@/components/ConnectButton";
 import CreateGameModal from "@/components/Home/CreateGameModal";
 import JoinGameModal from "@/components/Home/JoinGameModal";
 import Loading from "@/components/Loading";
@@ -8,26 +9,22 @@ import {
   FHENIX_CORE_ADDRESS,
   FHENIX_EVM_ARBITRUM_ADDRESS,
 } from "@/utils/constants";
-import {
-  createWalletClientFromWallet,
-  DynamicWidget,
-  useDynamicContext,
-  Wallet,
-} from "@dynamic-labs/sdk-react-core";
+
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import { createPublicClient, http } from "viem";
+import { createPublicClient, createWalletClient, custom, http } from "viem";
 import { arbitrumSepolia } from "viem/chains";
+import { useAccount } from "wagmi";
 
 function Page() {
-  const { primaryWallet, isAuthenticated, sdkHasLoaded } = useDynamicContext();
+  const { address, status } = useAccount();
 
   const [enableCreateGameModal, setEnableCreateGameModal] =
     React.useState(false);
   const [enableJoinGameModal, setEnableJoinGameModal] = React.useState(false);
 
-  return sdkHasLoaded ? (
+  return (
     <div className="h-screen flex flex-col items-center justify-around space-y-4 select-none xl:w-[33%] lg:w-[50%] md:w-[70%] sm:w-[85%] w-full mx-auto relative">
       <Image
         className="absolute"
@@ -44,22 +41,22 @@ function Page() {
         alt="back"
       />
       <div className="relative flex flex-col text-center">
-        <DynamicWidget />
+        <ConnectButton />
 
         <button
           onClick={async () => {
-            const walletClient = await createWalletClientFromWallet(
-              primaryWallet as Wallet
-            );
-
-            const publicClient = createPublicClient({
-              chain: fhenixTestnet,
-              transport: http(),
-            });
-
             try {
-              const res = await publicClient.simulateContract({
-                account: primaryWallet?.address as `0x${string}`,
+              const walletClient = createWalletClient({
+                chain: fhenixTestnet,
+                transport: custom(window.ethereum!),
+              });
+
+              const publicClient = createPublicClient({
+                chain: fhenixTestnet,
+                transport: http(fhenixTestnet.rpcUrls.default.http[0]),
+              });
+              const { request } = await publicClient.simulateContract({
+                account: address as `0x${string}`,
                 address: FHENIX_CORE_ADDRESS as `0x${string}`,
                 abi: FHENIX_CORE_ABI,
                 functionName: "setOrigin",
@@ -68,7 +65,9 @@ function Page() {
                   "0x" + FHENIX_EVM_ARBITRUM_ADDRESS.slice(2).padStart(64, "0"),
                 ],
               });
-              console.log(res);
+
+              const tx = await walletClient.writeContract(request);
+              console.log(tx);
             } catch (e) {
               console.log("TRANSACTION FAILED");
               console.log(e);
@@ -78,7 +77,7 @@ function Page() {
         >
           Fhenix, SetOrigin
         </button>
-        {/* {isAuthenticated && (
+        {status == "connected" && (
           <>
             <button
               onClick={() => {
@@ -110,24 +109,16 @@ function Page() {
               Test Pyth
             </Link>
           </>
-        )} */}
+        )}
       </div>
 
       {enableJoinGameModal && (
-        <JoinGameModal
-          primaryWallet={primaryWallet}
-          closeModal={() => setEnableJoinGameModal(false)}
-        />
+        <JoinGameModal closeModal={() => setEnableJoinGameModal(false)} />
       )}
       {enableCreateGameModal && (
-        <CreateGameModal
-          primaryWallet={primaryWallet}
-          closeModal={() => setEnableCreateGameModal(false)}
-        />
+        <CreateGameModal closeModal={() => setEnableCreateGameModal(false)} />
       )}
     </div>
-  ) : (
-    <Loading />
   );
 }
 

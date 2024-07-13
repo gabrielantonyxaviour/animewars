@@ -51,34 +51,34 @@ export default function GamePlay({
           <WaitingForMove
             roomCode={roomCode}
             gameState={gameState}
-            address={primaryWallet.address.toLowerCase()}
+            address={address.toLowerCase()}
           />
         ) : gameState.currentPlay.state == "equip_armour" ||
           gameState.currentPlay.state == "equip_pet" ? (
           <Equipped
             roomCode={roomCode}
             gameState={gameState}
-            address={primaryWallet.address}
+            address={address}
             cardId={gameState.currentPlay.metadata.cardId}
           />
         ) : gameState.currentPlay.state == "attack" ? (
           <AttackSummary
             roomCode={roomCode}
             gameState={gameState}
-            address={primaryWallet.address.toLowerCase()}
+            address={address.toLowerCase()}
           />
         ) : gameState.currentPlay.state == "waiting_for_discard" ? (
           <WaitingForDiscard
             roomCode={roomCode}
             gameState={gameState}
-            address={primaryWallet.address.toLowerCase()}
+            address={address.toLowerCase()}
           />
         ) : gameState.currentPlay.state == "potion" ? (
           <Potion
             cardId={gameState.currentPlay.metadata.cardId}
             roomCode={roomCode}
             gameState={gameState}
-            address={primaryWallet.address.toLowerCase()}
+            address={address.toLowerCase()}
           />
         ) : (
           gameState.currentPlay.state == "trance" && (
@@ -86,7 +86,7 @@ export default function GamePlay({
               cardId={gameState.currentPlay.metadata.cardId}
               roomCode={roomCode}
               gameState={gameState}
-              address={primaryWallet.address.toLowerCase()}
+              address={address.toLowerCase()}
             />
           )
         )

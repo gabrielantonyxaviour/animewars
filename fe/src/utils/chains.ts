@@ -26,7 +26,7 @@ import { defineChain } from "viem";
 // });
 
 export const fhenixTestnet = defineChain({
-  id: 18008135,
+  id: 8008135,
   name: "Fhenix Testnet",
   nativeCurrency: { name: "FHENIX", symbol: "tFHE", decimals: 18 },
   rpcUrls: {

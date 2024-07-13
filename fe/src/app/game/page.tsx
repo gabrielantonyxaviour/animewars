@@ -15,7 +15,6 @@ import getPlayer from "@/utils/rooms/getPlayer";
 import getRoomPlayers from "@/utils/rooms/getRoomPlayers";
 import isRoomFull from "@/utils/rooms/isRoomfull";
 import supabase from "@/utils/supabase";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -40,7 +39,7 @@ function Page() {
     if (primaryWallet == null) return;
     if (gameState != null && Object.keys(gameState).length == 0)
       getRoomPlayers(roomCode as string).then((roomPlayers) => {
-        getPlayer(primaryWallet.address.toLowerCase()).then((player) => {
+        getPlayer(address.toLowerCase()).then((player) => {
           isRoomFull(roomCode as string).then((roomFull) => {
             console.log("ROOM FULL", roomFull);
             if (!roomFull) window.location.href = "/room?code=" + roomCode;

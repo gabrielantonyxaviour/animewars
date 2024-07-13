@@ -7,16 +7,15 @@ import isRoomFull from "@/utils/rooms/isRoomfull";
 import joinRoom from "@/utils/rooms/joinRoom";
 import { sign } from "crypto";
 import React, { useEffect } from "react";
+import { createWalletClient, custom } from "viem";
+import { useAccount } from "wagmi";
 
 interface JoinGameModalProps {
   closeModal: () => void;
-  primaryWallet: any;
 }
 
-const JoinGameModal: React.FC<JoinGameModalProps> = ({
-  closeModal,
-  primaryWallet,
-}) => {
+const JoinGameModal: React.FC<JoinGameModalProps> = ({ closeModal }) => {
+  const { address } = useAccount();
   const [name, setName] = React.useState("");
   const [pfp_id, setPfpId] = React.useState("");
   const [roomCode, setRoomCode] = React.useState("");
@@ -25,9 +24,7 @@ const JoinGameModal: React.FC<JoinGameModalProps> = ({
 
   useEffect(() => {
     (async function () {
-      const playerData = await getPlayer(
-        (primaryWallet.address as string).toLowerCase()
-      );
+      const playerData = await getPlayer((address as string).toLowerCase());
       if (playerData != null && playerData.success == true) {
         console.log("THIS CODE IS EXECUTED");
         setName(playerData.data.name);
@@ -91,7 +88,10 @@ const JoinGameModal: React.FC<JoinGameModalProps> = ({
             className="text-white border border-[1px] border-gray-300 rounded-lg p-2 my-2 "
             onClick={async () => {
               try {
-                await signWalletOwnership(primaryWallet);
+                const walletClient = createWalletClient({
+                  transport: custom(window.ethereum!),
+                });
+                await signWalletOwnership(walletClient);
                 setSignature(true);
                 setError("");
               } catch (e) {
@@ -136,7 +136,7 @@ const JoinGameModal: React.FC<JoinGameModalProps> = ({
 
                 const joinRoomData = await joinRoom({
                   roomCode: roomCode,
-                  address: (primaryWallet.address as string).toLowerCase(),
+                  address: (address as string).toLowerCase(),
                   pfpCode: pfp_id,
                   name: name,
                 });

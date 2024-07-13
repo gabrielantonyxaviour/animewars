@@ -4,11 +4,6 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "app.dynamic.xyz",
-        port: "",
-      },
-      {
-        protocol: "https",
         hostname: "noun-api.com",
         port: "",
       },

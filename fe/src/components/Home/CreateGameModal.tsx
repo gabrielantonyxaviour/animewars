@@ -4,16 +4,15 @@ import signWalletOwnership from "@/utils/helpers/signWalletOwnership";
 import getPlayer from "@/utils/rooms/getPlayer";
 import createRoom from "@/utils/rooms/createRoom";
 import React, { useEffect } from "react";
+import { createWalletClient, custom } from "viem";
+import { useAccount } from "wagmi";
 
 interface CreateGameModalProps {
   closeModal: () => void;
-  primaryWallet: any;
 }
 
-const CreateGameModal: React.FC<CreateGameModalProps> = ({
-  closeModal,
-  primaryWallet,
-}) => {
+const CreateGameModal: React.FC<CreateGameModalProps> = ({ closeModal }) => {
+  const { address } = useAccount();
   const [name, setName] = React.useState("");
   const [pfp_id, setPfpId] = React.useState("");
   const [signature, setSignature] = React.useState<boolean | null>(null);
@@ -21,9 +20,7 @@ const CreateGameModal: React.FC<CreateGameModalProps> = ({
 
   useEffect(() => {
     (async function () {
-      const playerData = await getPlayer(
-        (primaryWallet.address as string).toLowerCase()
-      );
+      const playerData = await getPlayer((address as string).toLowerCase());
       console.log(playerData);
       console.log("ONLOY THIS DONT WORRY");
       if (playerData != null && playerData.success == true) {
@@ -79,7 +76,10 @@ const CreateGameModal: React.FC<CreateGameModalProps> = ({
             className="text-white border border-[1px] border-gray-300 rounded-lg p-2 my-2 "
             onClick={async () => {
               try {
-                await signWalletOwnership(primaryWallet);
+                const walletClient = createWalletClient({
+                  transport: custom(window.ethereum!),
+                });
+                await signWalletOwnership(walletClient);
                 setSignature(true);
                 setError("");
               } catch (e) {
@@ -124,7 +124,7 @@ const CreateGameModal: React.FC<CreateGameModalProps> = ({
                 const roomCode = generateRandomCode();
                 const createRoomData = await createRoom({
                   roomCode: roomCode,
-                  address: (primaryWallet.address as string).toLowerCase(),
+                  address: (address as string).toLowerCase(),
                   pfpCode: pfp_id,
                   name: name,
                 });

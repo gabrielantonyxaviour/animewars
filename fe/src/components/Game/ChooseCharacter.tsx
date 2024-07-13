@@ -15,8 +15,7 @@ export default function ChooseCharacter({
 }) {
   return gameState.players[
     gameState.players.findIndex(
-      (player) =>
-        player.address.toLowerCase() == primaryWallet.address.toLowerCase()
+      (player) => player.address.toLowerCase() == address.toLowerCase()
     )
   ].character == null ? (
     <div className="relative w-[70%] py-12 mb-4 flex flex-col space-y-4 justify-center items-center w-full">
@@ -49,7 +48,7 @@ export default function ChooseCharacter({
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: primaryWallet.address.toLowerCase(),
+                    address: address.toLowerCase(),
                     characterId: index,
                   }).then(() => {
                     console.log("CHOOSED PLAYER");
@@ -74,7 +73,7 @@ export default function ChooseCharacter({
               choosePlayer({
                 roomCode: roomCode as string,
                 state: gameState,
-                address: primaryWallet.address.toLowerCase(),
+                address: address.toLowerCase(),
                 characterId: 2,
               }).then(() => {
                 console.log("CHOOSED PLAYER");
@@ -116,7 +115,7 @@ export default function ChooseCharacter({
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: primaryWallet.address.toLowerCase(),
+                    address: address.toLowerCase(),
                     characterId: character.id - 1,
                   });
                 }}
@@ -142,7 +141,7 @@ export default function ChooseCharacter({
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: primaryWallet.address.toLowerCase(),
+                    address: address.toLowerCase(),
                     characterId: character.id - 1,
                   }).then((returndata: any) => {
                     console.log("CHOOSED PLAYER");
@@ -173,8 +172,7 @@ export default function ChooseCharacter({
             gameState.players[
               gameState.players.findIndex(
                 (player) =>
-                  player.address.toLowerCase() ==
-                  primaryWallet.address.toLowerCase()
+                  player.address.toLowerCase() == address.toLowerCase()
               )
             ].character || 0
           ].name
@@ -190,8 +188,7 @@ export default function ChooseCharacter({
               gameState.players[
                 gameState.players.findIndex(
                   (player) =>
-                    player.address.toLowerCase() ==
-                    primaryWallet.address.toLowerCase()
+                    player.address.toLowerCase() == address.toLowerCase()
                 )
               ].character || 0
             ].card

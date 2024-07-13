@@ -18,7 +18,7 @@ export default function GameNavbar({
           const { data, error } = await supabase
             .from("players")
             .update({ current_game: null })
-            .eq("address", primaryWallet.address.toLowerCase())
+            .eq("address", address.toLowerCase())
             .select();
 
           if (error) {

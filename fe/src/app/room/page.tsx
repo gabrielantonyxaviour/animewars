@@ -3,7 +3,6 @@ import getRoomPlayers from "@/utils/rooms/getRoomPlayers";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import supabase from "@/utils/supabase";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_PLAYERS_COUNT } from "@/utils/constants";
 
 export default function Page() {

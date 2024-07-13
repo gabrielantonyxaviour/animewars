@@ -1,11 +1,7 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
 import { IDKitWidget, VerificationLevel } from "@worldcoin/idkit";
-import {
-  Wallet,
-  createWalletClientFromWallet,
-  useDynamicContext,
-} from "@dynamic-labs/sdk-react-core";
+
 import { baseSepolia } from "viem/chains";
 import {
   createPublicClient,

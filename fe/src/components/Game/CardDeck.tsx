@@ -26,14 +26,13 @@ export default function CardDeck({
 }) {
   const players = gameState.players;
   const playerId = gameState.players.findIndex(
-    (player) => player.address == primaryWallet.address.toLowerCase()
+    (player) => player.address == address.toLowerCase()
   );
   const isPlaying =
     gameState.players[(gameState.turn - 1) % 5].address ==
-    primaryWallet.address.toLowerCase();
+    address.toLowerCase();
   const cardIds = gameState.players.filter(
-    (player) =>
-      player.address.toLowerCase() == primaryWallet.address.toLowerCase()
+    (player) => player.address.toLowerCase() == address.toLowerCase()
   )[0].cards;
   const [cardSelected, setCardSelected] = useState<number | null>(null);
   return (
