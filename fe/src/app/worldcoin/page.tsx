@@ -5,6 +5,8 @@ import { IDKitWidget, VerificationLevel } from "@worldcoin/idkit";
 import { baseSepolia } from "viem/chains";
 import {
   createPublicClient,
+  createWalletClient,
+  custom,
   decodeAbiParameters,
   hexToBigInt,
   http,
@@ -13,14 +15,15 @@ import {
   WORLDCOIN_TESTER_ABI,
   WORLDCOIN_TESTER_ADDRESS,
 } from "@/utils/constants";
+import { useAccount } from "wagmi";
 
 function Page() {
-  const { primaryWallet, sdkHasLoaded, isAuthenticated } = useDynamicContext();
+  const { address, status } = useAccount();
   const [proofState, setProofState] = useState<number>(0);
   const [txHash, setTxHash] = useState<string>("");
   const [error, setError] = useState<string>("");
   useEffect(() => {
-    if (sdkHasLoaded && !isAuthenticated) {
+    if (status != "connected") {
       window.location.href = "/";
     }
   }, []);
@@ -32,7 +35,7 @@ function Page() {
         <IDKitWidget
           app_id={process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID as `app_${string}`}
           action="enter-game"
-          signal={primaryWallet?.address as `0x${string}`}
+          signal={address as `0x${string}`}
           verification_level={VerificationLevel.Orb}
           onError={() => {
             setProofState(3);
@@ -41,9 +44,9 @@ function Page() {
             const { merkle_root, proof, nullifier_hash, verification_level } =
               worldcoinData;
             setProofState(1);
-            const walletClient = await createWalletClientFromWallet(
-              primaryWallet as Wallet
-            );
+            const walletClient = createWalletClient({
+              transport: custom(window.ethereum!),
+            });
             const bigNumProofs = decodeAbiParameters(
               [{ type: "uint256[8]" }],
               proof as `0x${string}`
@@ -56,19 +59,19 @@ function Page() {
             });
             console.log("PARAMS");
             console.log([
-              primaryWallet?.address,
+              address,
               hexToBigInt(merkle_root as `0x${string}`),
               hexToBigInt(nullifier_hash as `0x${string}`),
               bigNumProofs,
             ]);
             try {
               const { request } = await publicClient.simulateContract({
-                account: primaryWallet?.address as `0x${string}`,
+                account: address as `0x${string}`,
                 address: WORLDCOIN_TESTER_ADDRESS as `0x${string}`,
                 abi: WORLDCOIN_TESTER_ABI,
                 functionName: "verifyAndExecute",
                 args: [
-                  primaryWallet?.address,
+                  address,
                   hexToBigInt(merkle_root as `0x${string}`),
                   hexToBigInt(nullifier_hash as `0x${string}`),
                   bigNumProofs,
