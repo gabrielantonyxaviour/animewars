@@ -1,0 +1,13 @@
+defaultHook:
+  type: merkleTreeHook
+defaultIsm:
+  relayer: "0x0429A2Da7884CA14E53142988D5845952fE4DF6a"
+  type: trustedRelayerIsm
+owner: "0x0429A2Da7884CA14E53142988D5845952fE4DF6a"
+requiredHook:
+  beneficiary: "0x0429A2Da7884CA14E53142988D5845952fE4DF6a"
+  maxProtocolFee: "100000000000000000"
+  owner: "0x0429A2Da7884CA14E53142988D5845952fE4DF6a"
+  protocolFee: "0"
+  type: protocolFee
+
