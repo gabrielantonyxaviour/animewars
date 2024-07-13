@@ -27,7 +27,7 @@ function Page() {
   const [gameState, setGameState] = useState<GameState | null>(null);
 
   useEffect(() => {
-    if (status != "connected") window.location.href = "/";
+    // if (status != "connected") window.location.href = "/";
 
     getGame(roomCode as string).then((game) => {
       console.log("GANEEES");
@@ -111,7 +111,7 @@ function Page() {
       )
       .subscribe();
   }, [supabase, roomCode, gameState, setGameState]);
-  if (status != "connected") return <div></div>;
+  // if (status != "connected") return <div></div>;
 
   return (
     <div className="h-screen flex flex-col items-center space-y-4 select-none xl:w-[33%] lg:w-[50%] md:w-[70%] sm:w-[85%] w-full mx-auto relative">
@@ -122,8 +122,13 @@ function Page() {
         objectFit="cover"
         alt="back"
       />
-      <GameNavbar roomCode={roomCode as string} />
-      <Game gameState={gameState} roomCode={roomCode as string} />
+
+      {gameState != null && Object.keys(gameState).length == 0 && (
+        <>
+          <GameNavbar roomCode={roomCode as string} />
+          <Game gameState={gameState} roomCode={roomCode as string} />
+        </>
+      )}
     </div>
   );
 }
