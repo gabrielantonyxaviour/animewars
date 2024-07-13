@@ -149,7 +149,6 @@ contract AnimeWarsCore is EIP712WithModifier {
         require(playerSignupStatus[gameCode][signer] == 1, "Player already signed up or player not invited");
         require(players[gameCode][index].playerAddress == signer, "Invalid Player");
 
-
         players[gameCode][index].character=character;
         GameRequest memory request=gameRequests[gameCode];
         playerSignupStatus[gameCode][signer]=2;
