@@ -103,7 +103,9 @@ function Page() {
         },
         (payload) => {
           console.log("Change received!", payload);
-
+          if (payload.new.state.turn == 0) {
+            console.log("HERE IS THE PROBELMSMMMKDVSDJOFjSDIOJOK");
+          }
           setGameState(payload.new.state as GameState);
         }
       )

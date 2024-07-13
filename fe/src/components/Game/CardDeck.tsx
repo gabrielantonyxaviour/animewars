@@ -29,7 +29,7 @@ export default function CardDeck({
     (player) => player.address == primaryWallet.address.toLowerCase()
   );
   const isPlaying =
-    gameState.players[(gameState.turn==0? - 1) % 5].address ==
+    gameState.players[(gameState.turn - 1) % 5].address ==
     primaryWallet.address.toLowerCase();
   const cardIds = gameState.players.filter(
     (player) =>
