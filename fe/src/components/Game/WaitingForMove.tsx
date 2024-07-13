@@ -14,6 +14,10 @@ export default function WaitingForMove({
   roomCode: string;
   address: string;
 }) {
+  useEffect(() => {
+    console.log("GAME STAETATFOEDFJNOSDIFVOISFNVS");
+    console.log(gameState);
+  }, []);
   return (
     <div className="relative py-12 mt-12 mb-4 flex flex-col justify-center space-y-4 items-center  w-full z-50">
       <Image
@@ -39,12 +43,17 @@ export default function WaitingForMove({
         setShowAttackOptions={null}
       />
       <button
+        disabled={
+          gameState.players[(gameState.turn - 1) % 5].address != address
+        }
         onClick={() => {
           setDiscard({ gameState, roomCode, address });
         }}
         className="bg-red-500 p-2 rounded-lg relative"
       >
-        End Turn
+        {gameState.players[(gameState.turn - 1) % 5].address != address
+          ? "Waiting for Turn"
+          : "End Turn"}
       </button>
     </div>
   );

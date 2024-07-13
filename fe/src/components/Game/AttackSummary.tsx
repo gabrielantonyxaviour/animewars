@@ -70,12 +70,17 @@ export default function AttackSummary({
       </div>
 
       <button
+        disabled={
+          gameState.players[(gameState.turn - 1) % 5].address != address
+        }
         onClick={() => {
           setDiscard({ gameState, roomCode, address });
         }}
         className="bg-red-500 p-2 rounded-lg relative"
       >
-        End Turn
+        {gameState.players[(gameState.turn - 1) % 5].address != address
+          ? "Waiting for Turn"
+          : "End Turn"}
       </button>
     </div>
   );

@@ -1,4 +1,4 @@
-import { cards, INITIAL_CARDS_DEALT, MAX_PLAYERS_COUNT } from "../constants";
+import { INITIAL_CARDS_DEALT, MAX_PLAYERS_COUNT } from "../constants";
 import { GameState, Player } from "../interface";
 import supabase from "../supabase";
 
