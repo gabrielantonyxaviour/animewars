@@ -18,7 +18,7 @@ function Page() {
   const [enableJoinGameModal, setEnableJoinGameModal] = React.useState(false);
 
   return (
-    <div className="h-screen flex flex-col items-center justify-around space-y-4 select-none xl:w-[33%] lg:w-[50%] md:w-[70%] sm:w-[85%] w-full mx-auto relative">
+    <div className="h-screen flex flex-col items-center justify-around select-none xl:w-[33%] lg:w-[50%] md:w-[70%] sm:w-[85%] w-full mx-auto relative">
       <Image
         className="absolute"
         src="/background.png"
