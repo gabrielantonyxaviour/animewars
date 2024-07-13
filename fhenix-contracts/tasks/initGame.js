@@ -4,7 +4,7 @@ task("init-game").setAction(async function (taskArguments, hre) {
   const { ethers, deployments } = hre;
   const [signer] = await ethers.getSigners();
   const animewarsCore = new ethers.Contract(
-    "0xCd74978AA1B264c78469969d6ECCA648643274df",
+    "0x16CBC6Cb38D19B73A3b545109c70b2031d20EA37",
     abi,
     signer
   );
@@ -20,7 +20,7 @@ task("init-game").setAction(async function (taskArguments, hre) {
       ],
     ],
     {
-      gasLimit: 30000000,
+      gasLimit: 1000000,
     }
   );
   const receipt = await response.wait();
