@@ -2,8 +2,22 @@
 
 pragma solidity ^0.8.19;
 
+import "./interface/hyperlane/IMailbox.sol";
 import { FHE, euint32, euint8 } from "@fhenixprotocol/contracts/FHE.sol";
+
+error NotOwner(address caller);
+error NotMailbox(address caller);
+error InadequateCrosschainFee(uint32 destination, uint256 requiredFee, uint256 sentFee);
+error DestinationNotSupported(uint32 destination, bytes32 destinationAddress);
+error InvalidOrigin(uint32 origin, bytes32 caller);
+
 contract AnimeWarsCore  {
+    
+    struct Move{
+        uint8 by;
+        uint8 to;
+        uint8 cardId;
+    }
 
     struct PlayerInput{
         address playerAddress;
@@ -53,12 +67,46 @@ contract AnimeWarsCore  {
     mapping(string=>mapping(address=>euint8[8])) public playerCards;
     // mapping(string=>mapping(address=>mapping(euint8=>bool))) public playerCardExists;
 
-   constructor(){}
+    // Hyperlane Variables
+    IMailbox public mailbox;
+    mapping(uint32=>bytes32) public originAddresses;
+
+   constructor(IMailbox _mailbox){
+        mailbox = _mailbox;
+   }
 
     event GameInitiated(string gameCode, address[4] players);
 
     event GameStarted(string gameCode, address[4] players, uint256 lordIndex);
     event PlayerSignedup(string gameCode, address player);
+    event InvalidAction(uint256 action);
+
+    modifier onlyMailbox() {
+        if(msg.sender != address(mailbox)) revert NotMailbox(msg.sender);
+        _;
+    }
+
+    function setOrigin(uint32 _origin, bytes32 _caller) public {
+        originAddresses[_origin]=_caller;
+    }
+
+    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable onlyMailbox{
+        if(originAddresses[_origin]  != _sender) revert InvalidOrigin(_origin, _sender);
+
+        (uint256 _action, bytes memory _data) = abi.decode(_message, (uint256, bytes));
+        if(_action==0){
+            (GameRequestInput memory _input) = abi.decode(_data, (GameRequestInput));
+            initGame(_input);
+        } else if(_action==1){
+            (string memory gameCode, address signer, uint8 index, uint8 character) = abi.decode(_data, (string, address, uint8, uint8));
+            signUp(gameCode, signer, index, character);
+        }else if(_action==2){
+            (string memory gameCode, address signer, uint8 playerIndex, Move[] memory moves) = abi.decode(_data, (string, address, uint8, Move[]));
+            makeMoves(gameCode, signer, playerIndex, moves);
+        }else{
+            emit InvalidAction(_action);
+        }
+    }
 
     function initGame(GameRequestInput memory _input) public {
         // check if game already exists
@@ -170,6 +218,10 @@ contract AnimeWarsCore  {
 
         gameRequests[gameCode]=request;
         emit PlayerSignedup(gameCode, signer);
+    }
+
+    function makeMoves(string memory gameCode, address signer, uint8 playerIndex, Move[] memory moves) public {
+      
     }
 
 

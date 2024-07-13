@@ -26,8 +26,9 @@ contract AnimeWarsEVM{
     IMailbox public mailbox;
     mapping(uint32=>bytes32) public destinationAddresses;
 
-    constructor( IMailbox _mailbox){
+    constructor(IMailbox _mailbox, bytes32 core, uint32 destination){
         mailbox = _mailbox;
+        destinationAddresses[destination]=core;
     }
 
     modifier onlyMailbox() {
@@ -47,11 +48,12 @@ contract AnimeWarsEVM{
 
         GameRequestInput memory gameRequestInput = GameRequestInput(gameCode, players);
         bytes memory _data = abi.encode(gameRequestInput);
+        bytes memory _sendData=abi.encode(uint256(0), _data);
 
-        uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _data);
+        uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _sendData);
         if(msg.value < _requiredFee) revert InadequateCrosschainFee(destination, _requiredFee, msg.value);
 
-        bytes32 messageId = mailbox.dispatch{value: msg.value}(destination, destinationAddress,_data);
+        bytes32 messageId = mailbox.dispatch{value: msg.value}(destination, destinationAddress, _sendData);
         emit MessageDispatched(messageId);  
     }
 
@@ -60,11 +62,12 @@ contract AnimeWarsEVM{
         if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
 
         bytes memory _data = abi.encode(gameCode, sender, index, character);
+        bytes memory _sendData=abi.encode(uint256(1), _data);
 
-        uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _data);
+        uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _sendData);
         if(msg.value < _requiredFee) revert InadequateCrosschainFee(destination, _requiredFee, msg.value);
 
-       bytes32 messageId = mailbox.dispatch{value: msg.value}(destination,destinationAddress,_data);
+       bytes32 messageId = mailbox.dispatch{value: msg.value}(destination,destinationAddress, _sendData);
         emit MessageDispatched(messageId);  
     }
 
@@ -74,12 +77,13 @@ contract AnimeWarsEVM{
         if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
         
         bytes memory _data = abi.encode(gameCode, sender, playerIndex, moves);
+        bytes memory _sendData=abi.encode(uint256(2), _data);
 
-        uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _data);
+        uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _sendData);
         if(msg.value < _requiredFee) revert InadequateCrosschainFee(destination, _requiredFee, msg.value);
 
-        bytes32 messageId = mailbox.dispatch{value: msg.value}(destination,destinationAddress,_data);
-        emit MessageDispatched(messageId);  
+        bytes32 messageId = mailbox.dispatch{value: msg.value}(destination, destinationAddress, _sendData);
+        emit MessageDispatched(messageId);
     } 
 
 }

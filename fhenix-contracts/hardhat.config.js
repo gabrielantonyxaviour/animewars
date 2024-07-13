@@ -33,6 +33,7 @@ module.exports = {
   etherscan: {
     apiKey: {
       baseSepolia: networks.baseSepolia.verifyApiKey,
+      zircuitTestnet: networks.zircuitTestnet.verifyApiKey,
     },
     customChains: [
       {
