@@ -1,0 +1,54 @@
+{
+  "arbitrum": {
+    "staticmerklerootmultisigismfactory": "0x7531BfE7268120e006a0088a1FcD36651aACB4f7",
+    "staticmessageidmultisigismfactory": "0xe0fBC90eD998B8A2dc5C0CcbF660721d99d7ba0d",
+    "staticaggregationismfactory": "0x9A369955B26f5E9BEcc6339e5661dB675B318B00",
+    "staticaggregationhookfactory": "0x4dCdc4624b25aAF9DA79188EAba61Ee516980c32",
+    "domainroutingismfactory": "0x6055973A4b7fA6A69B52A1A881667076f977df07",
+    "proxyadmin": "0x1375c6f0ceAF056FEf94840613B45116C400B82C",
+    "mailbox": "0xA03BF3Ab8f4ad4e6DF2Ab8627c6CBAA5bB4A645a",
+    "interchainaccountrouter": "0x32E257cd8fAaAE8525d8705616dAbaFE92E81D7C",
+    "interchainaccountism": "0x178F1a1d6C37824B8CB5AcF0FF54D1cbf3D1317A",
+    "validatorannounce": "0xeea40921519F31e1b5976d69695d952ea19A3b03",
+    "testrecipient": "0x07D2f75dFdA72810523Db664Aa0bA81165EdcCe0"
+  },
+  "zircuit": {
+    "staticmerklerootmultisigismfactory": "0x4ab8f50796b059aE5C8b8534afC6bb4c84912ff6",
+    "staticmessageidmultisigismfactory": "0x7125e097a72cCf547ED6e9e98bCc09BE3AC61997",
+    "staticaggregationismfactory": "0x50751BD8d7b0a84c422DE96A56426a370F31a42D",
+    "staticaggregationhookfactory": "0x08AC2b69feB202b34aD7c65E5Ac876E901CA6216",
+    "domainroutingismfactory": "0x108A91edD1329e17409A86b54D4204A102534ec3",
+    "proxyadmin": "0xc6b011774FE1393AE254d19456e76F0f1b5B09Eb",
+    "mailbox": "0x09F1aF4e16728fcF340051055159F0f9D5e00b54",
+    "interchainaccountrouter": "0xB32e77dc18A4a6afDccBD58517f869A905E58Ca8",
+    "interchainaccountism": "0x35913884404941d616Ba76a90702572236DaF317",
+    "validatorannounce": "0xBbc7268f991b6325Ab733f7250da42243900C71a",
+    "testrecipient": "0xDe2E718C8A658Ac1c9ED28F2756642F683104C9e"
+  },
+  "inco": {
+    "staticmerklerootmultisigismfactory": "0x34fdCe7193c6A9D49CB928fd4D9e80858D88C401",
+    "staticmessageidmultisigismfactory": "0xe5f254F465C3EDd0a651Bb14824FDbb2eb4ddE46",
+    "staticaggregationismfactory": "0xf196dDc633a805376859187914F56211e81A85b4",
+    "staticaggregationhookfactory": "0xD8F181CcdAC34BBB6f34b9CCaa3C9cd677219B84",
+    "domainroutingismfactory": "0x8723e1E9955BC0461a12ADD57DEa5Ab84B3aFdAc",
+    "proxyadmin": "0xb1515f97f08046Cf041d978068f66986Ab750FBC",
+    "mailbox": "0x88854958eCE14EF7AC63AC684AAF19f7D9e84233",
+    "interchainaccountrouter": "0x720ab59a2a0542B30E6fE033fF693fA509AB4631",
+    "interchainaccountism": "0x31a70eb8990ccc7Fdb4f96a62f5c1aa6E314C88b",
+    "validatorannounce": "0x8aA8aEF203FbEEa3E2067BaA3B6703151Fe96137",
+    "testrecipient": "0xA61Ee1f3E6D088c223EE4b02c803D8C48781Faa8"
+  },
+  "fhenix": {
+    "staticmerklerootmultisigismfactory": "0x70e6A6B036cf5b8759E8E7105168568086d05430",
+    "staticmessageidmultisigismfactory": "0x8DecD86959b87c64Be4978029a27D19c3e5d49DE",
+    "staticaggregationismfactory": "0xB32e77dc18A4a6afDccBD58517f869A905E58Ca8",
+    "staticaggregationhookfactory": "0xBbc7268f991b6325Ab733f7250da42243900C71a",
+    "domainroutingismfactory": "0xDe2E718C8A658Ac1c9ED28F2756642F683104C9e",
+    "proxyadmin": "0x46eb9d9F7C1fA5f7f7D8ad92e14eEEF7a83e47d0",
+    "mailbox": "0x935A5B36C923CDFfD3986f2488E92Cf2D1d8c09D",
+    "interchainaccountrouter": "0x0C29b8C5121a4a72E9D623eFe418875fc7E3Dd15",
+    "interchainaccountism": "0xAa25e4A9db1F3e493B9a20279572e4F15Ce6eEa2",
+    "validatorannounce": "0xcfA34a6eAA2Db2E89f77E754B3Aa62BD82042556",
+    "testrecipient": "0xeCC1d950bDE3fE9b632A159E24E60a29601aC5fC"
+  }
+}
