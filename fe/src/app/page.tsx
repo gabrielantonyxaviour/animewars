@@ -2,23 +2,17 @@
 import ConnectButton from "@/components/ConnectButton";
 import CreateGameModal from "@/components/Home/CreateGameModal";
 import JoinGameModal from "@/components/Home/JoinGameModal";
-import { fhenixTestnet } from "@/utils/chains";
-import {
-  FHENIX_CORE_ABI,
-  FHENIX_CORE_ADDRESS,
-  FHENIX_EVM_ARBITRUM_ADDRESS,
-} from "@/utils/constants";
-
+import WalletButton from "@/components/WalletButton";
+import setOrigin from "@/utils/transactions/write/setOrigin";
+import testCrosschain from "@/utils/transactions/write/testCrosschain";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
-import { createPublicClient, createWalletClient, custom, http } from "viem";
+import React from "react";
 import { arbitrumSepolia } from "viem/chains";
 import { useAccount } from "wagmi";
 
 function Page() {
-  const { address, status } = useAccount();
-
+  const { address, status, chainId } = useAccount();
   const [enableCreateGameModal, setEnableCreateGameModal] =
     React.useState(false);
   const [enableJoinGameModal, setEnableJoinGameModal] = React.useState(false);
@@ -39,77 +33,70 @@ function Page() {
         height={150}
         alt="back"
       />
-      <div className="relative flex flex-col text-center">
-        <ConnectButton />
-
+      <div className="relative flex flex-col text-center space-y-2">
+        {status == "connected" ? <WalletButton /> : <ConnectButton />}
+        {/* {false ||
+          (status == "connected" && (
+            <div className="mt-4 flex flex-col space-y-4">
+              <button
+                onClick={async () => {
+                  try {
+                    const receipt = await setOrigin({
+                      address: address as `0x${string}`,
+                    });
+                    console.log(receipt);
+                  } catch (e) {
+                    console.log("TRANSACTION FAILED");
+                    console.log(e);
+                  }
+                }}
+                className="text-white font-bold text-2xl border border-2 border-white p-4 rounded-xl"
+              >
+                SetOrigin
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    const receipt = await testCrosschain({
+                      address,
+                      chainId: chainId,
+                      targetChainId: arbitrumSepolia.id,
+                    });
+                    console.log(receipt);
+                  } catch (e) {
+                    console.log("TRANSACTION FAILED");
+                    console.log(e);
+                  }
+                }}
+                className="text-white font-bold text-2xl border border-2 border-white p-4 rounded-xl"
+              >
+                Crosschain Testing
+              </button>
+            </div>
+          ))} */}
         {status == "connected" && (
-          <button
-            onClick={async () => {
-              try {
-                const walletClient = createWalletClient({
-                  chain: fhenixTestnet,
-                  transport: custom(window.ethereum!),
-                });
-
-                const publicClient = createPublicClient({
-                  chain: fhenixTestnet,
-                  transport: http(fhenixTestnet.rpcUrls.default.http[0]),
-                });
-                const { request } = await publicClient.simulateContract({
-                  account: address as `0x${string}`,
-                  address: FHENIX_CORE_ADDRESS as `0x${string}`,
-                  abi: FHENIX_CORE_ABI,
-                  functionName: "setOrigin",
-                  args: [
-                    arbitrumSepolia.id,
-                    "0x" +
-                      FHENIX_EVM_ARBITRUM_ADDRESS.slice(2).padStart(64, "0"),
-                  ],
-                });
-
-                const tx = await walletClient.writeContract(request);
-                console.log(tx);
-              } catch (e) {
-                console.log("TRANSACTION FAILED");
-                console.log(e);
-              }
-            }}
-            className="text-white font-bold text-2xl border border-2 border-white p-4 rounded-xl"
-          >
-            Fhenix, SetOrigin
-          </button>
-        )}
-        {false && status == "connected" && (
           <>
-            <button
+            <Image
+              src="/buttons/Create.png"
+              width={240}
+              height={100}
+              alt="arbitrum"
+              className="cursor-pointer"
               onClick={() => {
                 setEnableCreateGameModal(true);
               }}
-              className="border border-[1px] border-white py-4 px-6 rounded-xl"
-            >
-              New Game
-            </button>
-            <button
+            />
+
+            <Image
+              src="/buttons/Join.png"
+              width={240}
+              height={100}
+              alt="arbitrum"
+              className="cursor-pointer"
               onClick={() => {
                 setEnableJoinGameModal(true);
               }}
-              className="border border-[1px] border-white py-4 px-6 rounded-xl"
-            >
-              Join Game
-            </button>
-
-            <Link
-              href="/worldcoin"
-              className="border border-[1px] border-white py-4 px-6 rounded-xl"
-            >
-              Test Worldcoin
-            </Link>
-            <Link
-              href="/pyth"
-              className="border border-[1px] border-white py-4 px-6 rounded-xl"
-            >
-              Test Pyth
-            </Link>
+            />
           </>
         )}
       </div>
