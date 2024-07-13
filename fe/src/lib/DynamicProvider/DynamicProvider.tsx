@@ -30,7 +30,7 @@ export const DynamicProvider: React.FC<PropsWithChildren> = ({ children }) => {
       blockExplorerUrls: [zircuitTestnet.blockExplorers.default.url],
       chainId: zircuitTestnet.id,
       chainName: "Zircuit Testnet",
-      iconUrls: [""],
+      iconUrls: ["https://animewars.vercel.app/logos/zircuit.jpeg"],
       name: "Zircuit Testnet",
       nativeCurrency: {
         decimals: 18,
