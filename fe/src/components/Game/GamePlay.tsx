@@ -8,6 +8,7 @@ import WaitingForMove from "./WaitingForMove";
 import Equipped from "./Equipped";
 import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
 import AttackSummary from "./AttackSummary";
+import WaitingForDiscard from "./WaitingForDiscard";
 
 export default function GamePlay({
   gameState,
@@ -19,16 +20,7 @@ export default function GamePlay({
   primaryWallet: Wallet;
 }) {
   const [acked, setAcked] = useState<boolean>(false);
-  const [timeLeft, setTimeLeft] = useState<number>(30);
-  useEffect(() => {
-    if (timeLeft === 0) {
-      triggerEndMove();
-    }
 
-    setInterval(() => {
-      if (timeLeft > 0) setTimeLeft(timeLeft - 1);
-    }, 1000);
-  }, [timeLeft]);
   return (
     <div className="flex-1 bg-white flex flex-col w-full">
       {gameState.currentPlay != null ? (
@@ -55,21 +47,31 @@ export default function GamePlay({
           />
         ) : gameState.currentPlay.state == "waiting_for_move" ? (
           <WaitingForMove
-            timeLeft={timeLeft}
+            roomCode={roomCode}
             gameState={gameState}
             address={primaryWallet.address.toLowerCase()}
           />
         ) : gameState.currentPlay.state == "equip_armour" ||
           gameState.currentPlay.state == "equip_pet" ? (
           <Equipped
+            roomCode={roomCode}
             gameState={gameState}
             address={primaryWallet.address}
             cardId={gameState.currentPlay.metadata.cardId}
-            timeLeft={timeLeft}
+          />
+        ) : gameState.currentPlay.state == "attack" ? (
+          <AttackSummary
+            roomCode={roomCode}
+            gameState={gameState}
+            address={primaryWallet.address.toLowerCase()}
           />
         ) : (
-          gameState.currentPlay.state == "attack" && (
-            <AttackSummary gameState={gameState} />
+          gameState.currentPlay.state == "waiting_for_discard" && (
+            <WaitingForDiscard
+              roomCode={roomCode}
+              gameState={gameState}
+              address={primaryWallet.address.toLowerCase()}
+            />
           )
         )
       ) : (

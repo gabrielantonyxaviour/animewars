@@ -85,18 +85,23 @@ export default async function triggerAttack(
       reverseDamageInflicted,
     },
   };
-  if (result < 0) {
-    tempState.players[attackerId].cards = attacker.cards.filter(
-      (card) => card != usedAttackId
-    );
-  } else {
-    tempState.players[defenderId].cards =
-      redDodge.concat(blackDodge).length > 0
-        ? defender.cards.filter(
-            (card) => redDodge.concat(blackDodge)[0] == card
-          )
-        : defender.cards;
-  }
+
+  console.log("CARD");
+  console.log(attacker.cards);
+  console.log("USED ATTACK ID");
+  console.log(usedAttackId);
+  tempState.players[attackerId].cards = attacker.cards.filter(
+    (card, index) => index != usedAttackId
+  );
+
+  console.log("CARD");
+  console.log(defender.cards);
+  tempState.players[defenderId].cards =
+    redDodge.concat(blackDodge).length > 0
+      ? defender.cards.filter((card) => redDodge.concat(blackDodge)[0] == card)
+      : defender.cards;
+  console.log("AFTER");
+  console.log(tempState.players[defenderId].cards);
 
   const { data, error } = await supabase
     .from("games")

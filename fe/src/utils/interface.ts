@@ -56,6 +56,7 @@ interface GamePlay {
     | "choose_character"
     | "declare_lord"
     | "waiting_for_move"
+    | "waiting_for_discard"
     | "spell"
     | "attack"
     | "trance"

@@ -1,6 +1,7 @@
 import { cards } from "@/utils/constants";
 import checkCanAttack from "@/utils/games/play/checks/checkCanAttack";
 import checkCardDisabled from "@/utils/games/play/checks/checkCardDisabled";
+import discard from "@/utils/games/play/discard";
 import equipArmour from "@/utils/games/play/eqiupArmour";
 import { GameState, Player } from "@/utils/interface";
 import { Wallet } from "@dynamic-labs/sdk-react-core";
@@ -61,6 +62,7 @@ export default function CardDeck({
                   : "hover:scale-110 transform transition-transform duration-200"
               }  ${index == 0 && "ml-2"}`}
               style={
+                !(gameState.currentPlay?.state == "waiting_for_discard") &&
                 checkCardDisabled({
                   cardId: cardIndex,
                   player: players[playerId],
@@ -75,7 +77,14 @@ export default function CardDeck({
                   : {}
               }
               onClick={() => {
-                if (
+                if (gameState.currentPlay?.state == "waiting_for_discard") {
+                  discard({
+                    gameState,
+                    playerIndex: playerId,
+                    selectedCardIndex: cardIndex,
+                    roomCode,
+                  });
+                } else if (
                   checkCardDisabled({
                     cardId: cardIndex,
                     player: players[playerId],
