@@ -32,16 +32,33 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      baseSepolia: networks.baseSepolia.verifyApiKey,
       zircuitTestnet: networks.zircuitTestnet.verifyApiKey,
+      arbitrumSepolia: networks.arbitrumSepolia.verifyApiKey,
+      fhenixTestnet: networks.fhenixTestnet.verifyApiKey,
     },
     customChains: [
       {
-        network: "baseSepolia",
-        chainId: networks.baseSepolia.chainId,
+        network: "zircuitTestnet",
+        chainId: networks.zircuitTestnet.chainId,
         urls: {
-          apiURL: "https://api-sepolia.basescan.org/api/",
-          browserURL: "https://sepolia.basescan.org/",
+          apiURL: "https://explorer.zircuit.com/api/contractVerifyHardhat",
+          browserURL: "https://explorer.zircuit.com/",
+        },
+      },
+      {
+        network: "fhenixTestnet",
+        chainId: networks.fhenixTestnet.chainId,
+        urls: {
+          apiURL: "https://api.helium.fhenix.zone",
+          browserURL: "https://explorer.helium.fhenix.zone",
+        },
+      },
+      {
+        network: "arbitrumSepolia",
+        chainId: networks.arbitrumSepolia.chainId,
+        urls: {
+          apiURL: "https://api-sepolia.arbiscan.io/api",
+          browserURL: "https://sepolia.arbiscan.io/",
         },
       },
     ],
