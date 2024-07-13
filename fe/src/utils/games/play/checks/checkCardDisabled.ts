@@ -28,5 +28,7 @@ export default function checkCardDisabled({
 
   if (cards[cardId].cardId == 14) return true;
 
+  if (spellsDisabled && cards[cardId].kind == "spell") return true;
+
   return false;
 }

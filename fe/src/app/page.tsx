@@ -2,10 +2,10 @@
 import CreateGameModal from "@/components/Home/CreateGameModal";
 import JoinGameModal from "@/components/Home/JoinGameModal";
 import Loading from "@/components/Loading";
-import { useDynamicContext, DynamicWidget } from "@dynamic-labs/sdk-react-core";
+import { DynamicWidget, useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 
 function Page() {
   const { primaryWallet, isAuthenticated, sdkHasLoaded } = useDynamicContext();
@@ -30,9 +30,8 @@ function Page() {
         height={150}
         alt="back"
       />
-      <DynamicWidget />
-
       <div className="relative flex flex-col text-center">
+        <DynamicWidget />
         {isAuthenticated && (
           <>
             <button

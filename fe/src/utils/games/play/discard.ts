@@ -1,28 +1,31 @@
-import { cards, MAX_PLAYERS_COUNT } from "@/utils/constants";
 import { GameState } from "@/utils/interface";
 import supabase from "@/utils/supabase";
 
-export default async function setDiscard({
-  address,
+export default async function discard({
   gameState,
+  playerIndex,
   roomCode,
+  selectedCardIndex,
 }: {
-  address: string;
   gameState: GameState;
+  playerIndex: number;
   roomCode: string;
+  selectedCardIndex: number;
 }) {
   const tempState = gameState;
-  let metadata = null;
-
+  console.log("PLAYER INDEX", playerIndex);
+  console.log("SELECTED CARD INDEX", selectedCardIndex);
+  tempState.players[playerIndex].cards = tempState.players[
+    playerIndex
+  ].cards.filter((card, index) => card != selectedCardIndex);
+  tempState.turn += 1;
   tempState.currentPlay = {
-    state: "waiting_for_discard",
-    by: gameState.players.filter(
-      (p) => p.address.toLowerCase() == address.toLowerCase()
-    )[0].id,
+    state: "waiting_for_move",
+    by: (tempState.turn + 1) % 5,
     to: null,
     move: tempState.currentPlay != null ? tempState.currentPlay.move + 1 : 0,
-    turn: tempState.currentPlay != null ? tempState.currentPlay.turn : 0,
-    metadata: metadata,
+    turn: tempState.currentPlay != null ? tempState.currentPlay.turn + 1 : 0,
+    metadata: null,
   };
 
   const { data, error } = await supabase
