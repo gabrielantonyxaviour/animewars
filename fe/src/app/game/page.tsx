@@ -32,7 +32,11 @@ function Page() {
     getGame(roomCode as string).then((game) => {
       console.log("GANEEES");
       console.log(game.data.state);
-      setGameState(JSON.parse(game.data.state));
+      setGameState(
+        typeof game.data.state == "string"
+          ? JSON.parse(game.data.state)
+          : game.data.state
+      );
     });
   }, [roomCode]);
 
@@ -125,7 +129,7 @@ function Page() {
         alt="back"
       />
 
-      {gameState != null && Object.keys(gameState).length == 0 && (
+      {gameState != null && Object.keys(gameState).length != 0 && (
         <>
           <GameNavbar roomCode={roomCode as string} />
           <Game gameState={gameState} roomCode={roomCode as string} />
