@@ -20,7 +20,7 @@ task("init-game").setAction(async function (taskArguments, hre) {
       ],
     ],
     {
-      gasLimit: 1000000,
+      gasLimit: 30000000,
     }
   );
   const receipt = await response.wait();
