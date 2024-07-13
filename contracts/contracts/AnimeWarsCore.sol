@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: BSD-3-Clause-Clear
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.20;
 
@@ -27,7 +27,6 @@ contract AnimeWarsCore is EIP712WithModifier {
     struct GameRequestInput{
         string gameCode;
         address[] players;
-       
     }
 
     struct GameRequest{
