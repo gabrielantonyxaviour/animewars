@@ -17,10 +17,13 @@ export default async function usePotion(
     to: null,
     move: tempState.currentPlay != null ? tempState.currentPlay.move + 1 : 0,
     turn: tempState.currentPlay != null ? tempState.currentPlay.turn : 0,
-    metadata: null,
+    metadata: {
+      cardId: cardId,
+    },
   };
-
-  tempState.players[playerId].cards.filter((c) => c == usedPotion.id);
+  tempState.players[playerId].cards = tempState.players[playerId].cards.filter(
+    (c) => c != usedPotion.id - 1
+  );
   const { data, error } = await supabase
     .from("games")
     .update({ state: tempState })

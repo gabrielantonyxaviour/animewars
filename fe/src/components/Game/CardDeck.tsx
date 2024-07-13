@@ -102,28 +102,36 @@ export default function CardDeck({
                   })
                 )
                   return;
+
+                console.log(cards[cardIndex - 1].name == "Potion");
+
                 if (cards[cardIndex - 1].name == "Attack") {
+                  console.log("ATTACK");
                   setCardSelected(index);
                   setShowAttackOptions(checkCanAttack(players, playerId));
                 } else if (cards[cardIndex - 1].kind == "armour") {
+                  console.log("ARMOUR");
                   if (players[playerId].equippedArmour != null) {
                     // TODO: Tell already equipped armour
                   } else {
                     equipArmour(playerId, gameState, cardIndex - 1, roomCode);
                   }
-                } else if (cards[(cardIndex = 1)].kind == "pet") {
+                } else if (cards[cardIndex - 1].kind == "pet") {
+                  console.log("PET");
                   if (players[playerId].equippedPet != null) {
                     // TODO: Tell already equipped pet
                   } else {
                     equipPet(playerId, gameState, cardIndex - 1, roomCode);
                   }
-                } else if (cards[(cardIndex = 1)].kind == "spell") {
+                } else if (cards[cardIndex - 1].kind == "spell") {
                   // show spell
                 } else if (cards[cardIndex - 1].name == "Potion") {
+                  console.log("YEAAA");
                   usePotion(playerId, gameState, cardIndex, roomCode);
-                } else if (cards[cardIndex - 1].name == "Trance") {
+                } else if (cards[cardIndex - 1].name === "Trance") {
                   useTrance(playerId, gameState, cardIndex, roomCode);
                 }
+
                 // cards[cardIndex - 1];
               }}
             />

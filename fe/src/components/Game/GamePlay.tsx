@@ -9,6 +9,8 @@ import Equipped from "./Equipped";
 // import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
 import AttackSummary from "./AttackSummary";
 import WaitingForDiscard from "./WaitingForDiscard";
+import Potion from "./Potion";
+import Trance from "./Trance";
 
 export default function GamePlay({
   gameState,
@@ -65,9 +67,23 @@ export default function GamePlay({
             gameState={gameState}
             address={primaryWallet.address.toLowerCase()}
           />
+        ) : gameState.currentPlay.state == "waiting_for_discard" ? (
+          <WaitingForDiscard
+            roomCode={roomCode}
+            gameState={gameState}
+            address={primaryWallet.address.toLowerCase()}
+          />
+        ) : gameState.currentPlay.state == "potion" ? (
+          <Potion
+            cardId={gameState.currentPlay.metadata.cardId}
+            roomCode={roomCode}
+            gameState={gameState}
+            address={primaryWallet.address.toLowerCase()}
+          />
         ) : (
-          gameState.currentPlay.state == "waiting_for_discard" && (
-            <WaitingForDiscard
+          gameState.currentPlay.state == "trance" && (
+            <Trance
+              cardId={gameState.currentPlay.metadata.cardId}
               roomCode={roomCode}
               gameState={gameState}
               address={primaryWallet.address.toLowerCase()}

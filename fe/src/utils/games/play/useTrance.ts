@@ -19,10 +19,14 @@ export default async function useTrance(
     to: null,
     move: tempState.currentPlay != null ? tempState.currentPlay.move + 1 : 0,
     turn: tempState.currentPlay != null ? tempState.currentPlay.turn : 0,
-    metadata: null,
+    metadata: {
+      cardId: cardId,
+    },
   };
 
-  tempState.players[playerId].cards.filter((c) => c == usedTrance.id);
+  tempState.players[playerId].cards = tempState.players[playerId].cards.filter(
+    (c) => c != usedTrance.id - 1
+  );
   const { data, error } = await supabase
     .from("games")
     .update({ state: tempState })
