@@ -6,6 +6,7 @@ import "./globals.css";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/lib/config";
+import { Suspense } from "react";
 
 const londrina = Londrina_Solid({
   subsets: ["latin"],
@@ -22,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <body className={`${londrina.className} bg-white`}>{children}</body>
+          <Suspense>
+            <body className={`${londrina.className} bg-white`}>{children}</body>
+          </Suspense>
         </QueryClientProvider>
       </WagmiProvider>
     </html>

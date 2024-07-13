@@ -1,6 +1,5 @@
 import { characters } from "@/utils/constants";
 import { GamePlay, GameState, Player } from "@/utils/interface";
-import { Wallet } from "@dynamic-labs/sdk-react-core";
 import Image from "next/image";
 import HealthAndArmour from "./HealthAndArmour";
 import PlayerCard from "./PlayerCard";
