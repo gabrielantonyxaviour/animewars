@@ -3,6 +3,9 @@ import checkCanAttack from "@/utils/games/play/checks/checkCanAttack";
 import checkCardDisabled from "@/utils/games/play/checks/checkCardDisabled";
 import discard from "@/utils/games/play/discard";
 import equipArmour from "@/utils/games/play/eqiupArmour";
+import equipPet from "@/utils/games/play/equipPet";
+import usePotion from "@/utils/games/play/usePotion";
+import useTrance from "@/utils/games/play/useTrance";
 import { GameState, Player } from "@/utils/interface";
 import { Wallet } from "@dynamic-labs/sdk-react-core";
 import Image from "next/image";
@@ -103,11 +106,17 @@ export default function CardDeck({
                     equipArmour(playerId, gameState, cardIndex - 1, roomCode);
                   }
                 } else if (cards[(cardIndex = 1)].kind == "pet") {
-                  // equip pet
+                  if (players[playerId].equippedPet != null) {
+                    // TODO: Tell already equipped pet
+                  } else {
+                    equipPet(playerId, gameState, cardIndex - 1, roomCode);
+                  }
                 } else if (cards[(cardIndex = 1)].kind == "spell") {
                   // show spell
                 } else if (cards[cardIndex - 1].name == "Potion") {
+                  usePotion(playerId, gameState, cardIndex, roomCode);
                 } else if (cards[cardIndex - 1].name == "Trance") {
+                  useTrance(playerId, gameState, cardIndex, roomCode);
                 }
                 // cards[cardIndex - 1];
               }}
