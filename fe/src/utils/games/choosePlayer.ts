@@ -21,7 +21,7 @@ export default async function choosePlayer({
   if (tempState.currentPlay == null) {
     tempState.currentPlay = {
       state: "choose_character",
-      by: tempState.players[playerIndex],
+      by: playerIndex,
       to: null,
       move: 0,
       turn: 0,

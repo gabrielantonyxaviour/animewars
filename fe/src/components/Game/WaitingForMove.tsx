@@ -2,7 +2,7 @@ import { GameState } from "@/utils/interface";
 import PlayerCard from "./PlayerCard";
 import Image from "next/image";
 import { useEffect } from "react";
-import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
+// import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
 import setDiscard from "@/utils/games/play/setDiscard";
 
 export default function WaitingForMove({

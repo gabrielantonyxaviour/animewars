@@ -6,7 +6,7 @@ import acknowledgeLord from "@/utils/games/acknowledgeLord";
 import { useEffect, useState } from "react";
 import WaitingForMove from "./WaitingForMove";
 import Equipped from "./Equipped";
-import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
+// import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
 import AttackSummary from "./AttackSummary";
 import WaitingForDiscard from "./WaitingForDiscard";
 
