@@ -73,7 +73,7 @@ contract AnimeWarsEVM{
 
 
     function makeMove(string memory gameCode, uint8 playerIndex, Move[] memory moves, uint32 destination, address sender) public payable{
-         bytes32 destinationAddress=destinationAddresses[destination];
+        bytes32 destinationAddress=destinationAddresses[destination];
         if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
         
         bytes memory _data = abi.encode(gameCode, sender, playerIndex, moves);
@@ -85,5 +85,22 @@ contract AnimeWarsEVM{
         bytes32 messageId = mailbox.dispatch{value: msg.value}(destination, destinationAddress, _sendData);
         emit MessageDispatched(messageId);
     } 
+
+
+    function testing(uint32 destination) public payable{
+        bytes32 destinationAddress=destinationAddresses[destination];
+        if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
+        
+
+        bytes memory _data=abi.encode("What", uint256(69));
+        bytes memory _sendData=abi.encode(uint256(3), _data);
+
+          uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _sendData);
+        if(msg.value < _requiredFee) revert InadequateCrosschainFee(destination, _requiredFee, msg.value);
+
+        bytes32 messageId = mailbox.dispatch{value: msg.value}(destination, destinationAddress, _sendData);
+        emit MessageDispatched(messageId);
+    }
+
 
 }

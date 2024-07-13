@@ -13,7 +13,11 @@ task("deploy-evm", "Deploys the AnimeWarsEVM contract")
     console.log("\n__Compiling Contracts__");
     await run("compile");
 
-    const args = ["0x09F1aF4e16728fcF340051055159F0f9D5e00b54"]; // ZIRCUIT MAILBOX
+    const args = [
+      networks[network.name].mailbox,
+      networks.fhenixTestnet.core,
+      networks.fhenixTestnet.chainId,
+    ];
 
     const animeWarsEvmFactory = await ethers.getContractFactory("AnimeWarsEVM");
 

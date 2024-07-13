@@ -25,6 +25,7 @@ const networks = {
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "tFHE",
     mailbox: "0x935A5B36C923CDFfD3986f2488E92Cf2D1d8c09D",
+    core: "0x000000000000000000000000dbff454c77307ccaa6c2762f9f515559f6d728d3",
   },
   zircuitTestnet: {
     url: "https://zircuit1.p2pify.com/",
@@ -36,6 +37,7 @@ const networks = {
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "ETH",
     mailbox: "0x09F1aF4e16728fcF340051055159F0f9D5e00b54",
+    evm: "",
   },
   arbitrumSepolia: {
     url: "https://arb-sepolia.g.alchemy.com/v2/" + process.env.ALCHEMY_API_KEY,
@@ -47,6 +49,7 @@ const networks = {
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "ETH",
     mailbox: "0xA03BF3Ab8f4ad4e6DF2Ab8627c6CBAA5bB4A645a",
+    evm: "0x0232d399ECbb77ff94f4E5FF5a847F79Bb529A34",
   },
 };
 

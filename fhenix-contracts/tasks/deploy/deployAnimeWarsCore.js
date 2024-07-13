@@ -13,7 +13,7 @@ task("deploy-core", "Deploys the AnimeWarsCore contract")
     console.log("\n__Compiling Contracts__");
     await run("compile");
 
-    const args = [];
+    const args = [networks.fhenixTestnet.mailbox];
 
     const pythTesterContractFactory = await ethers.getContractFactory(
       "AnimeWarsCore"
