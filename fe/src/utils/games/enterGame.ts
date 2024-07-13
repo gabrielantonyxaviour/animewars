@@ -13,7 +13,7 @@ export default async function enterGame({
 }) {
   const tempDeck = deck.slice(INITIAL_CARDS_DEALT * MAX_PLAYERS_COUNT);
   const initGameState: GameState = {
-    turn: 0,
+    turn: 1,
     players: players,
     deck: tempDeck,
     spellsDisabled: 0,
@@ -22,7 +22,7 @@ export default async function enterGame({
       by: 0,
       to: null,
       move: 0,
-      turn: 0,
+      turn: 1,
       metadata: {
         count: 0,
       },
