@@ -10,12 +10,15 @@ error DestinationNotSupported(uint32 destination, bytes32 destinationAddress);
 
 contract AnimeWarsEVM{
 
-    uint8 public constant ATTACK = 1;
-    uint8 public constant DODGE = 2;
-    uint8 public constant TRANCE = 3;
-    uint8 public constant HEAL = 4;
-    uint8 public constant ARMOUR = 5;
-    uint8 public constant PET = 6;
+
+    uint8 public constant ATTACK = 0;
+    uint8 public constant DODGE = 1;
+    uint8 public constant TRANCE = 2;
+    uint8 public constant HEAL = 3;
+    uint8 public constant ARMOUR = 4;
+    uint8 public constant PET = 5;
+    uint8 public constant SPELL = 6;
+    
 
     struct Move{
         uint8 by;

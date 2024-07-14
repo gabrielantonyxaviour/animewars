@@ -13,12 +13,13 @@ error InvalidOrigin(uint32 origin, bytes32 caller);
 
 contract AnimeWarsCore  {
 
-    uint8 public constant ATTACK = 1;
-    uint8 public constant DODGE = 2;
-    uint8 public constant TRANCE = 3;
-    uint8 public constant HEAL = 4;
-    uint8 public constant ARMOUR = 5;
-    uint8 public constant PET = 6;
+    uint8 public constant ATTACK = 0;
+    uint8 public constant DODGE = 1;
+    uint8 public constant TRANCE = 2;
+    uint8 public constant HEAL = 3;
+    uint8 public constant ARMOUR = 4;
+    uint8 public constant PET = 5;
+    uint8 public constant SPELL = 6;
     
     struct Move{
         uint8 by;
@@ -87,7 +88,10 @@ contract AnimeWarsCore  {
     event GameStarted(string gameCode, address[4] players, uint256 lordIndex);
     event PlayerSignedup(string gameCode, address player);
     event InvalidAction(uint256 action);
-
+    event MoveInvalid(string gameCode, address signer, uint8 playerIndex, Move[] moves, uint8 moveIndex);
+    event MoveValid(string gameCode, address signer, uint8 playerIndex, Move[] moves, uint8 moveIndex);
+    event TurnSuccess(string gameCode, address signer, uint8 playerIndex, Move[] moves, uint8 moveIndex);
+   
     modifier onlyMailbox() {
         if(msg.sender != address(mailbox)) revert NotMailbox(msg.sender);
         _;
@@ -227,32 +231,82 @@ contract AnimeWarsCore  {
         emit PlayerSignedup(gameCode, signer);
     }
 
-    function makeMoves(string memory gameCode, address signer, uint8 playerIndex, Move[] memory moves) public {
+    function makeMoves(string memory gameCode, address signer, uint8 playerIndex, Move[] memory moves) public returns(bool) {
         Game memory _game=games[gameCode];
-        Player memory _player=players[gameCode][playerIndex];
         require(_game.players[playerIndex]==signer, "Invalid Player");
         require(_game.turn-1==playerIndex, "Invalid Turn");
-
+        bool isAttacked=false;
         for(uint8 i=0;i<moves.length;i++){
             Move memory move=moves[i];
-            if(move.by==ATTACK){
-                _attack(_game, _player, move);
-            }else if(move.by==DODGE){
-                _dodge(_game, _player, move);
-            }else if(move.by==TRANCE){
-                _trance(_game, _player, move);
-            }else if(move.by==HEAL){
-                _heal(_game, _player, move);
-            }else if(move.by==ARMOUR){
-                _armour(_game, _player, move);
-            }else if(move.by==PET){
-                _pet(_game, _player, move);
+            playerCardsCategorized[gameCode][signer][move.cardId].sub(FHE.asEuint8(1));
+
+            if(move.cardId==0){
+                if(isAttacked){
+                    emit MoveInvalid(gameCode, signer, playerIndex, moves, i);
+                    return false;
+                }
+                isAttacked=true;
+                if(!checkBattle(gameCode, signer, _game.players[move.to]))
+                    reduceHealth(gameCode, move.to, players[gameCode][move.by].tranceCooldown>0 ? 2 : 1);
+            } else if(move.cardId==2){
+                players[gameCode][move.by].tranceCooldown=2;
+            } else if(move.cardId==3){
+                players[gameCode][move.by].health+=1;
+            } else if(move.cardId==4){
+                players[gameCode][move.by].armour+=1;
+            } else if(move.cardId==5){
+                players[gameCode][move.by].equippedPet+=1;
+            } 
+            emit MoveValid(gameCode, signer, playerIndex, moves, i);
+        }
+        emit TurnSuccess(gameCode, signer, playerIndex, moves, 0);
+        _game.turn+=1;
+        games[gameCode]=_game;
+        return true;
+    }
+    
+    function reduceHealth(string memory gameCode, uint8 receiver, uint8 damage) internal {
+        uint8 health=players[gameCode][receiver].health;
+        uint8 armour=players[gameCode][receiver].armour;
+        if(armour>0){
+            if(armour>=damage){
+                players[gameCode][receiver].armour-=damage;
+            }else{
+                players[gameCode][receiver].armour=0;
+                players[gameCode][receiver].health-=damage-armour;
             }
+        }else{
+            players[gameCode][receiver].health-=damage;
         }
     }
 
+    function checkBattle(string memory gameCode, address attacker, address defender) internal view returns(bool){
+        return FHE.decrypt(FHE.gt(playerCardsCategorized[gameCode][attacker][0], playerCardsCategorized[gameCode][defender][1]));
+    }
 
-    function _categorizeCards
+
+    function _categorizeCards(euint8[8] memory cards) internal pure returns(euint8[8] memory){
+        euint8[8] memory _categorizedCards;
+        for(uint8 i=0;i<cards.length;i++){
+            euint8 card=cards[i];
+            if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(31)))){
+                _categorizedCards[0]=card;
+            }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(61)))){
+                _categorizedCards[1]=card;
+            }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(81)))){
+                _categorizedCards[2]=card;
+            }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(91)))){
+                _categorizedCards[3]=card;
+            }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(94)))){
+                _categorizedCards[4]=card;
+            }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(100)))){
+                _categorizedCards[5]=card;
+            }else{
+                _categorizedCards[6]=card;
+            }
+        }
+        return _categorizedCards;
+    }
 
 
     function _getOrder() internal view returns(uint8[4] memory){
@@ -272,7 +326,7 @@ contract AnimeWarsCore  {
     }
 
     function getCards(string memory gameCode, address signer) public view returns(uint8[8] memory _data){
-        euint8[8] memory _cards = playerCards[gameCode][signer];
+        euint8[8] memory _cards = playerCardsCategorized[gameCode][signer];
         uint8[8] memory _decryptedCards;
         
         for(uint8 i=0;i<_cards.length; i++){
