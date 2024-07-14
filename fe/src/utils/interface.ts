@@ -19,6 +19,8 @@ interface Character {
   family: string;
   name: string;
   card: string;
+  attackable: string;
+  selected: string;
   weapon: string;
   maxHealth: number;
   maxArmour: number;

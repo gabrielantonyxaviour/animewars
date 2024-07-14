@@ -29,6 +29,12 @@ export default async function discard({
     metadata: null,
   };
 
+  if (tempState.players[tempState.turn].cards.length < 8) {
+    tempState.players[tempState.turn].cards.push(
+      Math.floor(Math.random() * 108)
+    );
+  }
+
   const { data, error } = await supabase
     .from("games")
     .update({ state: tempState })

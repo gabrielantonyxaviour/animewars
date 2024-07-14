@@ -24,13 +24,7 @@ export default function PlayerCard({
   return (
     <div
       key={index}
-      className={`w-[90px] cursor-pointer relative ${
-        gameState != null && (gameState.turn - 1) % MAX_PLAYERS_COUNT == index
-          ? "bg-green-500"
-          : isAttackable
-          ? "bg-red-500"
-          : ""
-      }`}
+      className={`w-[90px] cursor-pointer relative `}
       onClick={() => {
         if (isAttackable) {
           console.log("Attacking Player");
@@ -54,7 +48,14 @@ export default function PlayerCard({
       <div className="border-white rounded-lg text-center w-[90px] h-[90px]">
         {player.character != null ? (
           <Image
-            src={characters[player.character].card}
+            src={
+              isAttackable
+                ? characters[player.character].attackable
+                : gameState != null &&
+                  (gameState.turn - 1) % MAX_PLAYERS_COUNT == index
+                ? characters[player.character].selected
+                : characters[player.character].card
+            }
             width={90}
             height={90}
             alt="character"
