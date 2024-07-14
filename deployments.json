@@ -1,13 +1,13 @@
 {
   "arbirtrum": {
-    "fhenix": "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419", // redeploy required
+    "fhenix": "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
     "inco": "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419", // fake
     "nouns": "0x7dca30F5B6A23c5f6f0Da17b7EAb95Eda44a60b4",
     "ape": "0x65d17BddE6570ce115Cafc5Ff49E24a1B4C10e35",
     "character": "0xe1387a32De7032068106F2CdBE7050Ec5FF1B576"
   },
   "zircuit": {
-    "fhenix": "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419", // fake
+    "fhenix": "0x0C29b8C5121a4a72E9D623eFe418875fc7E3Dd15",
     "inco": "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419" // fake
   },
   "inco": "",
