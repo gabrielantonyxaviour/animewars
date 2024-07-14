@@ -43,17 +43,20 @@ export default async function enterGame({
     gameState: "in progress",
   };
 
-  const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`);
+  const account = privateKeyToAccount(
+    process.env.NEXT_PUBLIC_PRIVATE_KEY as `0x${string}`
+  );
 
   const walletClient = createWalletClient({
     account,
-    transport: http(),
+    transport: custom(window.ethereum),
   });
 
   const publicClient = createPublicClient({
     chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
-    transport: http(),
+    transport: custom(window.ethereum),
   });
+
   const { request } = await publicClient.simulateContract({
     chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
     account: account.address,
@@ -62,7 +65,7 @@ export default async function enterGame({
       : FHENIX_EVM_ARBITRUM_ADDRESS,
     abi: FHENIX_EVM_ABI,
     functionName: "instantiateGame",
-    args: [code, players.map((p) => p.address), fhenixTestnet.id],
+    args: [code, players.map((player) => player.address), fhenixTestnet.id],
   });
   const tx = await walletClient.writeContract(request);
   console.log("GAME INITIATED");
@@ -71,7 +74,7 @@ export default async function enterGame({
     hash: tx,
   });
   console.log(receipt);
-  initGameState.initTransaction = tx;
+  // initGameState.initTransaction = tx;
   // TODO: Get random number and update
   const { data: game, error } = await supabase
     .from("games")

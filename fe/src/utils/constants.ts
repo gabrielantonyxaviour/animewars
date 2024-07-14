@@ -1328,9 +1328,9 @@ export const FHENIX_CORE_ABI = [
 ];
 
 export const FHENIX_EVM_ARBITRUM_ADDRESS =
-  "0x11C6E5451d010C43e04240EFC4696AC763fac19f";
+  "0x85028AE19BBDc6Beb9500AAbd598e3e75eA7983E";
 export const FHENIX_EVM_ZIRCUIT_ADDRESS =
-  "0xcfA34a6eAA2Db2E89f77E754B3Aa62BD82042556";
+  "0xbfef5DE3805a60E7dcB079B616b8096bd96d3712";
 
 export const FHENIX_EVM_ABI = [
   {
@@ -1534,6 +1534,29 @@ export const FHENIX_EVM_ABI = [
     ],
     name: "instantiateGame",
     outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "address[]",
+        name: "players",
+        type: "address[]",
+      },
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+    ],
+    name: "instantiateGame_",
+    outputs: [],
     stateMutability: "payable",
     type: "function",
   },
@@ -1597,6 +1620,56 @@ export const FHENIX_EVM_ABI = [
     ],
     name: "makeMove",
     outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "playerIndex",
+        type: "uint8",
+      },
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "by",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "to",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "cardId",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct AnimeWarsEVM.Move[]",
+        name: "moves",
+        type: "tuple[]",
+      },
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "makeMove_",
+    outputs: [],
     stateMutability: "payable",
     type: "function",
   },
@@ -1614,6 +1687,39 @@ export const FHENIX_EVM_ABI = [
       },
     ],
     name: "setDestinationAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "gameCoe",
+        type: "string",
+      },
+      {
+        internalType: "uint8",
+        name: "index",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "character",
+        type: "uint8",
+      },
+      {
+        internalType: "uint32",
+        name: "destination",
+        type: "uint32",
+      },
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "signUp",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1646,7 +1752,7 @@ export const FHENIX_EVM_ABI = [
         type: "address",
       },
     ],
-    name: "signUp",
+    name: "signUp_",
     outputs: [],
     stateMutability: "payable",
     type: "function",

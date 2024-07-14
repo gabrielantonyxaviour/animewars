@@ -50,8 +50,21 @@ contract AnimeWarsEVM{
     }
 
     event MessageDispatched(bytes32 messageId);
+
+    function instantiateGame(string memory gameCode, address[] memory players, uint32 destination) public{
+        emit MessageDispatched(bytes32(uint256(block.timestamp)));  
+    }
+
+    function signUp(string memory gameCoe, uint8 index, uint8 character, uint32 destination, address sender) public{       
+         emit MessageDispatched(bytes32(uint256(block.timestamp))); 
     
-    function instantiateGame(string memory gameCode, address[] memory players, uint32 destination) public payable{
+    }    
+    function makeMove(string memory gameCode, uint8 playerIndex, Move[] memory moves, uint32 destination, address sender) public{
+        emit MessageDispatched(bytes32(uint256(block.timestamp)));
+    }
+
+
+    function instantiateGame_(string memory gameCode, address[] memory players, uint32 destination) public payable{
         bytes32 destinationAddress=destinationAddresses[destination];
         if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
 
@@ -66,7 +79,8 @@ contract AnimeWarsEVM{
         emit MessageDispatched(messageId);  
     }
 
-    function signUp(string memory gameCode, uint8 index, uint8 character, uint32 destination, address sender) public payable{
+
+    function signUp_(string memory gameCode, uint8 index, uint8 character, uint32 destination, address sender) public payable{
         bytes32 destinationAddress=destinationAddresses[destination];
         if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
 
@@ -81,7 +95,7 @@ contract AnimeWarsEVM{
     }
 
 
-    function makeMove(string memory gameCode, uint8 playerIndex, Move[] memory moves, uint32 destination, address sender) public payable{
+    function makeMove_(string memory gameCode, uint8 playerIndex, Move[] memory moves, uint32 destination, address sender) public payable{
         bytes32 destinationAddress=destinationAddresses[destination];
         if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
         

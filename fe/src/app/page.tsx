@@ -3,12 +3,27 @@ import ConnectButton from "@/components/ConnectButton";
 import CreateGameModal from "@/components/Home/CreateGameModal";
 import JoinGameModal from "@/components/Home/JoinGameModal";
 import WalletButton from "@/components/WalletButton";
+import { fhenixTestnet } from "@/utils/chains";
+import {
+  FHENIX_EVM_ABI,
+  FHENIX_EVM_ARBITRUM_ADDRESS,
+  FHENIX_EVM_ZIRCUIT_ADDRESS,
+  ONLY_ZIRCUIT,
+} from "@/utils/constants";
 import setOrigin from "@/utils/transactions/write/setOrigin";
 import testCrosschain from "@/utils/transactions/write/testCrosschain";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { arbitrumSepolia } from "viem/chains";
+import {
+  createPublicClient,
+  createWalletClient,
+  custom,
+  http,
+  parseEther,
+} from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
 import { useAccount } from "wagmi";
 
 function Page() {
@@ -45,45 +60,6 @@ function Page() {
 
       <div className="relative flex flex-col text-center space-y-2">
         {status == "connected" ? <WalletButton /> : <ConnectButton />}
-        {/* {false ||
-          (status == "connected" && (
-            <div className="mt-4 flex flex-col space-y-4">
-              <button
-                onClick={async () => {
-                  try {
-                    const receipt = await setOrigin({
-                      address: address as `0x${string}`,
-                    });
-                    console.log(receipt);
-                  } catch (e) {
-                    console.log("TRANSACTION FAILED");
-                    console.log(e);
-                  }
-                }}
-                className="text-white font-bold text-2xl border border-2 border-white p-4 rounded-xl"
-              >
-                SetOrigin
-              </button>
-              <button
-                onClick={async () => {
-                  try {
-                    const receipt = await testCrosschain({
-                      address,
-                      chainId: chainId,
-                      targetChainId: arbitrumSepolia.id,
-                    });
-                    console.log(receipt);
-                  } catch (e) {
-                    console.log("TRANSACTION FAILED");
-                    console.log(e);
-                  }
-                }}
-                className="text-white font-bold text-2xl border border-2 border-white p-4 rounded-xl"
-              >
-                Crosschain Testing
-              </button>
-            </div>
-          ))} */}
         {status == "connected" && (
           <>
             <Image
