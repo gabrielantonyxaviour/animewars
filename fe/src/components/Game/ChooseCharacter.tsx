@@ -176,7 +176,7 @@ export default function ChooseCharacter({
   ) : (
     <div className="w-[70%] bg-white py-4">
       <p className="text-black text-center font-semibold text-2xl">
-        You chose{" "}
+        You chose &nbsp;
         {
           characters[
             gameState.players[

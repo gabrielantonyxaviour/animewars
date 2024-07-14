@@ -39,13 +39,7 @@ export default async function triggerAttack(
       : 0;
   let reverseDamageInflicted = 0;
   if (result > 0) {
-    tempState = inflictDamage(
-      tempState,
-      tempState.players,
-      attackerId,
-      defenderId,
-      attack
-    );
+    tempState = inflictDamage(tempState, tempState.players, defenderId, attack);
 
     // Check if Shinobu is dying
     if (tempState.players[defenderId].health == 0) {
@@ -54,17 +48,9 @@ export default async function triggerAttack(
       // SHinobu effect
       if (tempState.players[defenderId].character == 6) {
         reverseDamageInflicted = 2;
-        tempState = inflictDamage(
-          tempState,
-          tempState.players,
-          attackerId,
-          defenderId,
-          2
-        );
+        tempState = inflictDamage(tempState, tempState.players, attackerId, 2);
       }
     }
-  } else {
-    // defence won
   }
 
   tempState.currentPlay = {

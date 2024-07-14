@@ -47,17 +47,39 @@ export default function DeclareLord({
           />
         </button>
       </div>
-
-      <button
-        className={`${
-          acked ? `bg-yellow-500` : `bg-green-500`
-        }  rounded-lg font-semibold p-4 my-4 relative`}
-        onClick={() => {
-          ack();
-        }}
-      >
-        {acked ? "Waiting" : "Start Game"}
-      </button>
+      {acked ? (
+        <div
+          className="font-semibold top-6 relative w-[180px] h-[70px]"
+          onClick={() => {}}
+        >
+          <Image
+            src="/buttons/Wallet.png"
+            width={180}
+            height={70}
+            alt="back"
+            className="absolute"
+          />
+          <p className="absolute left-16 top-1 text-md text-white">WAITING</p>
+        </div>
+      ) : (
+        <div
+          className="font-semibold top-6 relative w-[200px] h-[70px] cursor-pointer hover:scale-110 transform transition-transform duration-200"
+          onClick={() => {
+            ack();
+          }}
+        >
+          <Image
+            src="/buttons/ButtonOne.png"
+            className="absolute "
+            width={200}
+            height={70}
+            alt="back"
+          />
+          <p className="absolute left-16 top-3 text-md text-black">
+            START GAME
+          </p>
+        </div>
+      )}
     </div>
   );
 }

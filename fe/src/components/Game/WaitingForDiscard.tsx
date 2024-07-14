@@ -39,9 +39,21 @@ export default function WaitingForDiscard({
         roomCode={roomCode}
         setShowAttackOptions={null}
       />
-      <button disabled className="bg-yellow-500 p-2 rounded-lg relative">
-        Waiting for Discard...
-      </button>
+      <div
+        className="font-semibold top-6 relative w-[180px] h-[70px]"
+        onClick={() => {}}
+      >
+        <Image
+          src="/buttons/Wallet.png"
+          width={180}
+          height={70}
+          alt="back"
+          className="absolute"
+        />
+        <p className="absolute left-8 top-2 font-normal text-sm text-white">
+          WAITING FOR DISCARD..
+        </p>
+      </div>
     </div>
   );
 }

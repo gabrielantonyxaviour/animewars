@@ -72,22 +72,40 @@ export default function AttackSummary({
             gameState.currentPlay?.metadata.blackDodge.length}
         </p>
       </div>
-
-      <button
-        disabled={
-          gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
-          (address ?? "").toLowerCase()
-        }
-        onClick={() => {
-          setDiscard({ gameState, roomCode, address });
-        }}
-        className="bg-red-500 p-2 rounded-lg relative"
-      >
-        {gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
-        (address ?? "").toLowerCase()
-          ? "Waiting for Turn"
-          : "End Turn"}
-      </button>
+      {gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
+      (address ?? "").toLowerCase() ? (
+        <div
+          className="font-semibold top-6 relative w-[180px] h-[70px]"
+          onClick={() => {}}
+        >
+          <Image
+            src="/buttons/Wallet.png"
+            width={180}
+            height={70}
+            alt="back"
+            className="absolute"
+          />
+          <p className="absolute left-10 top-2 text-sm text-white">
+            WAITING FOR TURN
+          </p>
+        </div>
+      ) : (
+        <div
+          className="font-semibold top-6 relative w-[200px] h-[70px] cursor-pointer hover:scale-110 transform transition-transform duration-200"
+          onClick={() => {
+            setDiscard({ gameState, roomCode, address });
+          }}
+        >
+          <Image
+            src="/buttons/ButtonOne.png"
+            className="absolute "
+            width={200}
+            height={70}
+            alt="back"
+          />
+          <p className="absolute left-10 top-2 text-md text-black">END TURN</p>
+        </div>
+      )}
     </div>
   );
 }

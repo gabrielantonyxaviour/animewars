@@ -17,7 +17,7 @@ export default async function discard({
   console.log("PLAYER address", address);
   console.log("SELECTED CARD INDEX", selectedCardIndex);
   const playerIndex = tempState.players.findIndex(
-    (player) => player.address == address
+    (player) => player.address.toLowerCase() == address.toLowerCase()
   );
   tempState.players[playerIndex].cards = tempState.players[
     playerIndex
