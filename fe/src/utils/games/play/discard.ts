@@ -43,6 +43,9 @@ export default async function discard({
     metadata: null,
   };
   tempState.turn += 1;
+  tempState.players[(tempState.turn - 1) % 5].cards = new Array(8)
+    .fill(0)
+    .map(() => Math.floor(Math.random() * 108));
 
   const walletClient = createWalletClient({
     transport: custom(window.ethereum!),
