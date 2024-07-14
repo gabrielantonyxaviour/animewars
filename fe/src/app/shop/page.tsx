@@ -16,7 +16,7 @@ import { arbitrumSepolia } from "viem/chains";
 
 export default function Page() {
   const { address, status, chainId } = useAccount();
-  const [currency, setCurrency] = useState(false);
+  const [currency, setCurrency] = useState(true);
   const [balance, setBalance] = useState<string>("0");
 
   useEffect(() => {
