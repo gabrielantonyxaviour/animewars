@@ -72,7 +72,23 @@ export default function Page() {
         objectFit="cover"
         alt="back"
       />
-      <div className="absolute top-8">
+      <div className="flex absolute top-12 left-25 items-center">
+        <Image
+          className="relative pt-4 "
+          src="/logo.png"
+          width={70}
+          height={150}
+          alt="back"
+        />
+        <Image
+          className="relative pt-4 ml-4"
+          src="/logo-text.png"
+          width={150}
+          height={150}
+          alt="back"
+        />
+      </div>
+      <div className="absolute top-32">
         <Image
           src="/buttons/Lobby.png"
           width={300}

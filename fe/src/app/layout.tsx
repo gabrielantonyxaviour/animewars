@@ -24,7 +24,14 @@ export default function RootLayout({
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <Suspense>
-            <body className={`${londrina.className} bg-white`}>{children}</body>
+            <body
+              className={`${londrina.className} bg-no-repeat bg-cover `}
+              style={{
+                backgroundImage: `url(/overall.gif)`,
+              }}
+            >
+              {children}
+            </body>
           </Suspense>
         </QueryClientProvider>
       </WagmiProvider>

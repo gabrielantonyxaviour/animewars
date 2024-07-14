@@ -26,13 +26,23 @@ function Page() {
         objectFit="cover"
         alt="back"
       />
-      <Image
-        className="relative pt-24"
-        src="/logo-text.png"
-        width={250}
-        height={150}
-        alt="back"
-      />
+      <div className="flex flex-col items-center">
+        <Image
+          className="relative pt-24"
+          src="/logo.png"
+          width={200}
+          height={150}
+          alt="back"
+        />
+        <Image
+          className="relative pt-4"
+          src="/logo-text.png"
+          width={250}
+          height={150}
+          alt="back"
+        />
+      </div>
+
       <div className="relative flex flex-col text-center space-y-2">
         {status == "connected" ? <WalletButton /> : <ConnectButton />}
         {/* {false ||
@@ -97,7 +107,16 @@ function Page() {
                 setEnableJoinGameModal(true);
               }}
             />
-            <div className="relative"></div>
+            <Image
+              src="/buttons/Shop.png"
+              width={240}
+              height={100}
+              alt="arbitrum"
+              className="cursor-pointer"
+              onClick={() => {
+                window.location.href = "/shop";
+              }}
+            />
           </>
         )}
       </div>
