@@ -1,3 +1,4 @@
+import { MAX_PLAYERS_COUNT } from "@/utils/constants";
 import { GameState } from "@/utils/interface";
 import supabase from "@/utils/supabase";
 
@@ -21,7 +22,7 @@ export default async function discard({
   tempState.turn += 1;
   tempState.currentPlay = {
     state: "waiting_for_move",
-    by: (tempState.turn + 1) % 5,
+    by: (tempState.turn + 1) % MAX_PLAYERS_COUNT,
     to: null,
     move: tempState.currentPlay != null ? tempState.currentPlay.move + 1 : 0,
     turn: tempState.currentPlay != null ? tempState.currentPlay.turn + 1 : 0,

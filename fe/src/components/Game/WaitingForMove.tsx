@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 // import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
 import setDiscard from "@/utils/games/play/setDiscard";
+import { MAX_PLAYERS_COUNT } from "@/utils/constants";
 
 export default function WaitingForMove({
   roomCode,
@@ -28,23 +29,24 @@ export default function WaitingForMove({
         className="absolute"
       />
       <p className="text-3xl relative text-black">
-        {gameState.players[(gameState.turn - 1) % 5].address ==
+        {gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address ==
         (address ?? "").toLowerCase()
           ? "Your"
-          : gameState.players[(gameState.turn - 1) % 5].name + "'s"}
+          : gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].name +
+            "'s"}
         &nbsp;turn
       </p>
       <PlayerCard
         gameState={gameState}
         index={gameState.turn - 1}
-        player={gameState.players[(gameState.turn - 1) % 5]}
+        player={gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT]}
         isAttackable={false}
         roomCode={roomCode}
         setShowAttackOptions={null}
       />
       <button
         disabled={
-          gameState.players[(gameState.turn - 1) % 5].address !=
+          gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
           (address ?? "").toLowerCase()
         }
         onClick={() => {
@@ -52,7 +54,7 @@ export default function WaitingForMove({
         }}
         className="bg-red-500 p-2 rounded-lg relative"
       >
-        {gameState.players[(gameState.turn - 1) % 5].address !=
+        {gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
         (address ?? "").toLowerCase()
           ? "Waiting for Turn"
           : "End Turn"}

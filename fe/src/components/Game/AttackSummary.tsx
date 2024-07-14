@@ -2,7 +2,7 @@ import { GameState } from "@/utils/interface";
 import Image from "next/image";
 import { useEffect } from "react";
 import PlayerCard from "./PlayerCard";
-import { cards } from "@/utils/constants";
+import { cards, MAX_PLAYERS_COUNT } from "@/utils/constants";
 import setDiscard from "@/utils/games/play/setDiscard";
 
 export default function AttackSummary({
@@ -28,7 +28,7 @@ export default function AttackSummary({
           ? gameState.currentPlay?.metadata.winner == gameState.currentPlay?.to
             ? gameState.players[gameState.currentPlay?.to || 0].name +
               " dodged the attack"
-            : gameState.players[(gameState.turn - 1) % 5].name +
+            : gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].name +
               " damaged " +
               gameState.players[gameState.currentPlay?.to || 0].name +
               " by " +
@@ -41,7 +41,7 @@ export default function AttackSummary({
           roomCode={roomCode}
           setShowAttackOptions={null}
           index={-1}
-          player={gameState.players[(gameState.turn - 1) % 5]}
+          player={gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT]}
           isAttackable={false}
         />
         <PlayerCard
@@ -49,7 +49,11 @@ export default function AttackSummary({
           roomCode={roomCode}
           setShowAttackOptions={null}
           index={-1}
-          player={gameState.players[(gameState.currentPlay?.to || 0) % 5]}
+          player={
+            gameState.players[
+              (gameState.currentPlay?.to || 0) % MAX_PLAYERS_COUNT
+            ]
+          }
           isAttackable={false}
         />
       </div>
@@ -71,7 +75,7 @@ export default function AttackSummary({
 
       <button
         disabled={
-          gameState.players[(gameState.turn - 1) % 5].address !=
+          gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
           (address ?? "").toLowerCase()
         }
         onClick={() => {
@@ -79,7 +83,7 @@ export default function AttackSummary({
         }}
         className="bg-red-500 p-2 rounded-lg relative"
       >
-        {gameState.players[(gameState.turn - 1) % 5].address !=
+        {gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
         (address ?? "").toLowerCase()
           ? "Waiting for Turn"
           : "End Turn"}

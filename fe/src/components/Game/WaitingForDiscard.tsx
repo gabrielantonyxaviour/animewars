@@ -2,6 +2,7 @@ import { GameState } from "@/utils/interface";
 import PlayerCard from "./PlayerCard";
 import Image from "next/image";
 import { useEffect } from "react";
+import { MAX_PLAYERS_COUNT } from "@/utils/constants";
 // import triggerEndMove from "@/utils/transactions/write/triggerEndMove";
 
 export default function WaitingForDiscard({
@@ -23,16 +24,17 @@ export default function WaitingForDiscard({
         className="absolute"
       />
       <p className="text-3xl relative text-black">
-        {gameState.players[(gameState.turn - 1) % 5].address ==
+        {gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address ==
         (address ?? "").toLowerCase()
           ? "Choose Your"
-          : gameState.players[(gameState.turn - 1) % 5].name + "'s"}
+          : gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].name +
+            "'s"}
         &nbsp;discard
       </p>
       <PlayerCard
         gameState={gameState}
         index={gameState.turn - 1}
-        player={gameState.players[(gameState.turn - 1) % 5]}
+        player={gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT]}
         isAttackable={false}
         roomCode={roomCode}
         setShowAttackOptions={null}

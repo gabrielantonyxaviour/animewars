@@ -1,7 +1,7 @@
 import { GameState } from "@/utils/interface";
 import Image from "next/image";
 import PlayerCard from "./PlayerCard";
-import { cards } from "@/utils/constants";
+import { cards, MAX_PLAYERS_COUNT } from "@/utils/constants";
 import setDiscard from "@/utils/games/play/setDiscard";
 
 export default function Trance({
@@ -25,17 +25,17 @@ export default function Trance({
         className="absolute"
       />
       <p className="text-xl relative text-black text-center">
-        {gameState.players[(gameState.turn - 1) % 5].address ==
+        {gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address ==
         (address ?? "").toLowerCase()
           ? "You "
-          : gameState.players[(gameState.turn - 1) % 5].name}
+          : gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].name}
         used Trance <br /> +2 HP and +1 ATK
       </p>
       <div className="flex space-x-8">
         <PlayerCard
           gameState={gameState}
           index={gameState.turn - 1}
-          player={gameState.players[(gameState.turn - 1) % 5]}
+          player={gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT]}
           isAttackable={false}
           roomCode={roomCode}
           setShowAttackOptions={null}
@@ -50,7 +50,7 @@ export default function Trance({
       </div>
       <button
         disabled={
-          gameState.players[(gameState.turn - 1) % 5].address !=
+          gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
           (address ?? "").toLowerCase()
         }
         onClick={() => {
@@ -58,7 +58,7 @@ export default function Trance({
         }}
         className="bg-red-500 p-2 rounded-lg relative"
       >
-        {gameState.players[(gameState.turn - 1) % 5].address !=
+        {gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address !=
         (address ?? "").toLowerCase()
           ? "Waiting for Turn"
           : "End Turn"}

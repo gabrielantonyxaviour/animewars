@@ -25,9 +25,7 @@ export default async function triggerAttack(
   let redDodgeCount = redDodge.length;
   let blackDodgeCount = blackDodge.length;
 
-  if (defender.character == 0 || defender.equippedArmour == 9)
-    blackAttackCount = 0;
-  else if (defender.character == 5) redAttackCount = 0;
+  if (defender.equippedArmour == 9) blackAttackCount = 0;
 
   const result =
     redAttackCount + blackAttackCount - redDodgeCount - blackDodgeCount;

@@ -1,4 +1,4 @@
-import { cards, characters } from "@/utils/constants";
+import { cards, characters, MAX_PLAYERS_COUNT } from "@/utils/constants";
 import { GamePlay, GameState, Player } from "@/utils/interface";
 import Image from "next/image";
 import HealthAndArmour from "./HealthAndArmour";
@@ -25,7 +25,7 @@ export default function PlayerCard({
     <div
       key={index}
       className={`w-[90px] cursor-pointer relative ${
-        gameState != null && (gameState.turn - 1) % 5 == index
+        gameState != null && (gameState.turn - 1) % MAX_PLAYERS_COUNT == index
           ? "bg-green-500"
           : isAttackable
           ? "bg-red-500"

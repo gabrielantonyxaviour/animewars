@@ -1,4 +1,4 @@
-import { cards } from "@/utils/constants";
+import { cards, MAX_PLAYERS_COUNT } from "@/utils/constants";
 import checkCanAttack from "@/utils/games/play/checks/checkCanAttack";
 import checkCardDisabled from "@/utils/games/play/checks/checkCardDisabled";
 import discard from "@/utils/games/play/discard";
@@ -28,7 +28,7 @@ export default function CardDeck({
     (player) => player.address == (address ?? "").toLowerCase()
   );
   const isPlaying =
-    gameState.players[(gameState.turn - 1) % 5].address ==
+    gameState.players[(gameState.turn - 1) % MAX_PLAYERS_COUNT].address ==
     (address ?? "").toLowerCase();
   const cardIds = gameState.players.filter(
     (player) => player.address.toLowerCase() == (address ?? "").toLowerCase()
@@ -65,7 +65,7 @@ export default function CardDeck({
               style={
                 !(
                   gameState.currentPlay?.state == "waiting_for_discard" &&
-                  (gameState.turn - 1) % 5 == playerId
+                  (gameState.turn - 1) % MAX_PLAYERS_COUNT == playerId
                 ) &&
                 checkCardDisabled({
                   cardId: cardIndex,
@@ -83,7 +83,7 @@ export default function CardDeck({
               onClick={() => {
                 if (
                   gameState.currentPlay?.state == "waiting_for_discard" &&
-                  (gameState.turn - 1) % 5 == playerId
+                  (gameState.turn - 1) % MAX_PLAYERS_COUNT == playerId
                 ) {
                   discard({
                     gameState,
