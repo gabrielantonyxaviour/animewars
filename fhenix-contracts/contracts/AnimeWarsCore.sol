@@ -12,6 +12,13 @@ error DestinationNotSupported(uint32 destination, bytes32 destinationAddress);
 error InvalidOrigin(uint32 origin, bytes32 caller);
 
 contract AnimeWarsCore  {
+
+    uint8 public constant ATTACK = 1;
+    uint8 public constant DODGE = 2;
+    uint8 public constant TRANCE = 3;
+    uint8 public constant HEAL = 4;
+    uint8 public constant ARMOUR = 5;
+    uint8 public constant PET = 6;
     
     struct Move{
         uint8 by;
@@ -64,7 +71,7 @@ contract AnimeWarsCore  {
     mapping(string=>Player[4]) public players;
     mapping(string=>GameRequest) public gameRequests;
     mapping(string=>mapping(address=>uint8)) public playerSignupStatus;
-    mapping(string=>mapping(address=>euint8[8])) public playerCards;
+    mapping(string=>mapping(address=>euint8[8])) public playerCardsCategorized;
     // mapping(string=>mapping(address=>mapping(euint8=>bool))) public playerCardExists;
 
     // Hyperlane Variables
@@ -209,7 +216,7 @@ contract AnimeWarsCore  {
             cards[i]=card;
         }
 
-        playerCards[gameCode][signer]=cards;
+        playerCardsCategorized[gameCode][signer]=_categorizeCards(cards);
         request.playersSignedUp+=1;
 
         if(request.playersSignedUp==4){
@@ -221,8 +228,31 @@ contract AnimeWarsCore  {
     }
 
     function makeMoves(string memory gameCode, address signer, uint8 playerIndex, Move[] memory moves) public {
-      
+        Game memory _game=games[gameCode];
+        Player memory _player=players[gameCode][playerIndex];
+        require(_game.players[playerIndex]==signer, "Invalid Player");
+        require(_game.turn-1==playerIndex, "Invalid Turn");
+
+        for(uint8 i=0;i<moves.length;i++){
+            Move memory move=moves[i];
+            if(move.by==ATTACK){
+                _attack(_game, _player, move);
+            }else if(move.by==DODGE){
+                _dodge(_game, _player, move);
+            }else if(move.by==TRANCE){
+                _trance(_game, _player, move);
+            }else if(move.by==HEAL){
+                _heal(_game, _player, move);
+            }else if(move.by==ARMOUR){
+                _armour(_game, _player, move);
+            }else if(move.by==PET){
+                _pet(_game, _player, move);
+            }
+        }
     }
+
+
+    function _categorizeCards
 
 
     function _getOrder() internal view returns(uint8[4] memory){

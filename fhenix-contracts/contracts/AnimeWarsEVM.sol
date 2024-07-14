@@ -10,6 +10,12 @@ error DestinationNotSupported(uint32 destination, bytes32 destinationAddress);
 
 contract AnimeWarsEVM{
 
+    uint8 public constant ATTACK = 1;
+    uint8 public constant DODGE = 2;
+    uint8 public constant TRANCE = 3;
+    uint8 public constant HEAL = 4;
+    uint8 public constant ARMOUR = 5;
+    uint8 public constant PET = 6;
 
     struct Move{
         uint8 by;
@@ -17,11 +23,11 @@ contract AnimeWarsEVM{
         uint8 cardId;
     }
 
-
     struct GameRequestInput{
         string gameCode;
         address[] players;
     }
+
     // Hyperlane Variables
     IMailbox public mailbox;
     mapping(uint32=>bytes32) public destinationAddresses;
