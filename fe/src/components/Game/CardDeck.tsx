@@ -22,7 +22,7 @@ export default function CardDeck({
   >;
   roomCode: string;
 }) {
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
   const players = gameState.players;
   const playerId = gameState.players.findIndex(
     (player) => player.address == (address ?? "").toLowerCase()
@@ -91,6 +91,7 @@ export default function CardDeck({
                     address: address == undefined ? "0x" : address,
                     selectedCardIndex: cardIndex,
                     roomCode,
+                    chainId: chainId ?? 0,
                   });
                   return;
                 } else if (

@@ -43,37 +43,37 @@ export default async function enterGame({
     gameState: "in progress",
   };
 
-  const account = privateKeyToAccount(
-    process.env.NEXT_PUBLIC_PRIVATE_KEY as `0x${string}`
-  );
+  // const account = privateKeyToAccount(
+  //   process.env.NEXT_PUBLIC_PRIVATE_KEY as `0x${string}`
+  // );
 
-  const walletClient = createWalletClient({
-    account,
-    transport: custom(window.ethereum),
-  });
+  // const walletClient = createWalletClient({
+  //   account,
+  //   transport: custom(window.ethereum),
+  // });
 
-  const publicClient = createPublicClient({
-    chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
-    transport: custom(window.ethereum),
-  });
+  // const publicClient = createPublicClient({
+  //   chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
+  //   transport: custom(window.ethereum),
+  // });
 
-  const { request } = await publicClient.simulateContract({
-    chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
-    account: account.address,
-    address: ONLY_ZIRCUIT
-      ? FHENIX_EVM_ZIRCUIT_ADDRESS
-      : FHENIX_EVM_ARBITRUM_ADDRESS,
-    abi: FHENIX_EVM_ABI,
-    functionName: "instantiateGame",
-    args: [code, players.map((player) => player.address), fhenixTestnet.id],
-  });
-  const tx = await walletClient.writeContract(request);
-  console.log("GAME INITIATED");
-  console.log(tx);
-  const receipt = await publicClient.waitForTransactionReceipt({
-    hash: tx,
-  });
-  console.log(receipt);
+  // const { request } = await publicClient.simulateContract({
+  //   chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
+  //   account: account.address,
+  //   address: ONLY_ZIRCUIT
+  //     ? FHENIX_EVM_ZIRCUIT_ADDRESS
+  //     : FHENIX_EVM_ARBITRUM_ADDRESS,
+  //   abi: FHENIX_EVM_ABI,
+  //   functionName: "instantiateGame",
+  //   args: [code, players.map((player) => player.address), fhenixTestnet.id],
+  // });
+  // const tx = await walletClient.writeContract(request);
+  // console.log("GAME INITIATED");
+  // console.log(tx);
+  // const receipt = await publicClient.waitForTransactionReceipt({
+  //   hash: tx,
+  // });
+  // console.log(receipt);
   // initGameState.initTransaction = tx;
   // TODO: Get random number and update
   const { data: game, error } = await supabase

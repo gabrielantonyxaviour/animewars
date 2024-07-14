@@ -17,13 +17,14 @@ export default async function discard({
   address,
   roomCode,
   selectedCardIndex,
+  chainId,
 }: {
   gameState: GameState;
   address: `0x${string}`;
   roomCode: string;
   selectedCardIndex: number;
+  chainId: number;
 }) {
-  const { chainId } = useAccount();
   const tempState = gameState;
   console.log("PLAYER address", address);
   console.log("SELECTED CARD INDEX", selectedCardIndex);
@@ -64,8 +65,8 @@ export default async function discard({
     account: address,
     functionName: "makeMove",
     args: [
-      roomCode,
-      playerIndex.toString(),
+      "roomCode",
+      playerIndex,
       [
         [playerIndex, 1, 0],
         [playerIndex, 3, 2],
@@ -73,7 +74,6 @@ export default async function discard({
       fhenixTestnet.id,
       address,
     ],
-    value: BigInt("0"),
   });
   const tx = await walletClient.writeContract(request);
   console.log("PLAYER CHOSEN");
