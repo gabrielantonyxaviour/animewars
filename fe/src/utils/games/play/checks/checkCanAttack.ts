@@ -13,7 +13,7 @@ export default function checkCanAttack(
   if (attacker.equippedPet != null && cards[attacker.equippedPet].cardId == 13)
     attackRange += 1;
 
-  let canAttack = new Array(5).fill(false);
+  let canAttack = new Array(MAX_PLAYERS_COUNT).fill(false);
   canAttack[attacker.order] = null;
   for (let i = 1; i <= attackRange; i++) {
     const attackPosition = (attacker.order + i) % MAX_PLAYERS_COUNT;
