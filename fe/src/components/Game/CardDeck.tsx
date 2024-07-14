@@ -72,6 +72,7 @@ export default function CardDeck({
                   player: players[playerId],
                   isPlaying,
                   spellsDisabled: gameState.turn < gameState.spellsDisabled,
+                  currentPlay: gameState.currentPlay,
                 })
                   ? {
                       filter: "brightness(50%)",
@@ -87,16 +88,18 @@ export default function CardDeck({
                 ) {
                   discard({
                     gameState,
-                    playerIndex: playerId,
+                    address: address ?? "",
                     selectedCardIndex: cardIndex,
                     roomCode,
                   });
+                  return;
                 } else if (
                   checkCardDisabled({
                     cardId: cardIndex,
                     player: players[playerId],
                     isPlaying,
                     spellsDisabled: gameState.turn < gameState.spellsDisabled,
+                    currentPlay: gameState.currentPlay,
                   })
                 )
                   return;

@@ -1,18 +1,22 @@
 import { cards, characters } from "@/utils/constants";
-import { Player } from "@/utils/interface";
+import { GamePlay, Player } from "@/utils/interface";
 
 export default function checkCardDisabled({
   cardId,
   isPlaying,
   player,
   spellsDisabled,
+  currentPlay,
 }: {
   cardId: number;
   isPlaying: boolean;
   player: Player;
   spellsDisabled: boolean;
+  currentPlay: GamePlay | null;
 }) {
   if (!isPlaying) return true;
+
+  if (currentPlay != null && currentPlay.state == "attack") return true;
   if (player.health > 2 && cards[cardId].name == "Trance") return true;
   if (player.equippedArmour != null && cards[cardId].kind == "armour")
     return true;

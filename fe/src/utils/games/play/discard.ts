@@ -4,22 +4,24 @@ import supabase from "@/utils/supabase";
 
 export default async function discard({
   gameState,
-  playerIndex,
+  address,
   roomCode,
   selectedCardIndex,
 }: {
   gameState: GameState;
-  playerIndex: number;
+  address: string;
   roomCode: string;
   selectedCardIndex: number;
 }) {
   const tempState = gameState;
-  console.log("PLAYER INDEX", playerIndex);
+  console.log("PLAYER address", address);
   console.log("SELECTED CARD INDEX", selectedCardIndex);
+  const playerIndex = tempState.players.findIndex(
+    (player) => player.address == address
+  );
   tempState.players[playerIndex].cards = tempState.players[
     playerIndex
-  ].cards.filter((card, index) => card != selectedCardIndex);
-  tempState.turn += 1;
+  ].cards.filter((card) => card != selectedCardIndex);
   tempState.currentPlay = {
     state: "waiting_for_move",
     by: (tempState.turn + 1) % MAX_PLAYERS_COUNT,
@@ -28,9 +30,10 @@ export default async function discard({
     turn: tempState.currentPlay != null ? tempState.currentPlay.turn + 1 : 0,
     metadata: null,
   };
+  tempState.turn += 1;
 
-  if (tempState.players[tempState.turn].cards.length < 8) {
-    tempState.players[tempState.turn].cards.push(
+  if (tempState.players[tempState.turn - 1].cards.length < 8) {
+    tempState.players[tempState.turn - 1].cards.push(
       Math.floor(Math.random() * 108)
     );
   }
