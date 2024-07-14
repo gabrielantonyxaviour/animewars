@@ -1,6 +1,8 @@
 import generateCards from "./helpers/generateCards";
 import { Card, Character } from "./interface";
 
+export const ONLY_ZIRCUIT = false;
+
 export const MAX_PLAYERS_COUNT = 4;
 export const INITIAL_CARDS_DEALT = 7;
 export const TOTAL_CARDS = 108;
@@ -648,12 +650,265 @@ export const FHENIX_CORE_ABI = [
       {
         indexed: false,
         internalType: "address",
+        name: "signer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "playerIndex",
+        type: "uint8",
+      },
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "by",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "to",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "cardId",
+            type: "uint8",
+          },
+        ],
+        indexed: false,
+        internalType: "struct AnimeWarsCore.Move[]",
+        name: "moves",
+        type: "tuple[]",
+      },
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "moveIndex",
+        type: "uint8",
+      },
+    ],
+    name: "MoveInvalid",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "signer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "playerIndex",
+        type: "uint8",
+      },
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "by",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "to",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "cardId",
+            type: "uint8",
+          },
+        ],
+        indexed: false,
+        internalType: "struct AnimeWarsCore.Move[]",
+        name: "moves",
+        type: "tuple[]",
+      },
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "moveIndex",
+        type: "uint8",
+      },
+    ],
+    name: "MoveValid",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "address",
         name: "player",
         type: "address",
       },
     ],
     name: "PlayerSignedup",
     type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "gameCode",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "signer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "playerIndex",
+        type: "uint8",
+      },
+      {
+        components: [
+          {
+            internalType: "uint8",
+            name: "by",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "to",
+            type: "uint8",
+          },
+          {
+            internalType: "uint8",
+            name: "cardId",
+            type: "uint8",
+          },
+        ],
+        indexed: false,
+        internalType: "struct AnimeWarsCore.Move[]",
+        name: "moves",
+        type: "tuple[]",
+      },
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "moveIndex",
+        type: "uint8",
+      },
+    ],
+    name: "TurnSuccess",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ARMOUR",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ATTACK",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "DODGE",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "HEAL",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "PET",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "SPELL",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRANCE",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
@@ -883,7 +1138,13 @@ export const FHENIX_CORE_ABI = [
       },
     ],
     name: "makeMoves",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -924,7 +1185,7 @@ export const FHENIX_CORE_ABI = [
         type: "uint256",
       },
     ],
-    name: "playerCards",
+    name: "playerCardsCategorized",
     outputs: [
       {
         internalType: "euint8",
@@ -1067,8 +1328,9 @@ export const FHENIX_CORE_ABI = [
 ];
 
 export const FHENIX_EVM_ARBITRUM_ADDRESS =
-  "0x0232d399ECbb77ff94f4E5FF5a847F79Bb529A34";
-export const FHENIX_EVM_ZIRCUIT_ADDRESS = "";
+  "0x11C6E5451d010C43e04240EFC4696AC763fac19f";
+export const FHENIX_EVM_ZIRCUIT_ADDRESS =
+  "0xcfA34a6eAA2Db2E89f77E754B3Aa62BD82042556";
 
 export const FHENIX_EVM_ABI = [
   {
@@ -1141,6 +1403,97 @@ export const FHENIX_EVM_ABI = [
     ],
     name: "MessageDispatched",
     type: "event",
+  },
+  {
+    inputs: [],
+    name: "ARMOUR",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ATTACK",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "DODGE",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "HEAL",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "PET",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "SPELL",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRANCE",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [

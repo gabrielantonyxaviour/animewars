@@ -14,6 +14,7 @@
     "@tanstack/react-query": "^5.51.1",
     "@worldcoin/idkit": "^1.2.0",
     "axios": "^1.7.2",
+    "fhenixjs": "^0.3.0",
     "graphql": "^16.8.1",
     "graphql-request": "^7.0.1",
     "next": "14.2.4",

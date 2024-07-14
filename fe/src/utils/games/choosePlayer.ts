@@ -1,6 +1,15 @@
-import { characters } from "../constants";
+import { createPublicClient, createWalletClient, custom, http } from "viem";
+import {
+  characters,
+  FHENIX_EVM_ABI,
+  FHENIX_EVM_ARBITRUM_ADDRESS,
+  FHENIX_EVM_ZIRCUIT_ADDRESS,
+  ONLY_ZIRCUIT,
+} from "../constants";
 import { GameState } from "../interface";
 import supabase from "../supabase";
+import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
+import { fhenixTestnet } from "../chains";
 
 export default async function choosePlayer({
   roomCode,
@@ -30,6 +39,36 @@ export default async function choosePlayer({
       },
     };
   }
+
+  const walletClient = createWalletClient({
+    transport: custom(window.ethereum!),
+  });
+  const publicClient = createPublicClient({
+    chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
+    transport: http(),
+  });
+  const { request } = await publicClient.simulateContract({
+    chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
+    address: ONLY_ZIRCUIT
+      ? FHENIX_EVM_ZIRCUIT_ADDRESS
+      : FHENIX_EVM_ARBITRUM_ADDRESS,
+    abi: FHENIX_EVM_ABI,
+    functionName: "signUp",
+    args: [
+      roomCode,
+      playerIndex.toString(),
+      characterId.toString(),
+      fhenixTestnet.id,
+      address as `0x${string}`,
+    ],
+  });
+  const tx = await walletClient.writeContract(request);
+  console.log("GAME INITIATED");
+  console.log(tx);
+  const receipt = await publicClient.waitForTransactionReceipt({
+    hash: tx,
+  });
+  console.log(receipt);
   tempState.currentPlay.metadata.count += 1;
   tempState.players[playerIndex].health = characters[characterId].maxHealth;
   if (tempState.currentPlay.metadata.count == tempState.players.length) {

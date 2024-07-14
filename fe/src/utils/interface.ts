@@ -78,6 +78,7 @@ interface GameState {
   turn: number;
   players: Player[];
   deck: number[];
+  initTransaction: string;
   spellsDisabled: number;
   currentPlay: GamePlay | null;
   winner: "lord & allies" | "rebels" | "traitor" | null;
