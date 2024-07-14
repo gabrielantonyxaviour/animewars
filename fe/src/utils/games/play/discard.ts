@@ -19,7 +19,7 @@ export default async function discard({
   selectedCardIndex,
 }: {
   gameState: GameState;
-  address: string;
+  address: `0x${string}`;
   roomCode: string;
   selectedCardIndex: number;
 }) {
@@ -61,6 +61,7 @@ export default async function discard({
       ? FHENIX_EVM_ZIRCUIT_ADDRESS
       : FHENIX_EVM_ARBITRUM_ADDRESS,
     abi: FHENIX_EVM_ABI,
+    account: address,
     functionName: "makeMove",
     args: [
       roomCode,
@@ -70,7 +71,7 @@ export default async function discard({
         [playerIndex, 3, 2],
       ],
       fhenixTestnet.id,
-      address as `0x${string}`,
+      address,
     ],
     value: BigInt("0"),
   });

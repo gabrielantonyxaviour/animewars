@@ -11,7 +11,7 @@ export default function ChooseCharacter({
   gameState: GameState;
   roomCode: string;
 }) {
-  const { address, status } = useAccount();
+  const { address, status, chainId } = useAccount();
   return gameState.players[
     gameState.players.findIndex(
       (player) => player.address.toLowerCase() == (address ?? "").toLowerCase()
@@ -46,8 +46,9 @@ export default function ChooseCharacter({
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: (address ?? "").toLowerCase(),
+                    address: address.toLowerCase() as `0x${string}`,
                     characterId: index,
+                    chainId,
                   }).then(() => {
                     console.log("CHOOSED PLAYER");
                   });
@@ -71,8 +72,10 @@ export default function ChooseCharacter({
               choosePlayer({
                 roomCode: roomCode as string,
                 state: gameState,
-                address: (address ?? "").toLowerCase(),
+                address: address.toLowerCase() as `0x${string}`,
+
                 characterId: 2,
+                chainId,
               }).then(() => {
                 console.log("CHOOSED PLAYER");
               });
@@ -125,8 +128,10 @@ export default function ChooseCharacter({
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: (address ?? "").toLowerCase(),
+                    address: address.toLowerCase() as `0x${string}`,
+
                     characterId: character.id - 1,
+                    chainId,
                   });
                 }}
               >
@@ -151,8 +156,9 @@ export default function ChooseCharacter({
                   choosePlayer({
                     roomCode: roomCode as string,
                     state: gameState,
-                    address: (address ?? "").toLowerCase(),
+                    address: address.toLowerCase() as `0x${string}`,
                     characterId: character.id - 1,
+                    chainId,
                   }).then((returndata: any) => {
                     console.log("CHOOSED PLAYER");
                     console.log(returndata);

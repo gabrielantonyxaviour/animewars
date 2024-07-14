@@ -88,7 +88,7 @@ export default function CardDeck({
                 ) {
                   discard({
                     gameState,
-                    address: address ?? "",
+                    address: address == undefined ? "0x" : address,
                     selectedCardIndex: cardIndex,
                     roomCode,
                   });

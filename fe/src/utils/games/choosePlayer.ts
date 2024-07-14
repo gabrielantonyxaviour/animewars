@@ -17,13 +17,14 @@ export default async function choosePlayer({
   state,
   address,
   characterId,
+  chainId,
 }: {
   roomCode: string;
   state: GameState;
-  address: string;
+  address: `0x${string}`;
   characterId: number;
+  chainId: number;
 }) {
-  const { chainId } = useAccount();
   const tempState = state;
   const playerIndex = tempState.players.findIndex(
     (player) => player.address === address
@@ -56,6 +57,7 @@ export default async function choosePlayer({
   });
   const { request } = await publicClient.simulateContract({
     chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
+    account: address,
     address: ONLY_ZIRCUIT
       ? FHENIX_EVM_ZIRCUIT_ADDRESS
       : FHENIX_EVM_ARBITRUM_ADDRESS,
@@ -66,7 +68,7 @@ export default async function choosePlayer({
       playerIndex.toString(),
       characterId.toString(),
       fhenixTestnet.id,
-      address as `0x${string}`,
+      address,
     ],
     value: BigInt("0"),
   });
