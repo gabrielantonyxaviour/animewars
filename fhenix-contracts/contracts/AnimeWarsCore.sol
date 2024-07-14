@@ -290,19 +290,19 @@ contract AnimeWarsCore  {
         for(uint8 i=0;i<cards.length;i++){
             euint8 card=cards[i];
             if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(31)))){
-                _categorizedCards[0]=card;
+                _categorizedCards[0].add(FHE.asEuint8(1));
             }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(61)))){
-                _categorizedCards[1]=card;
+                _categorizedCards[1].add(FHE.asEuint8(1));
             }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(81)))){
-                _categorizedCards[2]=card;
+                _categorizedCards[2].add(FHE.asEuint8(1));
             }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(91)))){
-                _categorizedCards[3]=card;
+                _categorizedCards[3].add(FHE.asEuint8(1));
             }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(94)))){
-                _categorizedCards[4]=card;
+                _categorizedCards[4].add(FHE.asEuint8(1));
             }else if(FHE.decrypt(FHE.lt(card, FHE.asEuint8(100)))){
-                _categorizedCards[5]=card;
+                _categorizedCards[5].add(FHE.asEuint8(1));
             }else{
-                _categorizedCards[6]=card;
+                _categorizedCards[6].add(FHE.asEuint8(1));
             }
         }
         return _categorizedCards;
