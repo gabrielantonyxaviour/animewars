@@ -97,6 +97,7 @@ function Page() {
                 setEnableJoinGameModal(true);
               }}
             />
+            <div className="relative"></div>
           </>
         )}
       </div>
