@@ -16,7 +16,7 @@ import { arbitrumSepolia } from "viem/chains";
 
 export default function Page() {
   const { address, status, chainId } = useAccount();
-  const [currency, setCurrency] = useState(true);
+  const [currency, setCurrency] = useState(false);
   const [balance, setBalance] = useState<string>("0");
 
   useEffect(() => {
@@ -152,8 +152,11 @@ export default function Page() {
                 alt="back"
               />
               <div
-                className="font-semibold relative w-[60px] h-[70px]"
-                onClick={() => {}}
+                className="font-semibold relative w-[60px] h-[70px] cursor-pointer"
+                onClick={() => {
+                  // approve token
+                  // buy item
+                }}
               >
                 <Image
                   src="/misc/balance.png"
@@ -195,7 +198,7 @@ export default function Page() {
                 alt="back"
               />
               <div
-                className="font-semibold relative w-[60px] h-[70px]"
+                className="font-semibold relative w-[60px] h-[70px] cursor-pointer"
                 onClick={() => {}}
               >
                 <Image
@@ -237,7 +240,7 @@ export default function Page() {
                 alt="back"
               />
               <div
-                className="font-semibold relative w-[60px] h-[70px]"
+                className="font-semibold relative w-[60px] h-[70px] cursor-pointer"
                 onClick={() => {}}
               >
                 <Image
@@ -279,7 +282,7 @@ export default function Page() {
                 alt="back"
               />
               <div
-                className="font-semibold relative w-[60px] h-[70px]"
+                className="font-semibold relative w-[60px] h-[70px] cursor-pointer"
                 onClick={() => {}}
               >
                 <Image

@@ -10,6 +10,7 @@ import { GameState } from "../interface";
 import supabase from "../supabase";
 import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
 import { fhenixTestnet } from "../chains";
+import { useAccount } from "wagmi";
 
 export default async function choosePlayer({
   roomCode,
@@ -22,6 +23,7 @@ export default async function choosePlayer({
   address: string;
   characterId: number;
 }) {
+  const { chainId } = useAccount();
   const tempState = state;
   const playerIndex = tempState.players.findIndex(
     (player) => player.address === address
@@ -39,10 +41,15 @@ export default async function choosePlayer({
       },
     };
   }
+  const chain = ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia;
 
   const walletClient = createWalletClient({
     transport: custom(window.ethereum!),
   });
+
+  if (chainId != chain.id) {
+    await walletClient.switchChain({ id: chainId || 0 });
+  }
   const publicClient = createPublicClient({
     chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
     transport: http(),
@@ -61,9 +68,10 @@ export default async function choosePlayer({
       fhenixTestnet.id,
       address as `0x${string}`,
     ],
+    value: BigInt("0"),
   });
   const tx = await walletClient.writeContract(request);
-  console.log("GAME INITIATED");
+  console.log("PLAYER CHOSEN");
   console.log(tx);
   const receipt = await publicClient.waitForTransactionReceipt({
     hash: tx,
