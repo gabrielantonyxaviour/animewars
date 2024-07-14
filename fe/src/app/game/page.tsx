@@ -55,8 +55,8 @@ function Page() {
             console.log(player.data.id);
             if (player.data.id == roomPlayers.data[2].id) {
               // Get order
-              const lordId = Math.floor(Math.random() * MAX_PLAYERS_COUNT);
-              const order = shuffleCards([0, 1, 2, 3, 4]);
+              const order = shuffleCards([0, 1, 2, 3]);
+              const roles = shuffleCards([0, 1, 2, 3]);
               const deck = shuffleCards(cards.map((card) => card.id));
               enterGame({
                 code: roomCode as string,
@@ -80,14 +80,7 @@ function Page() {
                     armour: 0,
                     tranceCooldown: 0,
                     poisonCooldown: 0,
-                    role:
-                      index == lordId
-                        ? 0
-                        : (index + 1) % 4 || (index - 1) % 4 == lordId
-                        ? 1
-                        : (index + 1) % 4 || (index - 1) % 4
-                        ? 2
-                        : 3,
+                    role: roles[index],
                     isAlive: true,
                   };
                 }),
