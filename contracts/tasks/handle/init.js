@@ -1,4 +1,4 @@
-const abi = require("../abi.json");
+const abi = require("../../abi.json");
 const { networks } = require("../../networks");
 
 function addressToBytes32(address) {
