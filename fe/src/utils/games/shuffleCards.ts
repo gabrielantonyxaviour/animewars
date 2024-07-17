@@ -1,7 +1,5 @@
-import { Card } from "../interface";
-
 export default function shuffleCards(cards: number[]) {
-  let randomNumber = 11231412312;
+  let randomNumber = Math.floor(Math.random() * 100000001);
   for (let i = cards.length - 1; i >= 0; i--) {
     // Generate a pseudo-random index based on the random number
     let n = randomNumber % (i + 1);

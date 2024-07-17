@@ -1,12 +1,5 @@
 import { createPublicClient, createWalletClient, custom, http } from "viem";
-import {
-  FHENIX_EVM_ABI,
-  FHENIX_EVM_ARBITRUM_ADDRESS,
-  FHENIX_EVM_ZIRCUIT_ADDRESS,
-  INITIAL_CARDS_DEALT,
-  MAX_PLAYERS_COUNT,
-  ONLY_ZIRCUIT,
-} from "../constants";
+import { INITIAL_CARDS_DEALT, MAX_PLAYERS_COUNT } from "../constants";
 import { GameState, Player } from "../interface";
 import supabase from "../supabase";
 import { privateKeyToAccount } from "viem/accounts";
@@ -43,9 +36,9 @@ export default async function enterGame({
     gameState: "in progress",
   };
 
-  // const account = privateKeyToAccount(
-  //   process.env.NEXT_PUBLIC_PRIVATE_KEY as `0x${string}`
-  // );
+  const account = privateKeyToAccount(
+    process.env.NEXT_PUBLIC_PRIVATE_KEY as `0x${string}`
+  );
 
   // const walletClient = createWalletClient({
   //   account,

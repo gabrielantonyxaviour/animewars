@@ -107,7 +107,7 @@ contract AnimeWarsCore  {
     event DecodedReslutB(string a, address b, uint8 c, uint8 d);
     event DecodedResultC(string a, address b, uint8 c, Move[] d);
 
-    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable // onlyMailbox 
+    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable onlyMailbox 
     {
         if(originAddresses[_origin]!= _sender) revert InvalidOrigin(_origin, _sender);
 
