@@ -1,11 +1,5 @@
 import { createPublicClient, createWalletClient, custom, http } from "viem";
-import {
-  characters,
-  FHENIX_EVM_ABI,
-  FHENIX_EVM_ARBITRUM_ADDRESS,
-  FHENIX_EVM_ZIRCUIT_ADDRESS,
-  ONLY_ZIRCUIT,
-} from "../constants";
+import { ARBITRUM_TESTNET, characters, EVM_ABI } from "../constants";
 import { GameState } from "../interface";
 import supabase from "../supabase";
 import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
@@ -42,26 +36,25 @@ export default async function choosePlayer({
       },
     };
   }
-  const chain = ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia;
 
   const walletClient = createWalletClient({
+    chain: arbitrumSepolia,
     transport: custom(window.ethereum!),
   });
 
-  if (chainId != chain.id) {
-    await walletClient.switchChain({ id: chainId || 0 });
-  }
   const publicClient = createPublicClient({
-    chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
+    chain: arbitrumSepolia,
     transport: http(),
   });
+
+  if (chainId != arbitrumSepolia.id) {
+    await walletClient.switchChain({ id: arbitrumSepolia.id });
+  }
   const { request } = await publicClient.simulateContract({
-    chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
+    chain: arbitrumSepolia,
+    address: ARBITRUM_TESTNET,
     account: address,
-    address: ONLY_ZIRCUIT
-      ? FHENIX_EVM_ZIRCUIT_ADDRESS
-      : FHENIX_EVM_ARBITRUM_ADDRESS,
-    abi: FHENIX_EVM_ABI,
+    abi: EVM_ABI,
     functionName: "signUp",
     args: [
       roomCode,

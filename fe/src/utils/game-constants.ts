@@ -1,7 +1,7 @@
 import generateCards from "./helpers/generateCards";
 import { Card, Character } from "./interface";
 
-export const MAX_PLAYERS_COUNT = 4;
+export const MAX_PLAYERS_COUNT = 2;
 export const INITIAL_CARDS_DEALT = 7;
 export const TOTAL_CARDS = 108;
 export const TRANCE_COOLDOWN = 3;

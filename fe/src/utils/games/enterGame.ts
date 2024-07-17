@@ -1,5 +1,10 @@
 import { createPublicClient, createWalletClient, custom, http } from "viem";
-import { INITIAL_CARDS_DEALT, MAX_PLAYERS_COUNT } from "../constants";
+import {
+  ARBITRUM_TESTNET,
+  EVM_ABI,
+  INITIAL_CARDS_DEALT,
+  MAX_PLAYERS_COUNT,
+} from "../constants";
 import { GameState, Player } from "../interface";
 import supabase from "../supabase";
 import { privateKeyToAccount } from "viem/accounts";
@@ -15,71 +20,84 @@ export default async function enterGame({
   players: Player[];
   deck: number[];
 }) {
-  const tempDeck = deck.slice(INITIAL_CARDS_DEALT * MAX_PLAYERS_COUNT);
-  const initGameState: GameState = {
-    turn: 1,
-    players: players,
-    deck: tempDeck,
-    spellsDisabled: 0,
-    initTransaction: "",
-    currentPlay: {
-      state: "choose_character",
-      by: 0,
-      to: null,
-      move: 0,
+  try {
+    const tempDeck = deck.slice(INITIAL_CARDS_DEALT * MAX_PLAYERS_COUNT);
+    const initGameState: GameState = {
       turn: 1,
-      metadata: {
-        count: 0,
+      players: players,
+      deck: tempDeck,
+      spellsDisabled: 0,
+      initTransaction: "",
+      currentPlay: {
+        state: "choose_character",
+        by: 0,
+        to: null,
+        move: 0,
+        turn: 1,
+        metadata: {
+          count: 0,
+        },
       },
-    },
-    winner: null,
-    gameState: "in progress",
-  };
-
-  const account = privateKeyToAccount(
-    process.env.NEXT_PUBLIC_PRIVATE_KEY as `0x${string}`
-  );
-
-  // const walletClient = createWalletClient({
-  //   account,
-  //   transport: custom(window.ethereum),
-  // });
-
-  // const publicClient = createPublicClient({
-  //   chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
-  //   transport: custom(window.ethereum),
-  // });
-
-  // const { request } = await publicClient.simulateContract({
-  //   chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
-  //   account: account.address,
-  //   address: ONLY_ZIRCUIT
-  //     ? FHENIX_EVM_ZIRCUIT_ADDRESS
-  //     : FHENIX_EVM_ARBITRUM_ADDRESS,
-  //   abi: FHENIX_EVM_ABI,
-  //   functionName: "instantiateGame",
-  //   args: [code, players.map((player) => player.address), fhenixTestnet.id],
-  // });
-  // const tx = await walletClient.writeContract(request);
-  // console.log("GAME INITIATED");
-  // console.log(tx);
-  // const receipt = await publicClient.waitForTransactionReceipt({
-  //   hash: tx,
-  // });
-  // console.log(receipt);
-  // initGameState.initTransaction = tx;
-  // TODO: Get random number and update
-  const { data: game, error } = await supabase
-    .from("games")
-    .update({ state: initGameState })
-    .eq("code", code)
-    .select();
-
-  if (game == null) return { success: false, data: "Game not found" };
-  else {
-    return {
-      success: true,
-      data: game[0],
+      winner: null,
+      gameState: "in progress",
     };
+
+    const walletClient = createWalletClient({
+      chain: arbitrumSepolia,
+      transport: http(),
+    });
+    const account = privateKeyToAccount(
+      process.env.NEXT_PUBLIC_PRIVATE_KEY as `0x${string}`
+    );
+
+    const publicClient = createPublicClient({
+      chain: arbitrumSepolia,
+      transport: http(),
+    });
+
+    const nonce = await account.nonceManager?.get({
+      address: account.address,
+      chainId: arbitrumSepolia.id,
+      client: walletClient,
+    });
+    const { request } = await publicClient.simulateContract({
+      nonce,
+      chain: arbitrumSepolia,
+      account: account,
+      address: ARBITRUM_TESTNET,
+      abi: EVM_ABI,
+      functionName: "instantiateGame",
+      args: [
+        code,
+        players
+          .map((player) => player.address)
+          .concat(players.map((player) => player.address)),
+        fhenixTestnet.id,
+      ],
+    });
+    const tx = await walletClient.writeContract(request);
+    console.log("GAME INITIATED");
+    console.log(tx);
+    const receipt = await publicClient.waitForTransactionReceipt({
+      hash: tx,
+    });
+    console.log(receipt);
+    initGameState.initTransaction = tx;
+    // TODO: Get random number and update
+    const { data: game, error } = await supabase
+      .from("games")
+      .update({ state: initGameState })
+      .eq("code", code)
+      .select();
+
+    if (game == null) return { success: false, data: "Game not found" };
+    else {
+      return {
+        success: true,
+        data: game[0],
+      };
+    }
+  } catch (e) {
+    return { success: false, data: e };
   }
 }

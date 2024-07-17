@@ -53,10 +53,10 @@ function Page() {
             console.log("ROOM PLAYERS");
             console.log(roomPlayers.data);
             console.log(player.data.id);
-            if (player.data.id == roomPlayers.data[2].id) {
+            if (player.data.id == roomPlayers.data[0].id) {
               // Get order
-              const order = shuffleCards([0, 1, 2, 3]);
-              const roles = shuffleCards([0, 1, 2, 3]);
+              const order = shuffleCards([0, 1]);
+              const roles = shuffleCards([0, 1]);
               const deck = shuffleCards(cards.map((card) => card.id));
               enterGame({
                 code: roomCode as string,
