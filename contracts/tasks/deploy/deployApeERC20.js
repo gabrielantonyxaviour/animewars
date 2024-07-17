@@ -1,6 +1,6 @@
 const { networks } = require("../../networks");
 
-task("deploy-core", "Deploys the AnimeWarsCore contract")
+task("deploy-ape", "Deploys the ApeERC20 contract")
   .addOptionalParam(
     "verify",
     "Set to true to verify contract",
@@ -8,35 +8,28 @@ task("deploy-core", "Deploys the AnimeWarsCore contract")
     types.boolean
   )
   .setAction(async (taskArgs) => {
-    console.log(`Deploying AnimeWarsCore contract to ${network.name}`);
+    console.log(`Deploying ApeERC20 contract to ${network.name}`);
 
     console.log("\n__Compiling Contracts__");
     await run("compile");
 
-    const args = [networks.incoTestnet.mailbox];
+    const args = ["0x0429A2Da7884CA14E53142988D5845952fE4DF6a"];
 
-    const pythTesterContractFactory = await ethers.getContractFactory(
-      "AnimeWarsCore"
-    );
+    const animeWarsEvmFactory = await ethers.getContractFactory("ApeERC20");
 
-    const pythTesterContract = await pythTesterContractFactory.deploy(...args);
+    const apeErc = await animeWarsEvmFactory.deploy(...args);
 
     console.log(
       `\nWaiting ${
         networks[network.name].confirmations
       } blocks for transaction ${
-        pythTesterContract.deployTransaction.hash
+        apeErc.deployTransaction.hash
       } to be confirmed...`
     );
 
-    await pythTesterContract.deployTransaction.wait(
-      networks[network.name].confirmations
-    );
+    await apeErc.deployTransaction.wait(networks[network.name].confirmations);
 
-    console.log(
-      "\nDeployed AnimeWarsCore contract to:",
-      pythTesterContract.address
-    );
+    console.log("\nDeployed ApeERC20 contract to:", apeErc.address);
 
     if (network.name === "localFunctionsTestnet") {
       return;
@@ -52,7 +45,7 @@ task("deploy-core", "Deploys the AnimeWarsCore contract")
       try {
         console.log("\nVerifying contract...");
         await run("verify:verify", {
-          address: pythTesterContract.address,
+          address: apeErc.address,
           constructorArguments: args,
         });
         console.log("Contract verified");
@@ -73,6 +66,6 @@ task("deploy-core", "Deploys the AnimeWarsCore contract")
     }
 
     console.log(
-      `\n AnimeWarsCore contract deployed to ${pythTesterContract.address} on ${network.name}`
+      `\n ApeERC20 contract deployed to ${apeErc.address} on ${network.name}`
     );
   });
