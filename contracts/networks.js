@@ -30,7 +30,7 @@ const networks = {
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "ETH",
     mailbox: "0xA03BF3Ab8f4ad4e6DF2Ab8627c6CBAA5bB4A645a",
-    evm: "",
+    evm: "0x9FafD4cB45410a931b538F1D97EFCC28b147E449",
   },
   rootstockTestnet: {
     url: "https://mycrypto.testnet.rsk.co",
