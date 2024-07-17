@@ -8,7 +8,7 @@ error NotMailbox(address caller);
 error InadequateCrosschainFee(uint32 destination, uint256 requiredFee, uint256 sentFee);
 error DestinationNotSupported(uint32 destination, bytes32 destinationAddress);
 
-contract AnimeWarsEVM{
+contract AnimeWarsRootstock{
 
 
     uint8 public constant ATTACK = 0;
