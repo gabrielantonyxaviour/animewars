@@ -32,27 +32,9 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      zircuitTestnet: networks.zircuitTestnet.verifyApiKey,
       arbitrumSepolia: networks.arbitrumSepolia.verifyApiKey,
-      fhenixTestnet: networks.fhenixTestnet.verifyApiKey,
     },
     customChains: [
-      {
-        network: "zircuitTestnet",
-        chainId: networks.zircuitTestnet.chainId,
-        urls: {
-          apiURL: "https://explorer.zircuit.com/api/contractVerifyHardhat",
-          browserURL: "https://explorer.zircuit.com/",
-        },
-      },
-      {
-        network: "fhenixTestnet",
-        chainId: networks.fhenixTestnet.chainId,
-        urls: {
-          apiURL: "https://api.helium.fhenix.zone",
-          browserURL: "https://explorer.helium.fhenix.zone",
-        },
-      },
       {
         network: "arbitrumSepolia",
         chainId: networks.arbitrumSepolia.chainId,
