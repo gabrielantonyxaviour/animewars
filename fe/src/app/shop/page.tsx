@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { APE_ABI, APE_ERC20, NOUNS_ABI, NOUNS_ERC20 } from "@/utils/constants";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import Image from "next/image";
 import {
   createPublicClient,
@@ -16,28 +15,9 @@ import { arbitrumSepolia } from "viem/chains";
 
 export default function Page() {
   const { address, status, chainId } = useAccount();
+  const { data } = useBalance();
   const [currency, setCurrency] = useState(false);
-  const [balance, setBalance] = useState<string>("0");
 
-  useEffect(() => {
-    if (status === "connected") {
-      (async function () {
-        const publicClient = createPublicClient({
-          chain: arbitrumSepolia,
-          transport: http(),
-        });
-        const data = await publicClient.readContract({
-          address: !currency ? APE_ERC20 : NOUNS_ERC20,
-          functionName: "balanceOf",
-          args: [address],
-          abi: erc20Abi,
-        });
-        console.log(!currency ? "APE BALANCE" : "NOUNS BALANCE");
-        console.log(data);
-        setBalance(formatEther(data));
-      })();
-    }
-  }, [address, currency, status]);
   return (
     <div className="h-screen flex flex-col items-center justify-around select-none xl:w-[33%] lg:w-[50%] md:w-[70%] sm:w-[85%] w-full mx-auto relative">
       <Image
@@ -64,37 +44,7 @@ export default function Page() {
             alt="back"
           />
         </div>
-        <div
-          className="font-semibold top-2 relative w-[90px] h-[50px] bg-black rounded-lg flex justify-center items-center cursor-pointer mr-8"
-          onClick={async () => {
-            if (address == "0x0429A2Da7884CA14E53142988D5845952fE4DF6a") {
-              const walletClient = createWalletClient({
-                transport: custom(window.ethereum!),
-              });
-              if (chainId != arbitrumSepolia.id) {
-                await walletClient.switchChain({ id: arbitrumSepolia.id });
-              }
-              const publicClient = createPublicClient({
-                chain: arbitrumSepolia,
-                transport: http(),
-              });
-              const { request } = await publicClient.simulateContract({
-                chain: arbitrumSepolia,
-                account: address as `0x${string}`,
-                address: currency ? NOUNS_ERC20 : APE_ERC20,
-                abi: currency ? NOUNS_ABI : APE_ABI,
-                functionName: "mint",
-                args: [address, "132000000000000000000"],
-              });
-              const tx = await walletClient.writeContract(request);
-              console.log(tx);
-              const receipt = await publicClient.waitForTransactionReceipt({
-                hash: tx,
-              });
-              console.log(receipt);
-            }
-          }}
-        >
+        <div className="font-semibold top-2 relative w-[90px] h-[50px] bg-black rounded-lg flex justify-center items-center cursor-pointer mr-8">
           <Image
             src="/misc/balance.png"
             width={90}
@@ -103,25 +53,15 @@ export default function Page() {
             className="absolute contain bg-repeat-y"
           />
           <div className="flex justify-center w-full absolute">
-            {!currency ? (
-              <Image
-                className="relative right-2"
-                src={"/logos/ape.gif"}
-                width={50}
-                height={50}
-                alt="back"
-              />
-            ) : (
-              <Image
-                className="relative right-2"
-                src={"/logos/nouns.gif"}
-                width={50}
-                height={50}
-                alt="back"
-              />
-            )}
+            <Image
+              className="relative right-2"
+              src={"/logos/nouns.gif"}
+              width={50}
+              height={50}
+              alt="back"
+            />
             <p className="my-auto relative right-4 top-[1px] text-sm text-white">
-              {balance}
+              {data?.formatted}
             </p>
           </div>
         </div>
@@ -166,23 +106,13 @@ export default function Page() {
                   className="absolute"
                 />
                 <div className="flex justify-center w-full absolute top-1 ">
-                  {!currency ? (
-                    <Image
-                      className="relative right-2"
-                      src={"/logos/ape.gif"}
-                      width={50}
-                      height={50}
-                      alt="back"
-                    />
-                  ) : (
-                    <Image
-                      className="relative right-2"
-                      src={"/logos/nouns.gif"}
-                      width={50}
-                      height={50}
-                      alt="back"
-                    />
-                  )}
+                  <Image
+                    className="relative right-2"
+                    src={"/logos/nouns.gif"}
+                    width={50}
+                    height={50}
+                    alt="back"
+                  />
                   <p className="my-auto relative right-4 top-[1px] text-sm text-white">
                     65
                   </p>
@@ -209,23 +139,13 @@ export default function Page() {
                   className="absolute"
                 />
                 <div className="flex justify-center w-full absolute top-1 ">
-                  {!currency ? (
-                    <Image
-                      className="relative right-2"
-                      src={"/logos/ape.gif"}
-                      width={50}
-                      height={50}
-                      alt="back"
-                    />
-                  ) : (
-                    <Image
-                      className="relative right-2"
-                      src={"/logos/nouns.gif"}
-                      width={50}
-                      height={50}
-                      alt="back"
-                    />
-                  )}
+                  <Image
+                    className="relative right-2"
+                    src={"/logos/nouns.gif"}
+                    width={50}
+                    height={50}
+                    alt="back"
+                  />
                   <p className="my-auto relative right-4 top-[1px] text-sm text-white">
                     90
                   </p>
@@ -251,23 +171,13 @@ export default function Page() {
                   className="absolute"
                 />
                 <div className="flex justify-center w-full absolute top-1 ">
-                  {!currency ? (
-                    <Image
-                      className="relative right-2"
-                      src={"/logos/ape.gif"}
-                      width={50}
-                      height={50}
-                      alt="back"
-                    />
-                  ) : (
-                    <Image
-                      className="relative right-2"
-                      src={"/logos/nouns.gif"}
-                      width={50}
-                      height={50}
-                      alt="back"
-                    />
-                  )}
+                  <Image
+                    className="relative right-2"
+                    src={"/logos/nouns.gif"}
+                    width={50}
+                    height={50}
+                    alt="back"
+                  />
                   <p className="my-auto relative right-4 top-[1px] text-sm text-white">
                     100
                   </p>
@@ -293,23 +203,13 @@ export default function Page() {
                   className="absolute"
                 />
                 <div className="flex justify-center w-full absolute top-1 ">
-                  {!currency ? (
-                    <Image
-                      className="relative right-2"
-                      src={"/logos/ape.gif"}
-                      width={50}
-                      height={50}
-                      alt="back"
-                    />
-                  ) : (
-                    <Image
-                      className="relative right-2"
-                      src={"/logos/nouns.gif"}
-                      width={50}
-                      height={50}
-                      alt="back"
-                    />
-                  )}
+                  <Image
+                    className="relative right-2"
+                    src={"/logos/nouns.gif"}
+                    width={50}
+                    height={50}
+                    alt="back"
+                  />
                   <p className="my-auto relative right-4 top-[1px] text-sm text-white">
                     40
                   </p>

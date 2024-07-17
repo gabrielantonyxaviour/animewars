@@ -3,27 +3,9 @@ import ConnectButton from "@/components/ConnectButton";
 import CreateGameModal from "@/components/Home/CreateGameModal";
 import JoinGameModal from "@/components/Home/JoinGameModal";
 import WalletButton from "@/components/WalletButton";
-import { fhenixTestnet } from "@/utils/chains";
-import {
-  FHENIX_EVM_ABI,
-  FHENIX_EVM_ARBITRUM_ADDRESS,
-  FHENIX_EVM_ZIRCUIT_ADDRESS,
-  ONLY_ZIRCUIT,
-} from "@/utils/constants";
-import setOrigin from "@/utils/transactions/write/setOrigin";
-import testCrosschain from "@/utils/transactions/write/testCrosschain";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
-import {
-  createPublicClient,
-  createWalletClient,
-  custom,
-  http,
-  parseEther,
-} from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
+
 import { useAccount } from "wagmi";
 
 function Page() {

@@ -38,7 +38,7 @@ export default function GameNavbar({ roomCode }: { roomCode: string }) {
           }
         }}
       >
-        <p className="text-[#454223] text-xs ">LEAVE ROOM</p>
+        <p className="text-[#454223] text-xs ">LEAVE GAME</p>
       </div>
     </div>
   );
