@@ -31,6 +31,7 @@ const networks = {
     nativeCurrencySymbol: "ETH",
     mailbox: "0xA03BF3Ab8f4ad4e6DF2Ab8627c6CBAA5bB4A645a",
     evm: "0x5494EE4a6d7D087DEbAfc2C16340cCE93f763D38",
+    evm32: "0x0000000000000000000000005494EE4a6d7D087DEbAfc2C16340cCE93f763D38",
   },
   rootstockTestnet: {
     url: "https://mycrypto.testnet.rsk.co",
