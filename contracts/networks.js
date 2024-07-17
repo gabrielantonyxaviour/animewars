@@ -17,8 +17,8 @@ const networks = {
     nativeCurrencySymbol: "tFHE",
     mailbox: "0x935A5B36C923CDFfD3986f2488E92Cf2D1d8c09D",
     core32:
-      "0x00000000000000000000000069559ee144e3499f385934894868656Cf8F35d6A",
-    core: "0x69559ee144e3499f385934894868656Cf8F35d6A",
+      "0x00000000000000000000000079E72dCc5beEE7F288c7e73C5052FEEBb9C491d9",
+    core: "0x79E72dCc5beEE7F288c7e73C5052FEEBb9C491d9",
   },
   arbitrumSepolia: {
     url: "https://arb-sepolia.g.alchemy.com/v2/" + process.env.ALCHEMY_API_KEY,
@@ -30,7 +30,7 @@ const networks = {
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "ETH",
     mailbox: "0xA03BF3Ab8f4ad4e6DF2Ab8627c6CBAA5bB4A645a",
-    evm: "0x9FafD4cB45410a931b538F1D97EFCC28b147E449",
+    evm: "0x5494EE4a6d7D087DEbAfc2C16340cCE93f763D38",
   },
   rootstockTestnet: {
     url: "https://mycrypto.testnet.rsk.co",

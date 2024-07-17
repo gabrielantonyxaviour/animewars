@@ -11,7 +11,7 @@ function addressToBytes32(address) {
   return bytes32Address;
 }
 
-task("handle-signup").setAction(async function (taskArguments, hre) {
+task("handle-mock-one").setAction(async function (taskArguments, hre) {
   const { ethers, deployments } = hre;
   const [signer] = await ethers.getSigners();
   const animewarsCore = new ethers.Contract(
@@ -19,20 +19,15 @@ task("handle-signup").setAction(async function (taskArguments, hre) {
     abi,
     signer
   );
-  const abiCoder = new ethers.utils.AbiCoder();
 
-  const data = abiCoder.encode(
-    ["string", "address", "uint8", "uint8"],
-    ["gggggg", "0x0429A2Da7884CA14E53142988D5845952fE4DF6a", 1, 2]
-  );
-  console.log(data);
-  const signdata = abiCoder.encode(["uint8", "bytes"], [1, data]);
-  console.log(signdata);
-  const response = await animewarsCore.handle(
+  const message =
+    "0x0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000097364767364766365770000000000000000000000000000000000000000000000";
+
+  const response = await animewarsCore.handleMockThree(
     ...[
       networks.arbitrumSepolia.chainId,
       addressToBytes32("0x0000000000000000000000000000000000000000"),
-      signdata,
+      message,
     ],
     {
       gasLimit: 30000000,

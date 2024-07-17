@@ -101,7 +101,12 @@ contract AnimeWarsCore  {
         originAddresses[_origin]=_caller;
     }
 
-    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable //  onlyMailbox 
+    event DResult(uint256 a, bytes b);
+    event DecodedResultA(GameRequestInput a);
+    event DecodedReslutB(string a, address b, uint8 c, uint8 d);
+    event DecodedResultC(string a, address b, uint8 c, Move[] d);
+
+    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable onlyMailbox 
     {
         if(originAddresses[_origin]  != _sender) revert InvalidOrigin(_origin, _sender);
 
@@ -195,7 +200,7 @@ contract AnimeWarsCore  {
             }
         }
              _game.roles[i]=rnd;
-
+            players[_input.gameCode][i]=_player;
         }        
 
         games[_input.gameCode]=_game;
@@ -214,17 +219,29 @@ contract AnimeWarsCore  {
 
         Game memory _game=games[gameCode];
 
-        euint8[8] memory cards;
-        for(uint8 i=0;i<2;i++)
-        {
-            euint8 card = _getFakeRandomU8();
-            card=FHE.rem(card, FHE.asEuint8(108));
-            cards[i]=card;
+        if(character==1){
+            euint8[8] memory cards;
+            for(uint8 i=0;i<2;i++)
+            {
+                euint8 card = _getFakeRandomU8();
+                card=FHE.rem(card, FHE.asEuint8(108));
+                cards[i]=card;
+            }
+        }else if(character==2){
+            euint8[8] memory cards;
+            for(uint8 i=0;i<2;i++)
+            {
+                euint8 card = _getFakeRandomU8();
+                card=FHE.rem(card, FHE.asEuint8(108));
+                cards[i]=card;
+            }
+            playerCardsCategorized[gameCode][signer]=_categorizeCards(cards);
+            request.playersSignedUp+=1;
+        }else{
+            request.playersSignedUp+=1;
         }
 
-        playerCardsCategorized[gameCode][signer]=_categorizeCards(cards);
-        request.playersSignedUp+=1;
-
+      
         if(request.playersSignedUp==4){
             emit GameStarted(gameCode, _game.players, _game.lordIndex);
         }
@@ -233,6 +250,7 @@ contract AnimeWarsCore  {
         emit PlayerSignedup(gameCode, signer);
     }
 
+   
     function makeMoves(string memory gameCode, address signer, uint8 playerIndex, Move[] memory moves) public returns(bool) {
         Game memory _game=games[gameCode];
         require(_game.players[playerIndex]==signer, "Invalid Player");

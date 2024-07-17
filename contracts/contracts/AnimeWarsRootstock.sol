@@ -28,7 +28,7 @@ contract AnimeWarsRootstock{
 
     struct GameRequestInput{
         string gameCode;
-        address[] players;
+        address[4] players;
     }
 
     // Hyperlane Variables
@@ -51,7 +51,7 @@ contract AnimeWarsRootstock{
 
     event MessageDispatched(bytes32 messageId);
 
-    function instantiateGame(string memory gameCode, address[] memory players, uint32 destination) public{
+    function instantiateGame(string memory gameCode, address[4] memory players, uint32 destination) public{
         emit MessageDispatched(bytes32(uint256(block.timestamp)));  
     }
 
@@ -64,7 +64,7 @@ contract AnimeWarsRootstock{
     }
 
 
-    function instantiateGame_(string memory gameCode, address[] memory players, uint32 destination) public payable{
+    function instantiateGame_(string memory gameCode, address[4] memory players, uint32 destination) public payable{
         bytes32 destinationAddress=destinationAddresses[destination];
         if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
 
@@ -125,7 +125,7 @@ contract AnimeWarsRootstock{
     }
 
 
-    function getInstantiateGameCrosschainData(string memory gameCode, address[] memory players) public view returns(bytes memory){
+    function getInstantiateGameCrosschainData(string memory gameCode, address[4] memory players) public view returns(bytes memory){
         GameRequestInput memory gameRequestInput = GameRequestInput(gameCode, players);
         bytes memory _data = abi.encode(gameRequestInput);
         bytes memory _sendData=abi.encode(uint256(0), _data);

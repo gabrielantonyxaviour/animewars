@@ -1,5 +1,4 @@
-const abi = require("../../abi.json");
-
+const abi = require("../../core-abi.json");
 const { networks } = require("../../networks");
 
 function addressToBytes32(address) {
@@ -21,12 +20,17 @@ task("handle-move").setAction(async function (taskArguments, hre) {
     signer
   );
 
-  const message = "";
+  const abiCoder = new ethers.utils.AbiCoder();
+
+  const message = abiCoder.encode(
+    ["string", "address", "uint8", "uint8"],
+    ["gggggg", "0x0429A2Da7884CA14E53142988D5845952fE4DF6a", 0, 2]
+  );
 
   const response = await animewarsCore.handle(
-    [
+    ...[
       networks.arbitrumSepolia.chainId,
-      addressToBytes32(networks.arbitrumSepolia.evm),
+      addressToBytes32("0x0000000000000000000000000000000000000000"),
       message,
     ],
     {
