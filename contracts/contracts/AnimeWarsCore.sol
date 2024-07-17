@@ -101,7 +101,8 @@ contract AnimeWarsCore  {
         originAddresses[_origin]=_caller;
     }
 
-    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable onlyMailbox{
+    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable //  onlyMailbox 
+    {
         if(originAddresses[_origin]  != _sender) revert InvalidOrigin(_origin, _sender);
 
         (uint256 _action, bytes memory _data) = abi.decode(_message, (uint256, bytes));
@@ -118,6 +119,7 @@ contract AnimeWarsCore  {
             emit InvalidAction(_action);
         }
     }
+
 
     function initGame(GameRequestInput memory _input) public {
         // check if game already exists
@@ -284,7 +286,6 @@ contract AnimeWarsCore  {
         return FHE.decrypt(FHE.gt(playerCardsCategorized[gameCode][attacker][0], playerCardsCategorized[gameCode][defender][1]));
     }
 
-
     function _categorizeCards(euint8[8] memory cards) internal pure returns(euint8[8] memory){
         euint8[8] memory _categorizedCards;
         for(uint8 i=0;i<cards.length;i++){
@@ -307,7 +308,6 @@ contract AnimeWarsCore  {
         }
         return _categorizedCards;
     }
-
 
     function _getOrder() internal view returns(uint8[4] memory){
         euint32 num = _getFakeRandomU32(); 

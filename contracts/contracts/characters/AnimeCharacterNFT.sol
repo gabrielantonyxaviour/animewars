@@ -39,8 +39,6 @@ contract AnimeCharacterNFT is ERC1155, Ownable {
         // Mint the tokens
         _mint(account, id, amount, "");
 
-        // Increase the token supply
-        tokenSupply[id] += amount;
     }
 
     function withdrawProfits() public onlyOwner {

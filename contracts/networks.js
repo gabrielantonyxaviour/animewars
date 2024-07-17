@@ -4,7 +4,7 @@ const DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS = 5;
 
 const TEST_PRIVATE_KEY = process.env.TEST_PRIVATE_KEY;
 
-const REAL_PRIVATE_KEY = process.env.REAL_PRIVATE_KEY;
+const REAL_PRIVATE_KEY = process.env.TEST_PRIVATE_KEY; // TODO: Replace with real private key
 
 const networks = {
   fhenixTestnet: {
@@ -16,18 +16,20 @@ const networks = {
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "tFHE",
     mailbox: "0x935A5B36C923CDFfD3986f2488E92Cf2D1d8c09D",
-    core: "0x000000000000000000000000bfef5DE3805a60E7dcB079B616b8096bd96d3712",
+    core32:
+      "0x00000000000000000000000069559ee144e3499f385934894868656Cf8F35d6A",
+    core: "0x69559ee144e3499f385934894868656Cf8F35d6A",
   },
   arbitrumSepolia: {
     url: "https://arb-sepolia.g.alchemy.com/v2/" + process.env.ALCHEMY_API_KEY,
     gasPrice: undefined,
     nonce: undefined,
-    accounts,
+    accounts: [TEST_PRIVATE_KEY],
     verifyApiKey: process.env.ARBISCAN_API_KEY || "UNSET",
     chainId: 421614,
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "ETH",
-    mailbox: "",
+    mailbox: "0xA03BF3Ab8f4ad4e6DF2Ab8627c6CBAA5bB4A645a",
     evm: "",
   },
   rootstockTestnet: {

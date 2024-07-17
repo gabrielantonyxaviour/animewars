@@ -113,17 +113,36 @@ contract AnimeWarsRootstock{
     function testing(uint32 destination) public payable{
         bytes32 destinationAddress=destinationAddresses[destination];
         if(destinationAddress==bytes32(0)) revert DestinationNotSupported(destination, destinationAddress);
-        
 
         bytes memory _data=abi.encode("What", uint256(69));
         bytes memory _sendData=abi.encode(uint256(3), _data);
 
-          uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _sendData);
+        uint256 _requiredFee = mailbox.quoteDispatch(destination, destinationAddress, _sendData);
         if(msg.value < _requiredFee) revert InadequateCrosschainFee(destination, _requiredFee, msg.value);
 
         bytes32 messageId = mailbox.dispatch{value: msg.value}(destination, destinationAddress, _sendData);
         emit MessageDispatched(messageId);
     }
 
+
+    function getInstantiateGameCrosschainData(string memory gameCode, address[] memory players) public view returns(bytes memory){
+        GameRequestInput memory gameRequestInput = GameRequestInput(gameCode, players);
+        bytes memory _data = abi.encode(gameRequestInput);
+        bytes memory _sendData=abi.encode(uint256(0), _data);
+        return _sendData;
+    } 
+
+
+    function getSignUpCrosschainData(string memory gameCode, uint8 index, uint8 character) public view returns(bytes memory){
+        bytes memory _data = abi.encode(gameCode, msg.sender, index, character);
+        bytes memory _sendData=abi.encode(uint256(1), _data);
+        return _sendData;
+    }
+
+    function getMakeMoveCrosschainData(string memory gameCode, uint8 playerIndex, Move[] memory moves) public view returns(bytes memory){
+        bytes memory _data = abi.encode(gameCode, msg.sender, playerIndex, moves);
+        bytes memory _sendData=abi.encode(uint256(2), _data);
+        return _sendData;
+    }
 
 }

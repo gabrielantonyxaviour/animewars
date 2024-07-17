@@ -3,7 +3,7 @@
 pragma solidity ^0.8.20;
 
 
-import "./interface/hyperlane/IMailbox.sol";
+import "../interface/hyperlane/IMailbox.sol";
 error NotOwner(address caller);
 error NotMailbox(address caller);
 error InadequateCrosschainFee(uint32 destinationDomain, uint256 requiredFee, uint256 sentFee);

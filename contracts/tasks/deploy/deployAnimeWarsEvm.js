@@ -1,6 +1,6 @@
 const { networks } = require("../../networks");
 
-task("deploy-evm", "Deploys the AnimeWarsEVM contract")
+task("deploy-evm", "Deploys the AnimeWarsRootstock contract")
   .addOptionalParam(
     "verify",
     "Set to true to verify contract",
@@ -8,18 +8,20 @@ task("deploy-evm", "Deploys the AnimeWarsEVM contract")
     types.boolean
   )
   .setAction(async (taskArgs) => {
-    console.log(`Deploying AnimeWarsEVM contract to ${network.name}`);
+    console.log(`Deploying AnimeWarsRootstock contract to ${network.name}`);
 
     console.log("\n__Compiling Contracts__");
     await run("compile");
 
     const args = [
       networks[network.name].mailbox,
-      networks.fhenixTestnet.core,
+      networks.fhenixTestnet.core32,
       networks.fhenixTestnet.chainId,
     ];
 
-    const animeWarsEvmFactory = await ethers.getContractFactory("AnimeWarsEVM");
+    const animeWarsEvmFactory = await ethers.getContractFactory(
+      "AnimeWarsRootstock"
+    );
 
     const animeWarsEvm = await animeWarsEvmFactory.deploy(...args);
 
@@ -35,7 +37,10 @@ task("deploy-evm", "Deploys the AnimeWarsEVM contract")
       networks[network.name].confirmations
     );
 
-    console.log("\nDeployed AnimeWarsEVM contract to:", animeWarsEvm.address);
+    console.log(
+      "\nDeployed AnimeWarsRootstock contract to:",
+      animeWarsEvm.address
+    );
 
     if (network.name === "localFunctionsTestnet") {
       return;
@@ -72,6 +77,6 @@ task("deploy-evm", "Deploys the AnimeWarsEVM contract")
     }
 
     console.log(
-      `\n AnimeWarsEVM contract deployed to ${animeWarsEvm.address} on ${network.name}`
+      `\n AnimeWarsRootstock contract deployed to ${animeWarsEvm.address} on ${network.name}`
     );
   });
