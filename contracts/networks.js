@@ -13,12 +13,12 @@ const networks = {
     nonce: undefined,
     accounts: [TEST_PRIVATE_KEY],
     chainId: 8008135,
-    confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
+    confirmations: 3,
     nativeCurrencySymbol: "tFHE",
     mailbox: "0x935A5B36C923CDFfD3986f2488E92Cf2D1d8c09D",
     core32:
-      "0x00000000000000000000000079E72dCc5beEE7F288c7e73C5052FEEBb9C491d9",
-    core: "0x79E72dCc5beEE7F288c7e73C5052FEEBb9C491d9",
+      "0x000000000000000000000000D88d16d81ba62cFa0f7172C57200c334571F989d",
+    core: "0xD88d16d81ba62cFa0f7172C57200c334571F989d",
   },
   arbitrumSepolia: {
     url: "https://arb-sepolia.g.alchemy.com/v2/" + process.env.ALCHEMY_API_KEY,

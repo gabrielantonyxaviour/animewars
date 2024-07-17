@@ -12,7 +12,7 @@ task("init-game").setAction(async function (taskArguments, hre) {
 
   const response = await animewarsCore.initGame(
     [
-      "gggggg",
+      "messi",
       [
         "0x0429A2Da7884CA14E53142988D5845952fE4DF6a",
         "0x0429A2Da7884CA14E53142988D5845952fE4DF6a",

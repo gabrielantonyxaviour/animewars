@@ -27,6 +27,30 @@
     "type": "error"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      }
+    ],
+    "name": "NotMailbox",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "euint8[8]",
+        "name": "cards",
+        "type": "uint256[8]"
+      }
+    ],
+    "name": "Cards",
+    "type": "event"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -630,75 +654,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint32",
-        "name": "_origin",
-        "type": "uint32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_sender",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_message",
-        "type": "bytes"
-      }
-    ],
-    "name": "handleMockOne",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint32",
-        "name": "_origin",
-        "type": "uint32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_sender",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_message",
-        "type": "bytes"
-      }
-    ],
-    "name": "handleMockThree",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint32",
-        "name": "_origin",
-        "type": "uint32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_sender",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_message",
-        "type": "bytes"
-      }
-    ],
-    "name": "handleMockTwo",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "components": [
           {
             "internalType": "string",
@@ -958,6 +913,13 @@
       }
     ],
     "name": "signUp",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "what",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

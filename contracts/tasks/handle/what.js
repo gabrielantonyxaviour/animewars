@@ -11,7 +11,7 @@ function addressToBytes32(address) {
   return bytes32Address;
 }
 
-task("handle-signup").setAction(async function (taskArguments, hre) {
+task("what").setAction(async function (taskArguments, hre) {
   const { ethers, deployments } = hre;
   const [signer] = await ethers.getSigners();
   const animewarsCore = new ethers.Contract(
@@ -19,25 +19,10 @@ task("handle-signup").setAction(async function (taskArguments, hre) {
     abi,
     signer
   );
-  const abiCoder = new ethers.utils.AbiCoder();
 
-  const data = abiCoder.encode(
-    ["string", "address", "uint8", "uint8"],
-    ["gggggg", "0x0429A2Da7884CA14E53142988D5845952fE4DF6a", 1, 2]
-  );
-  console.log(data);
-  const signdata = abiCoder.encode(["uint256", "bytes"], [1, data]);
-  console.log(signdata);
-  const response = await animewarsCore.handle(
-    ...[
-      networks.arbitrumSepolia.chainId,
-      addressToBytes32("0x0000000000000000000000000000000000000000"),
-      signdata,
-    ],
-    {
-      gasLimit: 30000000,
-    }
-  );
+  const response = await animewarsCore.what({
+    gasLimit: 30000000,
+  });
   const receipt = await response.wait();
   console.log(receipt);
 });

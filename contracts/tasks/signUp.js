@@ -1,15 +1,16 @@
-const abi = require("../abi.json");
+const abi = require("../core-abi.json");
+const { networks } = require("../networks");
 
 task("sign-up").setAction(async function (taskArguments, hre) {
   const { ethers, deployments } = hre;
   const [signer] = await ethers.getSigners();
   const animewarsCore = new ethers.Contract(
-    "0x16CBC6Cb38D19B73A3b545109c70b2031d20EA37",
+    networks.fhenixTestnet.core,
     abi,
     signer
   );
   const args = [
-    "31svwed",
+    "onetwo",
     "0x0429A2Da7884CA14E53142988D5845952fE4DF6a",
     "0",
     "2",

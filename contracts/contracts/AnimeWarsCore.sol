@@ -61,6 +61,7 @@ contract AnimeWarsCore  {
         string gameCode;
         address[4] players;
         uint8[4] order;
+        bool[4] isDead;
         uint8 lordIndex;
         uint8 turn;
         uint8 winner;
@@ -106,9 +107,9 @@ contract AnimeWarsCore  {
     event DecodedReslutB(string a, address b, uint8 c, uint8 d);
     event DecodedResultC(string a, address b, uint8 c, Move[] d);
 
-    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable onlyMailbox 
+    function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external payable // onlyMailbox 
     {
-        if(originAddresses[_origin]  != _sender) revert InvalidOrigin(_origin, _sender);
+        if(originAddresses[_origin]!= _sender) revert InvalidOrigin(_origin, _sender);
 
         (uint256 _action, bytes memory _data) = abi.decode(_message, (uint256, bytes));
         if(_action==0){
@@ -212,35 +213,21 @@ contract AnimeWarsCore  {
         require(playerSignupStatus[gameCode][signer] == 1, "Player already signed up or player not invited");
         require(players[gameCode][index].playerAddress == signer, "Invalid Player");
 
-
         players[gameCode][index].character=character;
         GameRequest memory request=gameRequests[gameCode];
         playerSignupStatus[gameCode][signer]=2;
 
         Game memory _game=games[gameCode];
 
-        if(character==1){
-            euint8[8] memory cards;
-            for(uint8 i=0;i<2;i++)
-            {
-                euint8 card = _getFakeRandomU8();
-                card=FHE.rem(card, FHE.asEuint8(108));
-                cards[i]=card;
-            }
-        }else if(character==2){
-            euint8[8] memory cards;
-            for(uint8 i=0;i<2;i++)
-            {
-                euint8 card = _getFakeRandomU8();
-                card=FHE.rem(card, FHE.asEuint8(108));
-                cards[i]=card;
-            }
-            playerCardsCategorized[gameCode][signer]=_categorizeCards(cards);
-            request.playersSignedUp+=1;
-        }else{
-            request.playersSignedUp+=1;
+        euint8[8] memory cards;
+        for(uint8 i=0;i<2;i++)
+        {
+            euint8 card = _getFakeRandomU8();
+            card=FHE.rem(card, FHE.asEuint8(108));
+            cards[i]=card;
         }
-
+        playerCardsCategorized[gameCode][signer]=_categorizeCards(cards);
+        request.playersSignedUp+=1;
       
         if(request.playersSignedUp==4){
             emit GameStarted(gameCode, _game.players, _game.lordIndex);
@@ -250,11 +237,12 @@ contract AnimeWarsCore  {
         emit PlayerSignedup(gameCode, signer);
     }
 
-   
+
     function makeMoves(string memory gameCode, address signer, uint8 playerIndex, Move[] memory moves) public returns(bool) {
+
         Game memory _game=games[gameCode];
-        require(_game.players[playerIndex]==signer, "Invalid Player");
-        require(_game.turn-1==playerIndex, "Invalid Turn");
+        _checkPlayable(gameCode, signer, playerIndex);
+
         bool isAttacked=false;
         for(uint8 i=0;i<moves.length;i++){
             Move memory move=moves[i];
@@ -280,7 +268,8 @@ contract AnimeWarsCore  {
             emit MoveValid(gameCode, signer, playerIndex, moves, i);
         }
         emit TurnSuccess(gameCode, signer, playerIndex, moves, 0);
-        _game.turn+=1;
+        
+        _game.turn=_game.turn + _getTurnIncrementer(_game);
         games[gameCode]=_game;
         return true;
     }
@@ -296,8 +285,34 @@ contract AnimeWarsCore  {
                 players[gameCode][receiver].health-=damage-armour;
             }
         }else{
+            if(health>damage)
             players[gameCode][receiver].health-=damage;
+            else{
+                players[gameCode][receiver].health=0;
+                _processDeath(gameCode, receiver);
+            }
         }
+    }
+
+    function _processDeath(string memory gameCode, uint8 receiver) internal {
+        Game memory _game=games[gameCode];
+        _game.isDead[receiver]=true;
+        games[gameCode]=_game;
+    }
+
+    function _checkPlayable(string memory gameCode, address signer, uint8 playerIndex) internal view {
+        Game memory _game=games[gameCode];
+        require(_game.players[playerIndex]==signer, "Invalid Player");
+        require(_game.turn-1==playerIndex, "Invalid Turn");
+        require(_game.winner==4, "Game Already Over");
+    }
+
+    function _getTurnIncrementer(Game memory _game) internal pure returns(uint8){
+        uint8 _increment=1;
+        while(_game.isDead[_game.turn + _increment - 1]){
+            _increment+=1;
+        }
+        return _increment;
     }
 
     function checkBattle(string memory gameCode, address attacker, address defender) internal view returns(bool){
