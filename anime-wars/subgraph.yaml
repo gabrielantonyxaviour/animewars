@@ -1,0 +1,35 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: AnimeWarsRootstock
+    network: arbitrum-sepolia
+    source:
+      address: "0x6036BdC357A2dF2a69621e658A4Bb951B60ca799"
+      abi: AnimeWarsRootstock
+      startBlock: 64624921
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - GameInstantiated
+        - MessageDispatched
+        - MoveMade
+        - PlayerSignedUp
+      abis:
+        - name: AnimeWarsRootstock
+          file: ./abis/AnimeWarsRootstock.json
+      eventHandlers:
+        - event: GameInstantiated(string,address[4])
+          handler: handleGameInstantiated
+        - event: MessageDispatched(bytes32)
+          handler: handleMessageDispatched
+        - event: MoveMade(string,uint8,(uint8,uint8,uint8)[])
+          handler: handleMoveMade
+        - event: PlayerSignedUp(string,uint8,uint8)
+          handler: handlePlayerSignedUp
+      file: ./src/anime-wars-rootstock.ts

@@ -35,6 +35,8 @@ contract AnimeWarsRootstock{
     IMailbox public mailbox;
     mapping(uint32=>bytes32) public destinationAddresses;
 
+    
+
     constructor(IMailbox _mailbox, bytes32 core, uint32 destination){
         mailbox = _mailbox;
         destinationAddresses[destination]=core;
@@ -45,11 +47,15 @@ contract AnimeWarsRootstock{
         _;
     }
 
+    event MessageDispatched(bytes32 messageId);
+    event GameInstantiated(string gameCode, address[4] players);
+    event PlayerSignedUp(string gameCode, uint8 index, uint8 character);
+    event MoveMade(string gameCode, uint8 playerIndex, Move[] moves);
+
     function setDestinationAddress(uint32 _destinationDomain, bytes32 _destinationAddress) public {
         destinationAddresses[_destinationDomain]=_destinationAddress;
     }
 
-    event MessageDispatched(bytes32 messageId);
 
     function instantiateGame_(string memory gameCode, address[4] memory players, uint32 destination) public{
         emit MessageDispatched(bytes32(uint256(block.timestamp)));  
@@ -77,6 +83,7 @@ contract AnimeWarsRootstock{
 
         bytes32 messageId = mailbox.dispatch{value: msg.value}(destination, destinationAddress, _sendData);
         emit MessageDispatched(messageId);  
+        emit GameInstantiated(gameCode, players);
     }
 
 
@@ -92,6 +99,7 @@ contract AnimeWarsRootstock{
 
        bytes32 messageId = mailbox.dispatch{value: msg.value}(destination,destinationAddress, _sendData);
         emit MessageDispatched(messageId);  
+        emit PlayerSignedUp(gameCode, index, character);
     }
 
 
@@ -107,6 +115,7 @@ contract AnimeWarsRootstock{
 
         bytes32 messageId = mailbox.dispatch{value: msg.value}(destination, destinationAddress, _sendData);
         emit MessageDispatched(messageId);
+        emit MoveMade(gameCode, playerIndex, moves);
     } 
 
 

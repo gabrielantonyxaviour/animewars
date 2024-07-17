@@ -1,0 +1,8 @@
+{
+  "arbitrum-sepolia": {
+    "AnimeWarsRootstock": {
+      "address": "0x6036BdC357A2dF2a69621e658A4Bb951B60ca799",
+      "startBlock": 64624921
+    }
+  }
+}
