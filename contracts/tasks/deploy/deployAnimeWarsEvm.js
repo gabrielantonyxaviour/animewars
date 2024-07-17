@@ -1,6 +1,6 @@
 const { networks } = require("../../networks");
 
-task("deploy-core", "Deploys the AnimeWarsCore contract")
+task("deploy-evm", "Deploys the AnimeWarsEVM contract")
   .addOptionalParam(
     "verify",
     "Set to true to verify contract",
@@ -8,35 +8,34 @@ task("deploy-core", "Deploys the AnimeWarsCore contract")
     types.boolean
   )
   .setAction(async (taskArgs) => {
-    console.log(`Deploying AnimeWarsCore contract to ${network.name}`);
+    console.log(`Deploying AnimeWarsEVM contract to ${network.name}`);
 
     console.log("\n__Compiling Contracts__");
     await run("compile");
 
-    const args = [networks.incoTestnet.mailbox];
+    const args = [
+      networks[network.name].mailbox,
+      networks.incoTestnet.core,
+      networks.incoTestnet.chainId,
+    ];
 
-    const pythTesterContractFactory = await ethers.getContractFactory(
-      "AnimeWarsCore"
-    );
+    const animeWarsEvmFactory = await ethers.getContractFactory("AnimeWarsEVM");
 
-    const pythTesterContract = await pythTesterContractFactory.deploy(...args);
+    const animeWarsEvm = await animeWarsEvmFactory.deploy(...args);
 
     console.log(
       `\nWaiting ${
         networks[network.name].confirmations
       } blocks for transaction ${
-        pythTesterContract.deployTransaction.hash
+        animeWarsEvm.deployTransaction.hash
       } to be confirmed...`
     );
 
-    await pythTesterContract.deployTransaction.wait(
+    await animeWarsEvm.deployTransaction.wait(
       networks[network.name].confirmations
     );
 
-    console.log(
-      "\nDeployed AnimeWarsCore contract to:",
-      pythTesterContract.address
-    );
+    console.log("\nDeployed AnimeWarsEVM contract to:", animeWarsEvm.address);
 
     if (network.name === "localFunctionsTestnet") {
       return;
@@ -52,7 +51,7 @@ task("deploy-core", "Deploys the AnimeWarsCore contract")
       try {
         console.log("\nVerifying contract...");
         await run("verify:verify", {
-          address: pythTesterContract.address,
+          address: animeWarsEvm.address,
           constructorArguments: args,
         });
         console.log("Contract verified");
@@ -73,6 +72,6 @@ task("deploy-core", "Deploys the AnimeWarsCore contract")
     }
 
     console.log(
-      `\n AnimeWarsCore contract deployed to ${pythTesterContract.address} on ${network.name}`
+      `\n AnimeWarsEVM contract deployed to ${animeWarsEvm.address} on ${network.name}`
     );
   });

@@ -38,6 +38,7 @@ const networks = {
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "INCO",
     privCastDeployment: "",
+    mailbox: "0x88854958eCE14EF7AC63AC684AAF19f7D9e84233",
   },
 };
 
