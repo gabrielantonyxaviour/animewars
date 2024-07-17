@@ -1,16 +1,13 @@
 import { fhenixTestnet } from "@/utils/chains";
 import {
-  FHENIX_EVM_ABI,
-  FHENIX_EVM_ARBITRUM_ADDRESS,
-  FHENIX_EVM_ZIRCUIT_ADDRESS,
+  ARBITRUM_TESTNET,
+  EVM_ABI,
   MAX_PLAYERS_COUNT,
-  ONLY_ZIRCUIT,
 } from "@/utils/constants";
 import { GameState } from "@/utils/interface";
 import supabase from "@/utils/supabase";
 import { createPublicClient, createWalletClient, custom, http } from "viem";
 import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
-import { useAccount } from "wagmi";
 
 export default async function discard({
   gameState,
@@ -43,32 +40,32 @@ export default async function discard({
     metadata: null,
   };
   tempState.turn += 1;
-  tempState.players[(tempState.turn - 1) % 5].cards = new Array(8)
+  tempState.players[(tempState.turn - 1) % MAX_PLAYERS_COUNT].cards = new Array(
+    8
+  )
     .fill(0)
     .map(() => Math.floor(Math.random() * 108));
 
   const walletClient = createWalletClient({
+    chain: arbitrumSepolia,
     transport: custom(window.ethereum!),
   });
-  const chain = ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia;
 
-  if (chainId != chain.id) {
-    await walletClient.switchChain({ id: chainId || 0 });
+  if (chainId != arbitrumSepolia.id) {
+    await walletClient.switchChain({ id: arbitrumSepolia.id });
   }
   const publicClient = createPublicClient({
-    chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
+    chain: arbitrumSepolia,
     transport: http(),
   });
   const { request } = await publicClient.simulateContract({
-    chain: ONLY_ZIRCUIT ? zircuitTestnet : arbitrumSepolia,
-    address: ONLY_ZIRCUIT
-      ? FHENIX_EVM_ZIRCUIT_ADDRESS
-      : FHENIX_EVM_ARBITRUM_ADDRESS,
-    abi: FHENIX_EVM_ABI,
+    chain: arbitrumSepolia,
+    address: ARBITRUM_TESTNET,
+    abi: EVM_ABI,
     account: address,
     functionName: "makeMove",
     args: [
-      "roomCode",
+      roomCode,
       playerIndex,
       [
         [playerIndex, 1, 0],
@@ -86,8 +83,10 @@ export default async function discard({
   });
   console.log(receipt);
 
-  if (tempState.players[tempState.turn - 1].cards.length < 8) {
-    tempState.players[tempState.turn - 1].cards.push(
+  if (
+    tempState.players[(tempState.turn - 1) % MAX_PLAYERS_COUNT].cards.length < 8
+  ) {
+    tempState.players[(tempState.turn - 1) % MAX_PLAYERS_COUNT].cards.push(
       Math.floor(Math.random() * 108)
     );
   }
