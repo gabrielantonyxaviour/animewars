@@ -22,16 +22,28 @@ task("handle-move").setAction(async function (taskArguments, hre) {
 
   const abiCoder = new ethers.utils.AbiCoder();
 
-  const message = abiCoder.encode(
-    ["string", "address", "uint8", "uint8"],
-    ["gggggg", "0x0429A2Da7884CA14E53142988D5845952fE4DF6a", 0, 2]
+  const data = abiCoder.encode(
+    ["string", "address", "uint8", "tuple(uint8,uint8,uint8)[]"],
+    [
+      "neymar",
+      "0x0429A2Da7884CA14E53142988D5845952fE4DF6a",
+      0,
+      [
+        [0, 0, 2],
+        [0, 1, 0],
+      ],
+    ]
   );
+
+  console.log(data);
+  const signdata = abiCoder.encode(["uint256", "bytes"], [2, data]);
+  console.log(signdata);
 
   const response = await animewarsCore.handle(
     ...[
       networks.arbitrumSepolia.chainId,
       addressToBytes32("0x0000000000000000000000000000000000000000"),
-      message,
+      signdata,
     ],
     {
       gasLimit: 30000000,

@@ -23,7 +23,7 @@ task("handle-signup").setAction(async function (taskArguments, hre) {
 
   const data = abiCoder.encode(
     ["string", "address", "uint8", "uint8"],
-    ["gggggg", "0x0429A2Da7884CA14E53142988D5845952fE4DF6a", 1, 2]
+    ["asd", "0x0429A2Da7884CA14E53142988D5845952fE4DF6a", 0, 0]
   );
   console.log(data);
   const signdata = abiCoder.encode(["uint256", "bytes"], [1, data]);

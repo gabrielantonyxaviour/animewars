@@ -17,8 +17,8 @@ const networks = {
     nativeCurrencySymbol: "tFHE",
     mailbox: "0x935A5B36C923CDFfD3986f2488E92Cf2D1d8c09D",
     core32:
-      "0x000000000000000000000000D88d16d81ba62cFa0f7172C57200c334571F989d",
-    core: "0xD88d16d81ba62cFa0f7172C57200c334571F989d",
+      "0x00000000000000000000000090252c2E0a34B5D211E7096b97222c3c22cF9064",
+    core: "0x90252c2E0a34B5D211E7096b97222c3c22cF9064",
   },
   arbitrumSepolia: {
     url: "https://arb-sepolia.g.alchemy.com/v2/" + process.env.ALCHEMY_API_KEY,
