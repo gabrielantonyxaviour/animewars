@@ -25,7 +25,7 @@ module.exports = {
         settings: SOLC_SETTINGS,
       },
       {
-        version: "0.8.20",
+        version: "0.8.19",
         settings: SOLC_SETTINGS,
       },
     ],
@@ -34,21 +34,7 @@ module.exports = {
   networks: {
     ...networks,
   },
-  etherscan: {
-    apiKey: {
-      arbitrumSepolia: networks.arbitrumSepolia.verifyApiKey,
-    },
-    customChains: [
-      {
-        network: "arbitrumSepolia",
-        chainId: networks.arbitrumSepolia.chainId,
-        urls: {
-          apiURL: "https://api-sepolia.arbiscan.io/api",
-          browserURL: "https://sepolia.arbiscan.io/",
-        },
-      },
-    ],
-  },
+
   gasReporter: {
     enabled: REPORT_GAS,
     currency: "USD",
