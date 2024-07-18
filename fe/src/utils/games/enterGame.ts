@@ -1,6 +1,6 @@
 import { createPublicClient, createWalletClient, custom, http } from "viem";
 import {
-  ARBITRUM_TESTNET,
+  ROOTSTACK_TESTNET,
   EVM_ABI,
   INITIAL_CARDS_DEALT,
   MAX_PLAYERS_COUNT,
@@ -8,7 +8,7 @@ import {
 import { GameState, Player } from "../interface";
 import supabase from "../supabase";
 import { privateKeyToAccount } from "viem/accounts";
-import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
+import { rootstockTestnet, zircuitTestnet } from "viem/chains";
 import { fhenixTestnet } from "../chains";
 
 export default async function enterGame({
@@ -43,7 +43,7 @@ export default async function enterGame({
     };
 
     const walletClient = createWalletClient({
-      chain: arbitrumSepolia,
+      chain: rootstockTestnet,
       transport: http(),
     });
     const account = privateKeyToAccount(
@@ -51,20 +51,20 @@ export default async function enterGame({
     );
 
     const publicClient = createPublicClient({
-      chain: arbitrumSepolia,
+      chain: rootstockTestnet,
       transport: http(),
     });
 
     const nonce = await account.nonceManager?.get({
       address: account.address,
-      chainId: arbitrumSepolia.id,
+      chainId: rootstockTestnet.id,
       client: walletClient,
     });
     const { request } = await publicClient.simulateContract({
       nonce,
-      chain: arbitrumSepolia,
+      chain: rootstockTestnet,
       account: account,
-      address: ARBITRUM_TESTNET,
+      address: ROOTSTACK_TESTNET,
       abi: EVM_ABI,
       functionName: "instantiateGame",
       args: [

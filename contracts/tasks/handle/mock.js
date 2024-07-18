@@ -25,7 +25,7 @@ task("handle-mock-one").setAction(async function (taskArguments, hre) {
 
   const response = await animewarsCore.handleMockThree(
     ...[
-      networks.arbitrumSepolia.chainId,
+      networks.rootstockTestnet.chainId,
       addressToBytes32("0x0000000000000000000000000000000000000000"),
       message,
     ],

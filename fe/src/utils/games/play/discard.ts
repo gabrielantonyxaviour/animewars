@@ -1,13 +1,13 @@
 import { fhenixTestnet } from "@/utils/chains";
 import {
-  ARBITRUM_TESTNET,
+  ROOTSTACK_TESTNET,
   EVM_ABI,
   MAX_PLAYERS_COUNT,
 } from "@/utils/constants";
 import { GameState } from "@/utils/interface";
 import supabase from "@/utils/supabase";
 import { createPublicClient, createWalletClient, custom, http } from "viem";
-import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
+import { rootstockTestnet, zircuitTestnet } from "viem/chains";
 
 export default async function discard({
   gameState,
@@ -47,20 +47,20 @@ export default async function discard({
     .map(() => Math.floor(Math.random() * 108));
 
   const walletClient = createWalletClient({
-    chain: arbitrumSepolia,
+    chain: rootstockTestnet,
     transport: custom(window.ethereum!),
   });
 
-  if (chainId != arbitrumSepolia.id) {
-    await walletClient.switchChain({ id: arbitrumSepolia.id });
+  if (chainId != rootstockTestnet.id) {
+    await walletClient.switchChain({ id: rootstockTestnet.id });
   }
   const publicClient = createPublicClient({
-    chain: arbitrumSepolia,
+    chain: rootstockTestnet,
     transport: http(),
   });
   const { request } = await publicClient.simulateContract({
-    chain: arbitrumSepolia,
-    address: ARBITRUM_TESTNET,
+    chain: rootstockTestnet,
+    address: ROOTSTACK_TESTNET,
     abi: EVM_ABI,
     account: address,
     functionName: "makeMove",

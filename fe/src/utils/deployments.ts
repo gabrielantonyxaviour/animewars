@@ -1,5 +1,4 @@
-export const ROOTSTOCK_TESTNET: `0x${string}` = "0x";
-export const ROOTSTOCK_MAINNET: `0x${string}` = "0x";
-export const ARBITRUM_TESTNET: `0x${string}` =
-  "0xbA86970e07802319ee10Def21Da2008e0F5496B8";
-export const FHENIX_TESTNET: `0x${string}` = "0x";
+export const ROOTSTACK_TESTNET: `0x${string}` =
+  "0xd37ca03a13bD2725306Fec4071855EE556037e2e";
+export const FHENIX_TESTNET: `0x${string}` =
+  "0x0e05DeD233Bf02192ba72B00f3aF3Cd904D2AcC6";

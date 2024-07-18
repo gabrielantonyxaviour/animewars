@@ -30,7 +30,7 @@ task("handle-signup").setAction(async function (taskArguments, hre) {
   console.log(signdata);
   const response = await animewarsCore.handle(
     ...[
-      networks.arbitrumSepolia.chainId,
+      networks.rootstockTestnet.chainId,
       addressToBytes32("0x0000000000000000000000000000000000000000"),
       signdata,
     ],

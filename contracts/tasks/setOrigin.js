@@ -10,8 +10,8 @@ task("set-origin").setAction(async function (taskArguments, hre) {
     signer
   );
   const args = [
-    networks.arbitrumSepolia.chainId.toString(),
-    networks.arbitrumSepolia.evm32,
+    networks.rootstockTestnet.chainId.toString(),
+    networks.rootstockTestnet.evm32,
   ];
 
   const response = await animewarsCore.setOrigin(...args, {

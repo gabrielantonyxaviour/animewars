@@ -11,7 +11,7 @@ import {
   http,
   parseEther,
 } from "viem";
-import { arbitrumSepolia } from "viem/chains";
+import { rootstockTestnet } from "viem/chains";
 
 export default function Page() {
   const { address, status, chainId } = useAccount();

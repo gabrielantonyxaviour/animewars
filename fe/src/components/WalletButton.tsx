@@ -1,6 +1,6 @@
 import { fhenixTestnet } from "@/utils/chains";
 import Image from "next/image";
-import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
+import { rootstockTestnet, zircuitTestnet } from "viem/chains";
 import { useAccount, useBalance } from "wagmi";
 
 export default function WalletButton() {
@@ -16,21 +16,13 @@ export default function WalletButton() {
         alt="wallet"
         className="absolute z-1"
       />
-      {chain?.id == arbitrumSepolia.id ? (
+      {chain?.id == rootstockTestnet.id ? (
         <Image
-          src="/logos/arbitrum.png"
+          src="/logos/rootstock.png"
           width={30}
           height={30}
           alt="arbitrum"
           className="rounded-full relative"
-        />
-      ) : chain?.id == zircuitTestnet.id ? (
-        <Image
-          src="/logos/zircuit.jpeg"
-          width={20}
-          height={20}
-          alt="zircuit"
-          className="relative "
         />
       ) : (
         chain?.id == fhenixTestnet.id && (

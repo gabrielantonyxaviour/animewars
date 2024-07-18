@@ -1,8 +1,8 @@
 import { createPublicClient, createWalletClient, custom, http } from "viem";
-import { ARBITRUM_TESTNET, characters, EVM_ABI } from "../constants";
+import { ROOTSTACK_TESTNET, characters, EVM_ABI } from "../constants";
 import { GameState } from "../interface";
 import supabase from "../supabase";
-import { arbitrumSepolia, zircuitTestnet } from "viem/chains";
+import { rootstockTestnet, zircuitTestnet } from "viem/chains";
 import { fhenixTestnet } from "../chains";
 import { useAccount } from "wagmi";
 
@@ -38,21 +38,21 @@ export default async function choosePlayer({
   }
 
   const walletClient = createWalletClient({
-    chain: arbitrumSepolia,
+    chain: rootstockTestnet,
     transport: custom(window.ethereum!),
   });
 
   const publicClient = createPublicClient({
-    chain: arbitrumSepolia,
+    chain: rootstockTestnet,
     transport: http(),
   });
 
-  if (chainId != arbitrumSepolia.id) {
-    await walletClient.switchChain({ id: arbitrumSepolia.id });
+  if (chainId != rootstockTestnet.id) {
+    await walletClient.switchChain({ id: rootstockTestnet.id });
   }
   const { request } = await publicClient.simulateContract({
-    chain: arbitrumSepolia,
-    address: ARBITRUM_TESTNET,
+    chain: rootstockTestnet,
+    address: ROOTSTACK_TESTNET,
     account: address,
     abi: EVM_ABI,
     functionName: "signUp",
